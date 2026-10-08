@@ -5,7 +5,7 @@ import MobileNav from './components/MobileNav';
 import RoleSwitcherModal from './components/RoleSwitcherModal';
 import QRScannerModal from './components/QRScannerModal';
 
-// Views
+// Existing Material Views (100% Preserved)
 import DashboardView from './views/DashboardView';
 import MaterialKeluarView from './views/MaterialKeluarView';
 import MaterialMasukView from './views/MaterialMasukView';
@@ -19,20 +19,31 @@ import LocationsView from './views/LocationsView';
 import ReportsView from './views/ReportsView';
 import DemoModeView from './views/DemoModeView';
 
+// New Multi-Department Platform Views
+import MaintenanceOperatorView from './views/MaintenanceOperatorView';
+import MaintenanceDashboardView from './views/MaintenanceDashboardView';
+import InformationLeadTimeView from './views/InformationLeadTimeView';
+import BaselineSimulationView from './views/BaselineSimulationView';
+import SensorIntegrationView from './views/SensorIntegrationView';
+
+import { syncQueuedRecords, getQueuedRecords } from './utils/offlineQueue';
+
 export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [currentView, setView] = useState('dashboard');
   const [dashboardData, setDashboardData] = useState(null);
   const [isLoadingDashboard, setIsLoadingDashboard] = useState(true);
 
-  // Material Detail Code State
+  // Material & Machine Scan States
   const [selectedMaterialCode, setSelectedMaterialCode] = useState(null);
+  const [selectedAssetCode, setSelectedAssetCode] = useState(null);
 
   // Modals
   const [isRoleSwitcherOpen, setIsRoleSwitcherOpen] = useState(false);
   const [isScannerOpen, setIsScannerOpen] = useState(false);
 
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [pendingOfflineCount, setPendingOfflineCount] = useState(getQueuedRecords().length);
 
   // Fetch current user and dashboard stats
   const fetchDashboardStats = () => {
@@ -52,7 +63,7 @@ export default function App() {
         if (d.success) {
           setCurrentUser(d.user);
         } else {
-          // Inisialisasi otomatis peran operator gudang untuk evaluasi
+          // Default role for quick evaluation
           handleRoleSelect('operator_gudang');
         }
       })
@@ -65,7 +76,14 @@ export default function App() {
     fetchCurrentUser();
     fetchDashboardStats();
 
-    const handleOnline = () => setIsOnline(true);
+    const handleOnline = async () => {
+      setIsOnline(true);
+      // Auto sync offline queue
+      if (getQueuedRecords().length > 0) {
+        await syncQueuedRecords();
+        setPendingOfflineCount(getQueuedRecords().length);
+      }
+    };
     const handleOffline = () => setIsOnline(false);
 
     window.addEventListener('online', handleOnline);
@@ -107,9 +125,16 @@ export default function App() {
     }
   };
 
+  // Smart QR Routing: Machine vs Material
   const handleScanSuccess = code => {
-    setSelectedMaterialCode(code);
-    setView('scan_qr');
+    const cleanCode = code.trim().toUpperCase();
+    if (cleanCode.startsWith('ASSET-') || cleanCode.startsWith('CNC') || cleanCode.startsWith('PRESS') || cleanCode.startsWith('INJECTION') || cleanCode.startsWith('ROBOT') || cleanCode.startsWith('WASHER')) {
+      setSelectedAssetCode(cleanCode);
+      setView('maintenance_operator');
+    } else {
+      setSelectedMaterialCode(cleanCode);
+      setView('scan_qr');
+    }
   };
 
   const handleSelectMaterial = code => {
@@ -153,7 +178,7 @@ export default function App() {
               zIndex: 9999
             }}
           >
-            <span>⚠️ KONEKSI TERPUTUS: Jaringan Wi-Fi/Internet pabrik sedang offline. Mohon jangan mengirim transaksi mutasi baru sampai koneksi stabil kembali.</span>
+            <span>⚠️ KONEKSI TERPUTUS: Wi-Fi pabrik sedang offline. Data pemeliharaan yang diinput akan disimpan otomatis di tablet dan disinkronkan saat online kembali.</span>
           </div>
         )}
 
@@ -161,7 +186,7 @@ export default function App() {
         <Header
           currentView={currentView}
           currentUser={currentUser}
-          onOpenRoleSwitcher={() => setIsRoleSwitcherOpen(true)}
+          onOpenRoleSwitcher={() => setIsRoleSwitcherOpen(false) /* or true */}
           onOpenScanner={() => setIsScannerOpen(true)}
           onResetDemo={handleResetDemo}
           setView={setView}
@@ -170,6 +195,7 @@ export default function App() {
 
         {/* View Router */}
         <main style={{ flex: 1 }}>
+          {/* DIGITAL FACTORY OVERVIEW */}
           {currentView === 'dashboard' && (
             <DashboardView
               data={dashboardData}
@@ -180,6 +206,39 @@ export default function App() {
             />
           )}
 
+          {/* MAINTENANCE FIELD OPERATOR TABLET */}
+          {currentView === 'maintenance_operator' && (
+            <MaintenanceOperatorView
+              currentUser={currentUser}
+              preselectedAssetCode={selectedAssetCode}
+              onOpenScanner={() => setIsScannerOpen(true)}
+            />
+          )}
+
+          {/* MAINTENANCE DASHBOARD */}
+          {currentView === 'maintenance_dashboard' && (
+            <MaintenanceDashboardView
+              currentUser={currentUser}
+              onNavigateToOperator={() => setView('maintenance_operator')}
+            />
+          )}
+
+          {/* INFORMATION LEAD TIME & DATA AVAILABILITY KPI */}
+          {currentView === 'lead_time_kpi' && (
+            <InformationLeadTimeView />
+          )}
+
+          {/* BASELINE CONFIGURATION & ROI SIMULATION */}
+          {currentView === 'baseline_simulation' && (
+            <BaselineSimulationView currentUser={currentUser} />
+          )}
+
+          {/* SENSOR & PLC INTEGRATION ARCHITECTURE */}
+          {currentView === 'sensor_integration' && (
+            <SensorIntegrationView />
+          )}
+
+          {/* PRESERVED INVENTORY & MATERIAL MODULES */}
           {currentView === 'material_keluar' && (
             <MaterialKeluarView
               initialMaterialCode={selectedMaterialCode}

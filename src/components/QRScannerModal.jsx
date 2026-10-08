@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Camera, Search, Barcode, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Camera, Search, Barcode, CheckCircle2, AlertCircle, Wrench, Boxes } from 'lucide-react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 
 export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
@@ -10,14 +10,18 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
   const [cameraError, setCameraError] = useState(null);
   const scannerRef = useRef(null);
 
-  // Quick preset samples for zero-friction factory testing
+  // Preset samples for machines and materials
   const sampleCodes = [
-    { code: 'MAT-000101', name: 'Bearing Shell A', cat: 'Komponen Mesin' },
-    { code: 'MAT-000201', name: 'Plat Baja SPCC 1.2mm', cat: 'Bahan Logam' },
-    { code: 'MAT-000107', name: 'Bushing Kuningan OD 35mm', cat: 'Komponen Mesin' },
-    { code: 'MAT-000301', name: 'Baut Hexagon M8x30', cat: 'Fastener' },
-    { code: 'MAT-000401', name: 'Pelumas Hidrolik ISO VG 68', cat: 'Pelumas' },
-    { code: 'MAT-000601', name: 'Kardus Master Box Pompa', cat: 'Kemasan' }
+    // Mesin Pabrik
+    { code: 'ASSET-CNC-01', name: 'CNC-01 Machining Center 4-Axis', type: 'MACHINE', cat: 'Lini Machining A' },
+    { code: 'ASSET-CNC-03', name: 'CNC-03 Precision Lathe Bubut', type: 'MACHINE', cat: 'Lini Machining B' },
+    { code: 'ASSET-PRESS-01', name: 'PRESS-01 Heavy Stamping 300T', type: 'MACHINE', cat: 'Lini Press & Stamping' },
+    { code: 'ASSET-INJECTION-01', name: 'INJECTION-01 Molding 180T', type: 'MACHINE', cat: 'Lini Komponen Plastik' },
+    // Material Gudang
+    { code: 'MAT-000101', name: 'Bearing Shell A', type: 'MATERIAL', cat: 'Komponen Mesin' },
+    { code: 'MAT-000201', name: 'Plat Baja SPCC 1.2mm', type: 'MATERIAL', cat: 'Bahan Logam' },
+    { code: 'MAT-000107', name: 'Bushing Kuningan OD 35mm', type: 'MATERIAL', cat: 'Komponen Mesin' },
+    { code: 'MAT-000401', name: 'Pelumas Hidrolik ISO VG 68', type: 'MATERIAL', cat: 'Pelumas' }
   ];
 
   useEffect(() => {
@@ -68,12 +72,12 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 480 }}>
+      <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 500 }}>
         <div className="modal-header">
           <div>
-            <h3 className="card-title" style={{ fontSize: 17 }}>Pemindai QR Code & Barcode</h3>
+            <h3 className="card-title" style={{ fontSize: 17 }}>Pemindai QR Code Lapangan</h3>
             <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-              Arahkan kamera ke label stiker atau gunakan kode cepat
+              Scan QR Mesin (Pemeliharaan) atau QR Material (Pengeluaran/Gudang)
             </p>
           </div>
           <button className="btn btn-outline" style={{ minHeight: 32, padding: '0 8px' }} onClick={onClose}>
@@ -114,7 +118,7 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
               cursor: 'pointer'
             }}
           >
-            ⌨️ Input Kode / Gun Scanner
+            ⌨️ Barcode Gun / Input
           </button>
 
           <button
@@ -131,7 +135,7 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
               cursor: 'pointer'
             }}
           >
-            🏷️ Sampel Cepat
+            🏷️ Sampel Uji Cepat
           </button>
         </div>
 
@@ -149,7 +153,7 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
                 }}
               />
               <p style={{ fontSize: 12, color: 'var(--text-muted)', textAlign: 'center', marginTop: 10 }}>
-                Posisikan QR Code di dalam kotak hijau pemindai.
+                Arahkan kamera ke stiker QR Mesin (ASSET-...) atau QR Material (MAT-...).
               </p>
             </div>
           )}
@@ -157,59 +161,67 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
           {activeTab === 'manual' && (
             <form onSubmit={handleManualSubmit}>
               <div className="form-group">
-                <label className="form-label">Ketik Kode Material atau Gunakan Barcode Gun:</label>
+                <label className="form-label">Ketik Kode Mesin atau Kode Material:</label>
                 <input
                   type="text"
                   className="form-input font-mono"
-                  style={{ fontSize: 18, textTransform: 'uppercase', letterSpacing: 1 }}
-                  placeholder="Contoh: MAT-000101"
+                  style={{ fontSize: 17, textTransform: 'uppercase', letterSpacing: 1 }}
+                  placeholder="Contoh: ASSET-CNC-03 atau MAT-000101"
                   value={manualCode}
                   onChange={e => setManualCode(e.target.value)}
                   autoFocus
                 />
                 <span style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4, display: 'block' }}>
-                  💡 Pemindai barcode fisik (USB/Bluetooth gun) otomatis mengirim kode dan tombol Enter.
+                  💡 Mendukung pemindai fisik (USB/Bluetooth wireless gun) di lingkungan pabrik.
                 </span>
               </div>
 
               <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%', marginTop: 8 }}>
-                Pilih Material
+                Proses Kode Terpilih
               </button>
             </form>
           )}
 
           {activeTab === 'sample' && (
             <div>
-              <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 12 }}>
-                Pilih sampel material pabrik siap uji berikut:
+              <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 10 }}>
+                Ketuk sampel berikut untuk simulasi pembacaan QR instan:
               </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {sampleCodes.map(s => (
-                  <div
-                    key={s.code}
-                    onClick={() => {
-                      onScanSuccess(s.code);
-                      onClose();
-                    }}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '12px 14px',
-                      backgroundColor: 'var(--bg-subtle)',
-                      border: '1px solid var(--border-subtle)',
-                      borderRadius: 'var(--radius-sm)',
-                      cursor: 'pointer',
-                      transition: 'background-color 120ms ease'
-                    }}
-                  >
-                    <div>
-                      <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--text-main)' }}>{s.name}</div>
-                      <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{s.cat}</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 300, overflowY: 'auto' }}>
+                {sampleCodes.map(s => {
+                  const isMachine = s.type === 'MACHINE';
+                  return (
+                    <div
+                      key={s.code}
+                      onClick={() => {
+                        onScanSuccess(s.code);
+                        onClose();
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '10px 14px',
+                        backgroundColor: 'var(--bg-subtle)',
+                        border: isMachine ? '1px solid #38bdf8' : '1px solid var(--border-subtle)',
+                        borderRadius: 'var(--radius-sm)',
+                        cursor: 'pointer',
+                        transition: 'background-color 120ms ease'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        {isMachine ? <Wrench size={18} color="#0284c7" /> : <Boxes size={18} color="#16a34a" />}
+                        <div>
+                          <div style={{ fontWeight: 800, fontSize: 13, color: 'var(--text-main)' }}>{s.name}</div>
+                          <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{s.cat}</div>
+                        </div>
+                      </div>
+                      <span className={`font-mono badge ${isMachine ? 'badge-primary' : 'badge-tersedia'}`}>
+                        {s.code}
+                      </span>
                     </div>
-                    <span className="font-mono badge badge-tersedia">{s.code}</span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}

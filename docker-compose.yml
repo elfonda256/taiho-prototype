@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  taiho-app:
+    build: .
+    container_name: taiho-field-platform
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - NODE_ENV=production
+      - JWT_SECRET=taiho-production-secret-key-2026-safe-token
+      - GATEWAY_API_KEY=taiho-iot-gateway-secure-2026
+    volumes:
+      - taiho-data:/app/server/data
+    networks:
+      - factory-net
+
+  # Optional PostgreSQL instance for production scalability
+  # (Can be disabled if running SQLite on existing lightweight server)
+  postgres:
+    image: postgres:16-alpine
+    container_name: taiho-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: taiho_factory_db
+      POSTGRES_USER: taiho_admin
+      POSTGRES_PASSWORD: taiho_secure_password_2026
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+      - ./server/db/schema.postgres.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - factory-net
+
+volumes:
+  taiho-data:
+  pg-data:
+
+networks:
+  factory-net:
+    driver: bridge

@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, ArrowUpRight, QrCode, ClipboardList, AlertOctagon } from 'lucide-react';
+import { LayoutDashboard, Wrench, QrCode, ArrowUpRight, Clock } from 'lucide-react';
 
 export default function MobileNav({ currentView, setView, onOpenScanner }) {
   return (
@@ -9,16 +9,16 @@ export default function MobileNav({ currentView, setView, onOpenScanner }) {
         onClick={() => setView('dashboard')}
       >
         <LayoutDashboard size={20} />
-        <span>Beranda</span>
+        <span>Pabrik</span>
       </button>
 
       <button
-        className={`mobile-nav-btn ${currentView === 'material_keluar' ? 'active' : ''}`}
-        onClick={() => setView('material_keluar')}
-        style={{ color: currentView === 'material_keluar' ? '#16a34a' : 'inherit' }}
+        className={`mobile-nav-btn ${currentView === 'maintenance_operator' ? 'active' : ''}`}
+        onClick={() => setView('maintenance_operator')}
+        style={{ color: currentView === 'maintenance_operator' ? '#0284c7' : 'inherit' }}
       >
-        <ArrowUpRight size={22} color="#16a34a" />
-        <span style={{ fontWeight: 700 }}>Keluar</span>
+        <Wrench size={20} color={currentView === 'maintenance_operator' ? '#0284c7' : 'inherit'} />
+        <span style={{ fontWeight: 700 }}>Mesin</span>
       </button>
 
       <button
@@ -26,13 +26,13 @@ export default function MobileNav({ currentView, setView, onOpenScanner }) {
         onClick={onOpenScanner}
         style={{
           transform: 'translateY(-8px)',
-          backgroundColor: '#0f172a',
+          backgroundColor: '#0284c7',
           color: '#ffffff',
           borderRadius: '50%',
           width: 52,
           height: 52,
           flex: 'none',
-          boxShadow: '0 4px 10px rgba(0,0,0,0.2)'
+          boxShadow: '0 4px 10px rgba(2, 132, 199, 0.4)'
         }}
       >
         <QrCode size={24} color="#ffffff" />
@@ -40,19 +40,19 @@ export default function MobileNav({ currentView, setView, onOpenScanner }) {
       </button>
 
       <button
-        className={`mobile-nav-btn ${currentView === 'stock_opname' ? 'active' : ''}`}
-        onClick={() => setView('stock_opname')}
+        className={`mobile-nav-btn ${currentView === 'material_keluar' ? 'active' : ''}`}
+        onClick={() => setView('material_keluar')}
       >
-        <ClipboardList size={20} />
-        <span>Opname</span>
+        <ArrowUpRight size={20} color="#16a34a" />
+        <span>Material</span>
       </button>
 
       <button
-        className={`mobile-nav-btn ${currentView === 'discrepancies' ? 'active' : ''}`}
-        onClick={() => setView('discrepancies')}
+        className={`mobile-nav-btn ${currentView === 'lead_time_kpi' ? 'active' : ''}`}
+        onClick={() => setView('lead_time_kpi')}
       >
-        <AlertOctagon size={20} />
-        <span>Selisih</span>
+        <Clock size={20} />
+        <span>Lead Time</span>
       </button>
     </nav>
   );

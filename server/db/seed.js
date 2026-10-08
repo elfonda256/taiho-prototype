@@ -13,6 +13,12 @@ const seedData = db.transaction(() => {
 
   // 1. CLEAR EXISTING DATA (in reverse dependency order)
   db.exec(`
+    DELETE FROM sensor_telemetry;
+    DELETE FROM maintenance_records;
+    DELETE FROM maintenance_checklist_items;
+    DELETE FROM maintenance_checklists;
+    DELETE FROM assets;
+    DELETE FROM baseline_configurations;
     DELETE FROM idempotency_keys;
     DELETE FROM approvals;
     DELETE FROM audit_logs;
@@ -448,7 +454,174 @@ const seedData = db.transaction(() => {
   insertAudit.run('aud_03', 'usr_hendra', 'APPROVE_SCRAP', 'material_scraps', 'scr_01', 'Supervisor Hendra menyetujui afkir 20 PCS Bearing Shell A', '192.168.1.10', '2026-10-04 14:20:00');
   insertAudit.run('aud_04', 'usr_bambang', 'VIEW_DASHBOARD', 'dashboard', null, 'Plant Manager Bambang mengakses ringkasan eksekutif kerugian material', '192.168.1.5', '2026-10-08 08:15:00');
 
-  // 20. RE-ESTABLISH IMMUTABILITY TRIGGERS
+  // 20. BASELINE CONFIGURATIONS (Parameter Operasional Pabrik untuk Perhitungan Lead Time & Estimasi Penghematan)
+  const insertBase = db.prepare(`
+    INSERT INTO baseline_configurations (id, config_key, config_value, description, unit, updated_at)
+    VALUES (?, ?, ?, ?, ?, datetime('now'))
+  `);
+  insertBase.run('base_01', 'current_reporting_lead_time_days', 7.0, 'Estimasi waktu tunggu laporan manual sampai ke manajemen', 'hari');
+  insertBase.run('base_02', 'target_reporting_lead_time_days', 0.1, 'Target lead time sistem digital (hari yang sama / < 2,4 jam)', 'hari');
+  insertBase.run('base_03', 'num_operators', 24.0, 'Jumlah operator lapangan yang mengisi form harian', 'orang');
+  insertBase.run('base_04', 'forms_per_day_per_op', 3.0, 'Rata-rata lembar form kertas per operator per hari', 'form/hari');
+  insertBase.run('base_05', 'minutes_per_form_manual', 12.0, 'Waktu pencatatan manual + re-entry per form', 'menit');
+  insertBase.run('base_06', 'people_in_recap_chain', 3.0, 'Jumlah staf yang terlibat dalam rekap & pengecekan berkas', 'orang');
+  insertBase.run('base_07', 'hours_per_month_recap', 96.0, 'Total jam per bulan yang terbuang untuk rekapitulasi data kertas', 'jam/bulan');
+  insertBase.run('base_08', 'labor_hourly_rate_idr', 45000.0, 'Biaya tenaga kerja rata-rata per jam', 'Rp/jam');
+  insertBase.run('base_09', 'baseline_material_discrepancy_idr', 64925000.0, 'Total nilai selisih material berjalan yang perlu diperbaiki', 'Rp');
+
+  // 21. ASSETS / MACHINES (Aset Mesin Produksi Pabrik Otomotif TAIHO)
+  const insertAsset = db.prepare(`
+    INSERT INTO assets (
+      id, asset_code, asset_name, machine_type, production_area, location,
+      manufacturer, model, serial_number, status, current_condition,
+      installation_date, last_maintenance_at, next_maintenance_at, qr_code_payload, is_active, created_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, datetime('now'))
+  `);
+
+  insertAsset.run('ast_cnc01', 'CNC-01', 'Machining Center Horisontal 4-Axis', 'Machining CNC', 'Lini Machining A (Blok Silinder)', 'Gedung 1 - Bay B01', 'Okuma', 'MA-500HII', 'OKM-2018-9941', 'NORMAL', 'Presisi Spindel Stabil, Suhu Bearing Normal', '2019-03-15', '2026-10-08 07:30:00', '2026-10-09 07:00:00', 'ASSET-CNC-01');
+  insertAsset.run('ast_cnc02', 'CNC-02', 'Vertical Machining Center 3-Axis', 'Machining CNC', 'Lini Machining A (Bearing Cap)', 'Gedung 1 - Bay B02', 'Mazak', 'VCN-530C', 'MZK-2020-1102', 'NORMAL', 'Getaran 0.8 mm/s (Batas Aman < 2.5 mm/s)', '2020-07-20', '2026-10-08 08:00:00', '2026-10-09 07:00:00', 'ASSET-CNC-02');
+  insertAsset.run('ast_cnc03', 'CNC-03', 'CNC Precision Lathe Bubut Otomatis', 'Machining CNC', 'Lini Machining B (Bushing Pin)', 'Gedung 1 - Bay B04', 'DMG Mori', 'NLX 2500|700', 'DMG-2021-3318', 'WARNING', 'Coolant level 20% (Perlu Top-up Segera)', '2021-11-10', '2026-10-08 10:04:00', '2026-10-08 14:00:00', 'ASSET-CNC-03');
+  insertAsset.run('ast_press01', 'PRESS-01', 'Heavy Stamping Press 300-Ton', 'Stamping Press', 'Lini Press & Stamping', 'Gedung 2 - Bay A01', 'AIDA', 'NC1-3000(2)', 'AID-2017-0044', 'NORMAL', 'Tekanan Hidrolik 210 Bar Stabil, Light Curtain OK', '2017-05-12', '2026-10-08 06:45:00', '2026-10-09 06:30:00', 'ASSET-PRESS-01');
+  insertAsset.run('ast_press02', 'PRESS-02', 'High-Speed Mechanical Press 150-Ton', 'Stamping Press', 'Lini Press & Stamping', 'Gedung 2 - Bay A02', 'Komatsu', 'H2F150', 'KMT-2019-7721', 'NORMAL', 'Sistem Rem Darurat & Kopling Pneumatik Normal', '2019-09-01', '2026-10-07 16:30:00', '2026-10-08 16:00:00', 'ASSET-PRESS-02');
+  insertAsset.run('ast_weld01', 'ROBOT-WELD-01', 'Robotic Arc Welding Cell 6-Axis', 'Robotic Welding', 'Lini Welding Sub-Assy', 'Gedung 2 - Bay C01', 'Fanuc', 'ARC Mate 100iD', 'FNC-2022-8119', 'NORMAL', 'Nozzle Cleaner & Kawat Las Feeder Lancar', '2022-04-18', '2026-10-08 07:15:00', '2026-10-09 07:00:00', 'ASSET-ROBOT-WELD-01');
+  insertAsset.run('ast_inj01', 'INJECTION-01', 'Plastic Injection Molding 180T', 'Plastic Injection', 'Lini Komponen Plastik', 'Gedung 3 - Bay D01', 'Nissei', 'FNX180-36A', 'NSS-2020-5540', 'PROBLEM', 'Heater Barrel Zona 3 Fluktuatif ±8°C (Perlu Pemeriksaan Thermocouple)', '2020-10-05', '2026-10-07 14:00:00', '2026-10-08 09:00:00', 'ASSET-INJECTION-01');
+  insertAsset.run('ast_wash01', 'WASHER-01', 'Ultrasonic Industrial Parts Cleaner', 'Parts Washer', 'Lini Pembersihan & Finishing', 'Gedung 1 - Bay B08', 'Renzacci', 'US-400T', 'RNZ-2021-9980', 'NORMAL', 'Suhu Larutan Degreasing 65°C, Transducer OK', '2021-08-25', '2026-10-08 06:30:00', '2026-10-09 06:30:00', 'ASSET-WASHER-01');
+
+  // 22. MAINTENANCE CHECKLISTS (Format Standar Operasional Lembar Periksa)
+  const insertChk = db.prepare(`
+    INSERT INTO maintenance_checklists (id, code, title, machine_type, maintenance_type, estimated_duration_minutes, is_active, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, 1, datetime('now'))
+  `);
+
+  insertChk.run('chk_cnc_daily', 'CHK-CNC-DAILY', 'Pemeriksaan Harian Mesin CNC Machining', 'Machining CNC', 'DAILY_INSPECTION', 10);
+  insertChk.run('chk_press_daily', 'CHK-PRESS-DAILY', 'Pemeriksaan Harian Mesin Stamping Press', 'Stamping Press', 'DAILY_INSPECTION', 12);
+  insertChk.run('chk_robot_daily', 'CHK-ROBOT-DAILY', 'Pemeriksaan Harian Robotic Welding Cell', 'Robotic Welding', 'DAILY_INSPECTION', 10);
+  insertChk.run('chk_cnc_prev', 'CHK-CNC-PREVENTIVE', 'Pemeliharaan Berkala Bulanan (PM) CNC', 'Machining CNC', 'PREVENTIVE', 45);
+
+  // 23. MAINTENANCE CHECKLIST ITEMS (Poin-Poin Lembar Periksa Tablet)
+  const insertChkItem = db.prepare(`
+    INSERT INTO maintenance_checklist_items (
+      id, checklist_id, item_order, item_label, standard_description,
+      item_type, min_value, max_value, unit, requires_action_if_fail
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `);
+
+  // Items untuk CHK-CNC-DAILY
+  insertChkItem.run('it_c1', 'chk_cnc_daily', 1, 'Kondisi Fisik & Getaran Mesin', 'Getaran halus, tidak ada getaran abnormal saat spindel idle 1000 RPM', 'STATUS', null, null, null, 1);
+  insertChkItem.run('it_c2', 'chk_cnc_daily', 2, 'Tingkat Oli Hidrolik & Pelumas Way Lube', 'Gelas ukur oli berada di antara batas Min dan Max', 'STATUS', null, null, null, 1);
+  insertChkItem.run('it_c3', 'chk_cnc_daily', 3, 'Tingkat & Konsentrasi Cairan Coolant', 'Brix konsentrasi coolant 7% - 10%, level tangki > 40%', 'STATUS', null, null, null, 1);
+  insertChkItem.run('it_c4', 'chk_cnc_daily', 4, 'Suara Abnormal & Beban Motor Spindel', 'Tidak ada bunyi gesekan kasar dari ball screw dan bearing', 'STATUS', null, null, null, 1);
+  insertChkItem.run('it_c5', 'chk_cnc_daily', 5, 'Kebocoran Oli, Udara Tekan, atau Coolant', 'Selang dan fitting bebas dari tetesan atau desisan bocor angin', 'STATUS', null, null, null, 1);
+  insertChkItem.run('it_c6', 'chk_cnc_daily', 6, 'Pintu Keselamatan & Interlock Switch', 'Mesin berhenti darurat ketika pintu pelindung dibuka paksa', 'STATUS', null, null, null, 1);
+  insertChkItem.run('it_c7', 'chk_cnc_daily', 7, 'Tekanan Udara Kompresor Utama', 'Pengukur tekanan pneumatik harus 0.5 - 0.7 MPa', 'MEASUREMENT', 0.5, 0.7, 'MPa', 1);
+
+  // Items untuk CHK-PRESS-DAILY
+  insertChkItem.run('it_p1', 'chk_press_daily', 1, 'Tirai Cahaya Keselamatan (Safety Light Curtain)', 'Respon sensor optik menghentikan slide press seketika', 'STATUS', null, null, null, 1);
+  insertChkItem.run('it_p2', 'chk_press_daily', 2, 'Kondisi Kopling Pneumatik & Rem Slide', 'Slide berhenti tepat di Titik Mati Atas (TMA / TDC)', 'STATUS', null, null, null, 1);
+  insertChkItem.run('it_p3', 'chk_press_daily', 3, 'Tekanan Sirkuit Hidrolik Utama', 'Tekanan stabil 190 - 220 Bar pada indikator utama', 'MEASUREMENT', 190, 220, 'Bar', 1);
+  insertChkItem.run('it_p4', 'chk_press_daily', 4, 'Pompa Pelumasan Otomatis Die & Gibs', 'Oli mengalir rata ke setiap alur pemandu geser', 'STATUS', null, null, null, 1);
+  insertChkItem.run('it_p5', 'chk_press_daily', 5, 'Kekencangan Baut Penjepit Matras (Die Clamp)', 'Tidak ada baut kendor atau ganjal plat yang bergeser', 'STATUS', null, null, null, 1);
+
+  // Items untuk CHK-ROBOT-DAILY
+  insertChkItem.run('it_r1', 'chk_robot_daily', 1, 'Kebersihan Nozzle Torch & Tip Las', 'Bebas dari kerak percikan spatter yang menyumbat gas diffuser', 'STATUS', null, null, null, 1);
+  insertChkItem.run('it_r2', 'chk_robot_daily', 2, 'Kelancaran Wire Feeder Kawat Las', 'Kawat terumpan lancar tanpa selip atau tertekuk', 'STATUS', null, null, null, 1);
+  insertChkItem.run('it_r3', 'chk_robot_daily', 3, 'Safety Fence, Interlock, & Bumper Sensor', 'Pintu pengaman memicu trip saat dibuka pada mode Auto', 'STATUS', null, null, null, 1);
+  insertChkItem.run('it_r4', 'chk_robot_daily', 4, 'Aliran Gas Pelindung Argon/CO2', 'Flowmeter gas menunjukkan 15 - 20 L/menit saat pengelasan', 'MEASUREMENT', 15, 20, 'L/min', 1);
+
+  // 24. MAINTENANCE RECORDS (Histori Pemeriksaan Nyata dengan Timestamp Presisi)
+  const insertRec = db.prepare(`
+    INSERT INTO maintenance_records (
+      id, record_number, asset_id, maintenance_type, checklist_id, operator_id,
+      start_time, completion_time, submitted_at, lead_time_seconds,
+      status, overall_condition, checklist_results, findings, action_taken, parts_used,
+      photo_url, remarks, supervisor_id, verified_at, is_offline_submission, created_at, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
+  `);
+
+  // Record 1: CNC-01 (Pemeriksaan Pagi Selesai Normal)
+  insertRec.run(
+    'rec_01', 'MNT-20261008-001', 'ast_cnc01', 'DAILY_INSPECTION', 'chk_cnc_daily', 'usr_budi',
+    '2026-10-08 07:15:00', '2026-10-08 07:27:00', '2026-10-08 07:30:00', 180,
+    'VERIFIED', 'NORMAL',
+    JSON.stringify([
+      { item_id: 'it_c1', label: 'Kondisi Fisik & Getaran Mesin', status: 'PASS' },
+      { item_id: 'it_c2', label: 'Tingkat Oli Hidrolik & Pelumas Way Lube', status: 'PASS' },
+      { item_id: 'it_c3', label: 'Tingkat & Konsentrasi Cairan Coolant', status: 'PASS' },
+      { item_id: 'it_c4', label: 'Suara Abnormal & Beban Motor Spindel', status: 'PASS' },
+      { item_id: 'it_c5', label: 'Kebocoran Oli, Udara Tekan, atau Coolant', status: 'PASS' },
+      { item_id: 'it_c6', label: 'Pintu Keselamatan & Interlock Switch', status: 'PASS' },
+      { item_id: 'it_c7', label: 'Tekanan Udara Kompresor Utama', value: 0.62, status: 'PASS' }
+    ]),
+    null, null, null, null, 'Pemeriksaan awal shift pagi berjalan lancar',
+    'usr_hendra', '2026-10-08 07:45:00', 0
+  );
+
+  // Record 2: PRESS-01 (Pemeriksaan Pagi Selesai Normal)
+  insertRec.run(
+    'rec_02', 'MNT-20261008-002', 'ast_press01', 'DAILY_INSPECTION', 'chk_press_daily', 'usr_budi',
+    '2026-10-08 06:30:00', '2026-10-08 06:42:00', '2026-10-08 06:45:00', 180,
+    'VERIFIED', 'NORMAL',
+    JSON.stringify([
+      { item_id: 'it_p1', label: 'Tirai Cahaya Keselamatan', status: 'PASS' },
+      { item_id: 'it_p2', label: 'Kondisi Kopling Pneumatik & Rem Slide', status: 'PASS' },
+      { item_id: 'it_p3', label: 'Tekanan Sirkuit Hidrolik Utama', value: 205, status: 'PASS' },
+      { item_id: 'it_p4', label: 'Pompa Pelumasan Otomatis Die & Gibs', status: 'PASS' },
+      { item_id: 'it_p5', label: 'Kekencangan Baut Penjepit Matras', status: 'PASS' }
+    ]),
+    null, null, null, null, 'Light curtain responsif, tes trip 3x normal',
+    'usr_hendra', '2026-10-08 07:00:00', 0
+  );
+
+  // Record 3: CNC-03 (Warning: Coolant Kurang -> Demonstrasi Real-Time Incident Capture)
+  insertRec.run(
+    'rec_03', 'MNT-20261008-003', 'ast_cnc03', 'DAILY_INSPECTION', 'chk_cnc_daily', 'usr_joko',
+    '2026-10-08 09:48:00', '2026-10-08 10:01:00', '2026-10-08 10:04:00', 180,
+    'COMPLETED', 'WARNING',
+    JSON.stringify([
+      { item_id: 'it_c1', label: 'Kondisi Fisik & Getaran Mesin', status: 'PASS' },
+      { item_id: 'it_c2', label: 'Tingkat Oli Hidrolik & Pelumas Way Lube', status: 'PASS' },
+      { item_id: 'it_c3', label: 'Tingkat & Konsentrasi Cairan Coolant', status: 'WARNING', notes: 'Level coolant di bawah 25%' },
+      { item_id: 'it_c4', label: 'Suara Abnormal & Beban Motor Spindel', status: 'PASS' },
+      { item_id: 'it_c5', label: 'Kebocoran Oli, Udara Tekan, atau Coolant', status: 'PASS' },
+      { item_id: 'it_c6', label: 'Pintu Keselamatan & Interlock Switch', status: 'PASS' },
+      { item_id: 'it_c7', label: 'Tekanan Udara Kompresor Utama', value: 0.58, status: 'PASS' }
+    ]),
+    'Level coolant tangki tersisa 20%, berisiko overheat pada pahat bubut bushing pin',
+    'Operator menghubungi logistik gudang untuk pengambilan 20 Liter Konsentrat Coolant Water-Soluble',
+    'Konsentrat Coolant Sintetis 20L (MAT-000401)',
+    null, 'Perlu verifikasi pengisian ulang sebelum shift siang dimulai',
+    null, null, 0
+  );
+
+  // Record 4: INJECTION-01 (Problem Heater Barrel)
+  insertRec.run(
+    'rec_04', 'MNT-20261007-004', 'ast_inj01', 'CORRECTIVE', null, 'usr_budi',
+    '2026-10-07 13:10:00', '2026-10-07 13:55:00', '2026-10-07 14:00:00', 300,
+    'COMPLETED', 'PROBLEM',
+    null,
+    'Suhu barrel zona 3 berosilasi dari 210°C ke 228°C, hasil cetakan cover bearing sedikit flash/burr',
+    'Pemeriksaan solid state relay (SSR) dan konektor thermocouple. Menunggu penggantian sensor sparepart.',
+    'Thermocouple Sensor Tipe-K 2m',
+    null, 'Mesin diistirahatkan sementara untuk kalibrasi heater controller',
+    'usr_hendra', '2026-10-07 14:30:00', 0
+  );
+
+  // 25. SENSOR TELEMETRY (Data Aliran Sensor & PLC Realistis)
+  const insertTel = db.prepare(`
+    INSERT INTO sensor_telemetry (id, asset_id, protocol, parameter_name, parameter_value, parameter_unit, status, recorded_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now', ?))
+  `);
+
+  insertTel.run('tel_01', 'ast_cnc01', 'MODBUS_TCP', 'spindle_vibration', 0.82, 'mm/s', 'NORMAL', '-5 minutes');
+  insertTel.run('tel_02', 'ast_cnc01', 'MODBUS_TCP', 'bearing_temperature', 41.5, '°C', 'NORMAL', '-5 minutes');
+  insertTel.run('tel_03', 'ast_cnc01', 'MODBUS_TCP', 'spindle_load_percent', 34.0, '%', 'NORMAL', '-5 minutes');
+  insertTel.run('tel_04', 'ast_cnc03', 'MQTT', 'coolant_level', 21.0, '%', 'WARNING', '-2 minutes');
+  insertTel.run('tel_05', 'ast_cnc03', 'MQTT', 'spindle_speed_rpm', 1450.0, 'RPM', 'NORMAL', '-2 minutes');
+  insertTel.run('tel_06', 'ast_press01', 'OPC_UA', 'hydraulic_pressure', 208.5, 'Bar', 'NORMAL', '-3 minutes');
+  insertTel.run('tel_07', 'ast_press01', 'OPC_UA', 'cycle_counter_today', 1240.0, 'Stroke', 'NORMAL', '-3 minutes');
+  insertTel.run('tel_08', 'ast_inj01', 'REST_API', 'barrel_temp_zone3', 228.4, '°C', 'ALARM', '-1 minutes');
+
+  // 26. RE-ESTABLISH IMMUTABILITY TRIGGERS
   db.exec(`
     CREATE TRIGGER IF NOT EXISTS prevent_trx_update
     BEFORE UPDATE ON inventory_transactions

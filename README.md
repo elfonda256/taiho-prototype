@@ -1,190 +1,172 @@
-# SISTEM PENCEGAHAN KEHILANGAN MATERIAL
-## (Material Loss Prevention System)
+# TAIHO DIGITAL FIELD DATA COLLECTION PLATFORM
+## Phase 2 Evolution: Platform Pengumpulan Data Lapangan Digital Pabrik
 
-> *"Setiap pergerakan material wajib meninggalkan jejak digital seketika."*  
-> **"Lebih mudah digunakan daripada Excel."**
-
----
-
-## 1. Ringkasan & Latar Belakang Masalah
-
-Pada banyak lantai pabrik manufaktur, pengelolaan persediaan bahan baku dan komponen masih mengandalkan pencatatan manual berupa buku catatan fisik, formulir Surat Jalan kertas, atau rekapitulasi file Excel terpisah di akhir shift.
-
-Hal ini memicu masalah kronis:
-- **Selisih Material Tinggi (Rata-rata 4.8%)** karena perpindahan barang tidak tercatat seketika di titik pergerakan.
-- **Deteksi Keterlambatan Parah**: Selisih baru diketahui 30 hingga 90 hari kemudian saat stock opname periodik.
-- **Ketiadaan Akuntabilitas**: Sulit membuktikan siapa yang mengeluarkan barang dan ke lini produksi mana material tersebut dialokasikan.
-- **Waktu Investigasi Terbuang**: Menghabiskan 45–90 menit per kasus pencocokan dokumen.
-
-Sistem ini memecahkan masalah tersebut **secara tuntas tanpa kecerdasan buatan (Non-AI)** melalui pendekatan rekayasa industri: **Buku Besar Transaksi Digital (Immutable Digital Ledger) + Identifikasi Cepat QR Code + Alur Kerja Berbasis Peran Ergonomis**.
+> *"Capture data at the source, at the moment the work happens."*  
+> **Dari Keterlambatan Laporan 7 Hari → Visibilitas Seketika (Same Day / ≤ 1 Hari)**
 
 ---
 
-## 2. Prinsip Rekayasa & Integritas Data
+## 1. Konteks Bisnis & Masalah Inti
 
-Sistem mencatat siklus hidup material secara penuh:
-$$\text{RECEIVE} \longrightarrow \text{STORE} \longrightarrow \text{RESERVE} \longrightarrow \text{ISSUE} \longrightarrow \text{USE} \longrightarrow \text{RETURN} \longrightarrow \text{TRANSFER} \longrightarrow \text{SCRAP}$$
+Aplikasi ini disiapkan sebagai prototipe operasional untuk industri manufaktur komponen otomotif di Indonesia.
 
-Setiap mutasi wajib mencatat data atomik:
-1. **Material**: Kode unik (`MAT-XXXXXX`) dan nama spesifik.
-2. **Kuantitas & Satuan**: Nilai fisik aktual dan unit ukuran resmi (PCS, KG, LTR, MTR, ROLL).
-3. **Lokasi**: Hierarki terstruktur (Gudang → Area → Rak → Ambalan).
-4. **Waktu**: Cap waktu ISO 8601 presisi.
-5. **Penanggung Jawab**: Akun operator login yang melakukan transaksi.
-6. **Tipe Transaksi**: `RECEIVE`, `ISSUE`, `RETURN`, `TRANSFER`, `SCRAP`, `ADJUSTMENT`.
-7. **Nomor Dokumen Referensi**: No. PO, No. SPK / WO, No. Surat Jalan.
-8. **Stok Sebelum & Stok Sesudah**: Integritas mutasi berurutan.
-9. **Dampak Finansial (IDR)**: Kuantitas mutasi dikalikan harga satuan material.
+Berdasarkan tinjauan operasional bersama Maintenance Manager dan Manajemen Pabrik, tantangan terbesar bukanlah sekadar ketiadaan perangkat lunak, melainkan:
 
-### Aturan Integritas Mutlak
-- **Larangan Overwrite**: Stok di tabel `inventory` tidak boleh dimodifikasi tanpa pencatatan pada tabel `inventory_transactions`.
-- **Pencegahan Stok Negatif**: Transaksi pengeluaran (`ISSUE`) atau pemindahan (`TRANSFER`) otomatis ditolak oleh transaksi ACID database jika kuantitas melebihi sisa stok yang tersedia.
+> **INFORMASI MEMBUTUHKAN WAKTU TERLALU LAMA UNTUK SAMPAI KE MANAJEMEN.**
+
+Kondisi lapangan saat ini masih sangat bergantung pada proses manual:
+- Pencatatan di kertas / lembar formulir harian
+- Pengumpulan lembar kertas fisik di akhir shift / akhir minggu
+- Pengetikan ulang data (re-entry) ke komputer oleh staf administrasi
+- Pengecekan, rekonsiliasi, dan rekapitulasi data
+- Menunggu tanda tangan dan persetujuan bertingkat
+
+Akibatnya, laporan kegiatan hari ini membutuhkan waktu **rata-rata hingga 7 hari** sebelum dapat dilihat dan dianalisis oleh manajemen. Hal ini menciptakan waktu tunggu yang sia-sia (*wasteful waiting time*) dan menunda keputusan perbaikan kritis pada mesin dan material.
 
 ---
 
-## 3. Persona Pengguna & Ergonomi Sentuh
+## 2. Posisi Produk & Evolusi Platform
 
-Aplikasi dirancang dengan gaya **"Industrial Minimal"** dan mematuhi prinsip ergonomi kerja pabrik:
+Aplikasi telah berevolusi dari *Material Loss Prevention System* menjadi:
 
-| Pengguna | Kebutuhan Utama | Fitur Utama |
+### **Digital Field Data Collection Platform**
+Dengan arsitektur multi-departemen yang modular:
+1. **Pemeliharaan (Maintenance Field Data)** — *Prioritas Fase 2*
+2. **Material & Inventaris (Material Control & Loss Prevention)** — *100% Dipertahankan & Terintegrasi*
+3. **Produksi & Kualitas (Production & Quality)** — *Arsitektur Siap Skalabilitas Masa Depan*
+
+---
+
+## 3. Modul Pemeliharaan Lapangan (Tablet-First UX)
+
+Dirancang khusus untuk operator dan teknisi pemeliharaan menggunakan tablet Android (layar 8–11 inci):
+- **Sentuhan Ergonomis**: Tombol besar ($\ge 50$px), font kontras tinggi, navigasi ramah sarung tangan kerja.
+- **Minim Ketikan**: Tombol toggle instan `[PASS]`, `[WARNING]`, `[FAIL]`.
+- **Formulir Dinamis**: Jika status `FAIL` atau `WARNING`, sistem secara dinamis mewajibkan input temuan kerusakan (*findings*) dan tindakan perbaikan (*action taken*).
+- **Scan QR Mesin**: Scan kode QR mesin (`ASSET-CNC-03`) langsung membuka lembar checklist mesin tersebut tanpa pencarian manual.
+- **Perekaman Waktu Digital**: Menghitung secara otomatis *Information Lead Time* dari selisih waktu penyelesaian kerja fisik (*completion time*) hingga pengiriman data digital (*submitted at*).
+
+---
+
+## 4. Dua KPI Strategis Utama
+
+### A. Information Lead Time KPI
+Definisi: Waktu antara **pekerjaan fisik selesai di lapangan** hingga **data tersedia di layar manajemen**.
+- **Baseline Manual (Kertas)**: ~7 Hari (10.080 menit)
+- **Sistem Digital TAIHO Aktual**: ~2 - 4 Menit (Dihitung dari *timestamp* riil)
+- **Akselerasi Informasi**: Mereduksi waktu tunggu hingga **>99%**.
+*(Disajikan sebagai target untuk divalidasi di lantai pabrik).*
+
+### B. Data Availability KPI
+Menampilkan rasio aktivitas lapangan yang telah masuk ke sistem secara real-time:
+$$\text{Data Availability} = \frac{\text{Aktivitas Terkirim Hari Ini}}{\text{Target Aktivitas Terencana Hari Ini}} \times 100\%$$
+Memungkinkan manajemen mengetahui secara pasti apakah data lapangan benar-benar mengalir ke sistem.
+
+---
+
+## 5. Model Simulasi Baseline & ROI (Tanpa Data Rekaan)
+
+Sistem **tidak pernah memalsukan angka penghematan perusahaan**. Sebagai gantinya, disediakan **Konfigurasi Baseline** interaktif di mana manajer dapat menginput:
+- Jumlah Operator Lapangan
+- Total Formulir Kertas / Hari
+- Menit Pengisian per Formulir
+- Staf Terlibat Rekapitulasi Lembar
+- Jam Lembur / Bulan untuk Input Ulang Manual
+- Baseline Selisih Material (Rp/Bulan)
+- Biaya Tenaga Kerja (Rp/Jam)
+
+Sistem kemudian menghitung estimasi matematis:
+- Total Jam Kerja Manual vs Digital
+- Estimasi Jam Kerja Terhemat per Bulan
+- Proyeksi Finansial Penghematan Tenaga Kerja (Per Bulan & Per Tahun)
+- Seluruh angka diberi label transparan: **"Simulasi / Estimasi Berdasarkan Baseline yang Diinput"**.
+
+---
+
+## 6. Kesiapan Integrasi Sensor & PLC (Industrial IoT Layer)
+
+Sistem menyediakan lapisan abstraksi terbuka (*ready-for-integration*) tanpa mengasumsikan sensor fisik telah terpasang:
+- **Protokol Siap Pakai**: Modbus TCP, MQTT Broker Bridge, OPC-UA Agent, dan Direct REST Ingestion.
+- **Endpoint Ingestion Terstandarisasi**: `POST /api/telemetry/ingest`
+- **Ambang Batas Otomatis**: Jika telemetri getaran atau suhu melebihi batas kritis, sistem secara otomatis memperbarui status mesin menjadi `WARNING` / `PROBLEM`.
+- **Simulator Gateway Terintegrasi**: Dapat menguji pengiriman sinyal telemetri langsung melalui antarmuka web.
+
+---
+
+## 7. Arsitektur Penerapan & Server Pabrik
+
+Sistem dirancang untuk diterapkan pada infrastruktur server Linux yang **sudah dimiliki perusahaan** tanpa biaya lisensi cloud mahal:
+
+| Lingkungan | Database Engine | Peran |
 |---|---|---|
-| **Pak Budi (50 Thn, Op. Gudang)** | Tombol besar (min 52px), scan cepat, minim ketikan | Form 3 Langkah Material Keluar, Tombol Preset `[+10]`, `[+50]`, `[+100]`, Scan Kamera |
-| **Mas Joko (Op. Produksi)** | Minta barang, lapor pakai, kembalikan sisa | Alur Pengembalian Sisa (`RETURN`) dengan alasan terstandarisasi (`SISA_PRODUKSI`) |
-| **Pak Hendra (Supervisor)** | Kontrol pengeluaran, investigasi selisih, opname | Validasi Opname Fisik, Persetujuan Afkir (`SCRAP`), Penyelesaian Selisih |
-| **Ir. Bambang (Plant Manager)** | Mengetahui kondisi dalam 10 detik | Dasbor Eksekutif, 4 Angka Utama, Indikator *Material Loss Rate* (%), Evaluasi Finansial |
-| **Bu Siti (Admin Sistem)** | Kelola master data, pengguna, dan audit log | Manajemen Pengguna, Master 55+ Material, Peta Rak, Audit Log Keamanan |
+| **Development & Demo** | **SQLite (WAL Mode)** | Ringan, tanpa setup server database terpisah, transaksi ACID terjamin |
+| **Produksi Pabrik** | **PostgreSQL 16** | Skalabilitas multi-lini, partisi data, konkurensi tinggi |
+
+### File Deployment Siap Pakai:
+- `Dockerfile`: Multi-stage Alpine build (~80 MB)
+- `docker-compose.yml`: Satu perintah deployment `docker compose up -d`
+- `nginx.conf`: Konfigurasi reverse proxy internal dengan kompresi gzip untuk jaringan Wi-Fi pabrik
 
 ---
 
-## 4. 4 Angka Utama Dasbor Eksekutif
+## 8. Mode Offline & PWA Tablet
 
-Dasbor utama langsung menjawab pertanyaan: **"Apakah kondisi material saya aman?"**
-
-1. **TOTAL MATERIAL**: `55 jenis` (tersebar di 4 gudang pabrik).
-2. **TOTAL NILAI STOK FISIK**: `Rp 2,42 Miliar` (dihitung otomatis dari akumulasi stok × harga satuan).
-3. **MATERIAL SELISIH**: `8 item` (kasus aktif yang memerlukan pemeriksaan fisik).
-4. **NILAI MATERIAL SELISIH**: `Rp 64,9 Juta` (potensi dampak finansial pada perusahaan).
-5. **TINGKAT KEHILANGAN (LOSS RATE)**: `2.68%` ($\frac{\text{Nilai Selisih}}{\text{Total Nilai Stok}} \times 100\%$).
+Jika jaringan Wi-Fi pabrik terputus saat teknisi berada di dalam sel mesin:
+- Data pemeliharaan secara otomatis ditampung di antrean lokal (*localStorage offline queue*).
+- Status tablet menampilkan indikator: `Mode Offline (Tersimpan Lokal)`.
+- Saat sinyal Wi-Fi terhubung kembali, sistem secara otomatis menyinkronkan data ke database pusat.
+- **Proteksi Idempotensi**: Menggunakan `client_uuid` unik untuk memastikan tidak ada duplikasi transaksi saat sinkronisasi ulang.
 
 ---
 
-## 5. Fitur-Fitur Unggulan
+## 9. Menjalankan Aplikasi Secara Lokal
 
-### A. Material Keluar (Alur 3 Langkah Cepat)
-1. **Langkah 1**: Scan label QR atau pilih material dari daftar pencarian cepat.
-2. **Langkah 2**: Masukkan kuantitas (menggunakan tombol sentuh `+10`, `+50`, `+100`), pilih tujuan (Lini Produksi 01), dan No. SPK.
-3. **Langkah 3**: Muncul dialog konfirmasi bernilai Rupiah:
-   > *"Anda akan mengeluarkan: 25 PCS Bearing Shell A senilai Rp 2.125.000 ke Lini Produksi 01. Apakah Anda yakin?"*
-4. Sistem memotong stok seketika, mencatat ke buku besar mutasi, dan menerbitkan bukti transaksi hijau.
+### Prasyarat
+- Node.js versi 18+ (Disarankan Node 20 LTS)
 
-### B. Stock Opname & Bahasa Netral
-- Mengganti istilah tuduhan *"Material Hilang"* menjadi bahasa kerja konstruktif: **"Diperlukan pemeriksaan"**.
-- Input hitung fisik langsung menghitung selisih real-time:
-  $$\text{Expected: 1.400 PCS} \quad \text{vs} \quad \text{Fisik: 1.250 PCS} \quad \longrightarrow \quad \mathbf{\text{Selisih: -150 PCS (Nilai: Rp 12.750.000)}}$$
-- Supervisor meninjau dan menyetujui penyesuaian resmi, menghasilkan transaksi mutasi koreksi otomatis di buku besar.
-
-### C. Rantai Pertanggungjawaban (Chain of Custody)
-Menyajikan visualisasi linimasa interaktif jejak material dari awal tiba hingga akhir pemakaian:
-`Penerimaan (PO) → Penempatan Rak → Reservasi SPK → Pengeluaran ke Lini → Pemakaian → Pengembalian Sisa → Afkir/Pemusnahan`.
-
-### D. Cetak Label Stiker QR Standar Industri
-Format stiker thermal 75 × 50 mm siap cetak (`window.print()`) berisi:
-- Logo dan Nama Pabrik
-- Kode Barcode / QR Resolusi Tinggi
-- Nama Material & Spesifikasi
-- Kode Rak Penyimpanan Terdaftar
-- Sisa Stok Sistem & Tanggal Cetak
-
-### E. Perbandingan Sebelum vs Sesudah (Evaluasi ROI)
-- **Sebelum**: Sistem manual kertas, pelacakan 45–90 menit, tingkat selisih 4.8%, audit lambat.
-- **Sesudah**: Sistem digital QR, pelacakan < 15 detik, tingkat selisih turun ke < 1%, akurasi opname 99.4%.
-- **Estimasi Penghematan Finansial**: **Rp 145.000.000 / Tahun**.
-
-### F. Mode Demo 3 Menit untuk Manajemen
-Panduan interaktif 10 langkah terarah yang memungkinkan direktur atau manajer pabrik memahami seluruh keunggulan sistem dalam waktu kurang dari 3 menit langsung pada antarmuka aplikasi.
-
----
-
-## 6. Arsitektur Teknis & Struktur Proyek
-
-```
-material-loss-prevention/
-├── server/
-│   ├── db/
-│   │   ├── index.js               # Koneksi better-sqlite3 (WAL Mode & ACID)
-│   │   ├── schema.sql             # Skema DDL Relasional (20 tabel)
-│   │   ├── schema.postgres.sql    # Skema DDL Produksi Enterprise PostgreSQL
-│   │   └── seed.js                # Data realistis 55+ material pabrik & mutasi
-│   ├── middleware/
-│   │   ├── auth.js                # Autentikasi JWT, RBAC & Audit Logger
-│   │   └── errorHandler.js        # Error handler ramah bahasa Indonesia
-│   ├── routes/
-│   │   ├── auth.js                # Login & 1-click Quick Role Switcher
-│   │   ├── dashboard.js           # 4 Angka Utama, Loss Rate & Top Selisih
-│   │   ├── materials.js           # Master data, pencarian, detail & QR label
-│   │   ├── transactions.js        # Mutasi Receive, Issue, Return, Transfer, Scrap
-│   │   ├── opnames.js             # Sesi opname, hitung fisik & persetujuan SPV
-│   │   ├── discrepancies.js       # Investigasi selisih & resolusi supervisor
-│   │   ├── locations.js           # Peta hierarki gudang, area, rak & ambalan
-│   │   ├── reports.js             # Laporan mutasi, valuasi stok, export CSV
-│   │   └── demo.js                # Eksekutor skenario demo 10 langkah & reset
-│   └── index.js                   # Server Express v5 (Port 5001)
-├── src/
-│   ├── components/                # Sidebar, Header, MobileNav, Modals
-│   ├── views/                     # Dashboard, MaterialKeluar, ScanQR, Opname, dll.
-│   ├── index.css                  # Desain Industrial Minimal & variabel sentuh
-│   ├── App.jsx                    # Router tampilan & state manajemen
-│   └── main.jsx                   # React 19 Client Entrypoint
-├── tests/
-│   ├── index.test.js              # 7 Unit tests integritas relasional
-│   └── e2e_simulation.js          # Simulasi end-to-end 7 alur pabrik nyata
-├── vite.config.js                 # Konfigurasi build Vite & proxy API
-└── package.json                   # Dependensi & skrip eksekusi
-```
-
----
-
-## 7. Cara Menjalankan Aplikasi
-
-### Persyaratan
-- Node.js versi 18+ atau 22+
-- npm versi 9+
-
-### Langkah 1: Instalasi Dependensi
+### Instalasi & Menjalankan
 ```bash
-cd /Users/mymac/.gemini/antigravity-ide/scratch/material-loss-prevention
+# 1. Masuk ke direktori
+cd scratch/material-loss-prevention
+
+# 2. Pasang dependensi
 npm install
-```
 
-### Langkah 2: Build & Menjalankan Server Produksi
-```bash
-# Build bundle frontend
+# 3. Inisialisasi basis data (Seed 55 Material + 8 Mesin Otomotif)
+npm run seed
+
+# 4. Bangun aset frontend
 npm run build
 
-# Menjalankan server di port 5001
+# 5. Jalankan server aplikasi
 npm start
 ```
-Aplikasi dapat langsung diakses melalui peramban di: **`http://localhost:5001`**
+Aplikasi dapat diakses melalui browser di: `http://localhost:5001`
 
-### Langkah 3: Menjalankan Pengujian Otomatis
+### Menjalankan Seluruh Pengujian Operasional
 ```bash
-# Menjalankan unit test integritas data
-npm test
+# Pengujian integrasi modul pemeliharaan & lead time
+node tests/maintenance.test.js
 
-# Menjalankan simulasi end-to-end lengkap
+# Pengujian simulasi end-to-end material
 node tests/e2e_simulation.js
+
+# Pengujian red-team penetrasi & integritas ledger
+node tests/redteam_attack.js
 ```
 
 ---
 
-## 8. Kredensial Demo Akun
+## 10. Struktur Akun Uji Coba
 
-Sistem menyediakan tombol cepat **"Ganti Peran"** di pojok kanan atas header untuk berganti akun seketika tanpa mengetik password. Kredensial manual juga tersedia:
-
-| Peran | Nama Pengguna | Kata Sandi | Nama Pengguna Lengkap |
+| Peran | Username | Password | Deskripsi Tugas |
 |---|---|---|---|
-| **Operator Gudang** | `operator_gudang` | `password123` | Pak Budi Santoso |
-| **Operator Produksi** | `operator_produksi` | `password123` | Mas Joko Prasetyo |
-| **Supervisor Gudang** | `supervisor` | `password123` | Pak Hendra Wijaya |
-| **Plant Manager** | `manajemen` | `password123` | Ir. Bambang Trihatmojo |
-| **Admin IT** | `admin` | `password123` | Bu Siti Rahmawati |
+| **Teknisi Produksi** | `operator_produksi` | `operator123` | Mengisi checklist mesin di tablet, scan QR mesin |
+| **Operator Gudang** | `operator_gudang` | `gudang123` | Mengeluarkan material ke lini, scan barcode barang |
+| **Supervisor** | `supervisor` | `spv123` | Verifikasi checklist lapangan, persetujuan selisih |
+| **Plant Manager** | `manajemen` | `manager123` | Memantau Digital Factory Overview, Lead Time KPI |
+| **Administrator** | `admin` | `admin123` | Konfigurasi baseline pabrik, master mesin & material |
+
+---
+
+*TAIHO Prototype v2.0 — Digital Field Data Collection Platform for Automotive Component Manufacturing.*

@@ -331,3 +331,113 @@ BEFORE DELETE ON audit_logs
 BEGIN
   SELECT RAISE(ABORT, 'Audit log sistem tidak boleh dihapus demi kepatuhan audit pabrik.');
 END;
+
+-- ============================================================================
+-- MODUL PEMELIHARAAN (MAINTENANCE) & DIGITAL FIELD DATA COLLECTION
+-- ============================================================================
+
+-- 23. ASSETS / MACHINES (Aset Mesin Pabrik)
+CREATE TABLE IF NOT EXISTS assets (
+  id TEXT PRIMARY KEY,
+  asset_code TEXT NOT NULL UNIQUE,
+  asset_name TEXT NOT NULL,
+  machine_type TEXT NOT NULL,
+  production_area TEXT NOT NULL,
+  location TEXT NOT NULL,
+  manufacturer TEXT,
+  model TEXT,
+  serial_number TEXT,
+  status TEXT NOT NULL DEFAULT 'NORMAL', -- NORMAL, WARNING, PROBLEM, MAINTENANCE
+  current_condition TEXT NOT NULL DEFAULT 'Baik & Siap Beroperasi',
+  installation_date DATE,
+  last_maintenance_at DATETIME,
+  next_maintenance_at DATETIME,
+  qr_code_payload TEXT NOT NULL UNIQUE,
+  is_active INTEGER NOT NULL DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 24. MAINTENANCE_CHECKLISTS (Konfigurasi Lembar Periksa)
+CREATE TABLE IF NOT EXISTS maintenance_checklists (
+  id TEXT PRIMARY KEY,
+  code TEXT NOT NULL UNIQUE,
+  title TEXT NOT NULL,
+  machine_type TEXT NOT NULL,
+  maintenance_type TEXT NOT NULL, -- DAILY_INSPECTION, WEEKLY_INSPECTION, PREVENTIVE, LUBRICATION, CORRECTIVE, CLEANING, PART_REPLACEMENT, REPAIR
+  estimated_duration_minutes INTEGER DEFAULT 10,
+  is_active INTEGER NOT NULL DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 25. MAINTENANCE_CHECKLIST_ITEMS (Poin Pemeriksaan Dinamis)
+CREATE TABLE IF NOT EXISTS maintenance_checklist_items (
+  id TEXT PRIMARY KEY,
+  checklist_id TEXT NOT NULL REFERENCES maintenance_checklists(id) ON DELETE CASCADE,
+  item_order INTEGER NOT NULL,
+  item_label TEXT NOT NULL,
+  standard_description TEXT,
+  item_type TEXT NOT NULL DEFAULT 'STATUS', -- STATUS (PASS/WARNING/FAIL), MEASUREMENT, CHECKBOX
+  min_value REAL,
+  max_value REAL,
+  unit TEXT,
+  requires_action_if_fail INTEGER DEFAULT 1
+);
+
+-- 26. MAINTENANCE_RECORDS (Catatan Lapangan Pemeliharaan Digital)
+CREATE TABLE IF NOT EXISTS maintenance_records (
+  id TEXT PRIMARY KEY,
+  record_number TEXT NOT NULL UNIQUE,
+  asset_id TEXT NOT NULL REFERENCES assets(id),
+  maintenance_type TEXT NOT NULL,
+  checklist_id TEXT REFERENCES maintenance_checklists(id),
+  operator_id TEXT NOT NULL REFERENCES users(id),
+  start_time DATETIME NOT NULL,
+  completion_time DATETIME NOT NULL,
+  submitted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  lead_time_seconds INTEGER NOT NULL DEFAULT 0, -- Selisih real-time antara completion dan submitted
+  status TEXT NOT NULL DEFAULT 'COMPLETED', -- IN_PROGRESS, COMPLETED, VERIFIED, FLAGGED
+  overall_condition TEXT NOT NULL DEFAULT 'NORMAL', -- NORMAL, WARNING, PROBLEM
+  checklist_results TEXT, -- JSON Array hasil evaluasi setiap item
+  findings TEXT, -- Keterangan temuan / kendala
+  action_taken TEXT, -- Tindakan penanganan langsung
+  parts_used TEXT, -- Komponen atau material yang diganti
+  photo_url TEXT, -- URL bukti visual / foto kamera
+  remarks TEXT,
+  supervisor_id TEXT REFERENCES users(id),
+  verified_at DATETIME,
+  is_offline_submission INTEGER DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 27. SENSOR_TELEMETRY (Lapisan Integrasi Sensor & PLC Masa Depan)
+CREATE TABLE IF NOT EXISTS sensor_telemetry (
+  id TEXT PRIMARY KEY,
+  asset_id TEXT NOT NULL REFERENCES assets(id),
+  protocol TEXT NOT NULL DEFAULT 'MODBUS_TCP', -- MODBUS_TCP, MQTT, OPC_UA, REST_API
+  parameter_name TEXT NOT NULL,
+  parameter_value REAL NOT NULL,
+  parameter_unit TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'NORMAL', -- NORMAL, WARNING, ALARM
+  recorded_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 28. BASELINE_CONFIGURATIONS (Parameter Baseline Operasional Pabrik)
+CREATE TABLE IF NOT EXISTS baseline_configurations (
+  id TEXT PRIMARY KEY,
+  config_key TEXT NOT NULL UNIQUE,
+  config_value REAL NOT NULL,
+  description TEXT,
+  unit TEXT,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- INDEXES FOR MAINTENANCE & TELEMETRY
+CREATE INDEX IF NOT EXISTS idx_assets_code ON assets(asset_code);
+CREATE INDEX IF NOT EXISTS idx_assets_status ON assets(status);
+CREATE INDEX IF NOT EXISTS idx_maintenance_asset ON maintenance_records(asset_id);
+CREATE INDEX IF NOT EXISTS idx_maintenance_submitted ON maintenance_records(submitted_at);
+CREATE INDEX IF NOT EXISTS idx_maintenance_operator ON maintenance_records(operator_id);
+CREATE INDEX IF NOT EXISTS idx_telemetry_asset ON sensor_telemetry(asset_id);
+CREATE INDEX IF NOT EXISTS idx_telemetry_recorded ON sensor_telemetry(recorded_at);

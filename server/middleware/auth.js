@@ -62,7 +62,11 @@ function authMiddleware(req, res, next) {
   }
 }
 
-function requireRole(allowedRoles) {
+function requireRole(...allowedRolesInput) {
+  const allowedRoles = Array.isArray(allowedRolesInput[0]) 
+    ? allowedRolesInput[0] 
+    : allowedRolesInput;
+
   return (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({

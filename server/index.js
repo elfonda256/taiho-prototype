@@ -27,6 +27,9 @@ app.use((req, res, next) => {
 // API Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/dashboard', require('./routes/dashboard'));
+app.use('/api/maintenance', require('./routes/maintenance'));
+app.use('/api/baseline', require('./routes/baseline'));
+app.use('/api/telemetry', require('./routes/telemetry'));
 app.use('/api/materials', require('./routes/materials'));
 app.use('/api/transactions', require('./routes/transactions'));
 app.use('/api/opnames', require('./routes/opnames'));
@@ -39,8 +42,9 @@ app.use('/api/demo', require('./routes/demo'));
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
-    system: 'Sistem Pencegahan Kehilangan Material (Material Loss Prevention System)',
-    version: '1.0.0-PROD',
+    platform: 'Platform Pengumpulan Data Lapangan Digital (Digital Field Data Collection Platform)',
+    system: 'TAIHO Prototype - Maintenance & Material Loss Prevention',
+    version: '2.0.0-PROD',
     timestamp: new Date().toISOString()
   });
 });
