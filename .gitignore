@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Production build
+dist/
+
+# SQLite WAL and runtime lock files
+server/data/*.db-shm
+server/data/*.db-wal
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment & local config
+.env
+.env.local
+
+# OS Files
+.DS_Store
+Thumbs.db
