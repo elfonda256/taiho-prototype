@@ -1,25 +1,32 @@
 import React from 'react';
 import { LayoutDashboard, Gauge, QrCode, FileSpreadsheet, Menu } from 'lucide-react';
+import { getTranslation } from '../utils/i18n';
 
-export default function MobileNav({ currentView, setView, onOpenScanner, onOpenMobileDrawer }) {
+export default function MobileNav({
+  currentView,
+  setView,
+  onOpenScanner,
+  onOpenMobileDrawer,
+  lang = 'en'
+}) {
   return (
     <nav className="mobile-nav">
       <button
         className={`mobile-nav-btn ${currentView === 'dashboard' ? 'active' : ''}`}
         onClick={() => setView('dashboard')}
-        aria-label="Ikhtisar Pabrik"
+        aria-label={getTranslation('nav_factory', lang)}
       >
         <LayoutDashboard size={19} />
-        <span>Pabrik</span>
+        <span>{getTranslation('nav_factory', lang)}</span>
       </button>
 
       <button
         className={`mobile-nav-btn ${currentView === 'maintenance_dashboard' ? 'active' : ''}`}
         onClick={() => setView('maintenance_dashboard')}
-        aria-label="Dasbor Kondisi Mesin"
+        aria-label={getTranslation('nav_machines', lang)}
       >
         <Gauge size={19} />
-        <span>Mesin</span>
+        <span>{getTranslation('nav_machines', lang)}</span>
       </button>
 
       {/* Floating Center Scan Button */}
@@ -41,28 +48,28 @@ export default function MobileNav({ currentView, setView, onOpenScanner, onOpenM
           justifyContent: 'center',
           border: '2px solid var(--bg-surface)'
         }}
-        aria-label="Pemindai QR Code"
+        aria-label="Scan QR Code"
       >
         <QrCode size={22} color="#ffffff" />
-        <span style={{ fontSize: 8.5, marginTop: 1, color: '#ffffff', fontWeight: 800 }}>SCAN</span>
+        <span style={{ fontSize: 8.5, marginTop: 1, color: '#ffffff', fontWeight: 800 }}>{getTranslation('nav_scan', lang)}</span>
       </button>
 
       <button
         className={`mobile-nav-btn ${currentView === 'reports' ? 'active' : ''}`}
         onClick={() => setView('reports')}
-        aria-label="Laporan Eksekutif & Finansial"
+        aria-label={getTranslation('nav_reports', lang)}
       >
         <FileSpreadsheet size={19} />
-        <span>Laporan</span>
+        <span>{getTranslation('nav_reports', lang)}</span>
       </button>
 
       <button
         className="mobile-nav-btn"
         onClick={onOpenMobileDrawer}
-        aria-label="Menu Lengkap"
+        aria-label={getTranslation('nav_menu', lang)}
       >
         <Menu size={19} />
-        <span>Menu</span>
+        <span>{getTranslation('nav_menu', lang)}</span>
       </button>
     </nav>
   );

@@ -19,13 +19,15 @@ import {
   RefreshCw,
   Gauge
 } from 'lucide-react';
+import { getTranslation } from '../utils/i18n';
 
 export default function DashboardView({
   data,
   isLoading,
   setView,
   onOpenScanner,
-  onSelectMaterial
+  onSelectMaterial,
+  lang = 'en'
 }) {
   const [digitalFactoryData, setDigitalFactoryData] = useState(null);
   const [isLoadingDF, setIsLoadingDF] = useState(true);
@@ -53,7 +55,9 @@ export default function DashboardView({
     return (
       <div className="content-body" style={{ textAlign: 'center', padding: '80px 20px' }}>
         <RefreshCw size={28} className="spin" color="#38bdf8" style={{ margin: '0 auto 16px' }} />
-        <p style={{ fontSize: 16, color: 'var(--text-muted)', fontWeight: 600 }}>Memuat Data Ikhtisar Pabrik...</p>
+        <p style={{ fontSize: 16, color: 'var(--text-muted)', fontWeight: 600 }}>
+          {lang === 'en' ? 'Loading Digital Factory Overview...' : 'Memuat Data Ikhtisar Pabrik...'}
+        </p>
       </div>
     );
   }
@@ -101,7 +105,7 @@ export default function DashboardView({
         position: 'relative',
         overflow: 'hidden'
       }}>
-        {/* Subtle accent line */}
+        {/* Apple-style subtle gradient accent line */}
         <div style={{
           position: 'absolute',
           top: 0,
@@ -122,14 +126,28 @@ export default function DashboardView({
               display: 'inline-block'
             }} />
             <span style={{ fontSize: 11.5, fontWeight: 800, color: 'var(--brand-primary)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-              PLATFORM OPERASIONAL DATA LAPANGAN • TAIHO
+              {getTranslation('brandName', lang)} • {getTranslation('platformTitle', lang)}
             </span>
+            {lang === 'en' && (
+              <span style={{
+                fontSize: 10,
+                fontWeight: 800,
+                color: '#0284c7',
+                padding: '2px 8px',
+                borderRadius: 6,
+                background: 'rgba(2, 132, 199, 0.12)',
+                border: '1px solid rgba(2, 132, 199, 0.28)',
+                letterSpacing: '0.4px'
+              }}>
+                社長 Shachō Review
+              </span>
+            )}
           </div>
-          <h2 style={{ margin: '2px 0 6px', fontSize: 22, fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
-            Ikhtisar Pabrik Digital (Digital Factory Overview)
+          <h2 style={{ margin: '2px 0 6px', fontSize: 22, fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.025em' }}>
+            {getTranslation('view_dashboard', lang)}
           </h2>
           <p style={{ margin: 0, fontSize: 13.5, color: 'var(--text-muted)' }}>
-            Transparansi operasional seketika: Kecepatan Aliran Data, Kondisi Mesin, dan Pengendalian Material
+            {getTranslation('sub_dashboard', lang)}
           </p>
         </div>
 
@@ -142,14 +160,16 @@ export default function DashboardView({
           textAlign: 'right',
           backdropFilter: 'blur(8px)'
         }}>
-          <div style={{ fontSize: 10.5, color: 'var(--text-muted)', fontWeight: 800, letterSpacing: '0.5px' }}>WAKTU SISTEM TERKINI</div>
+          <div style={{ fontSize: 10.5, color: 'var(--text-muted)', fontWeight: 800, letterSpacing: '0.5px' }}>
+            {getTranslation('systemTime', lang)}
+          </div>
           <div style={{ fontSize: 17, fontWeight: 800, color: 'var(--text-main)', marginTop: 2, fontFamily: 'var(--font-mono)' }}>
-            ⏱️ {currentTime.toLocaleTimeString('id-ID')} WIB
+            ⏱️ {currentTime.toLocaleTimeString(lang === 'en' ? 'en-US' : 'id-ID')} {lang === 'en' ? 'UTC+7' : 'WIB'}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6, marginTop: 4 }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#10b981' }} />
-            <span style={{ fontSize: 11, color: 'var(--status-safe)', fontWeight: 700 }}>
-              Database SQLite WAL Sinkron
+            <span style={{ fontSize: 11, color: 'var(--status-safe-text)', fontWeight: 700 }}>
+              {getTranslation('dbSync', lang)}
             </span>
           </div>
         </div>
@@ -175,10 +195,10 @@ export default function DashboardView({
             </div>
             <div>
               <h3 className="card-title" style={{ fontSize: 16 }}>
-                1. Kecepatan Aliran Informasi (Information Flow & Availability)
+                {getTranslation('sec_info_lead_time', lang)}
               </h3>
               <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0 }}>
-                Perbandingan jeda laporan kertas fisik (baseline 7 hari) vs digital (seketika)
+                {getTranslation('sec_info_desc', lang)}
               </p>
             </div>
           </div>
@@ -188,7 +208,7 @@ export default function DashboardView({
             className="btn btn-outline"
             style={{ minHeight: 34, padding: '0 12px', fontSize: 12.5, gap: 6, color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }}
           >
-            <span>Analisis Detail Lead Time</span>
+            <span>{getTranslation('btn_detail_lead_time', lang)}</span>
             <ArrowRight size={14} />
           </button>
         </div>
@@ -207,18 +227,18 @@ export default function DashboardView({
             position: 'relative'
           }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--accent-cyan)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              INFORMATION LEAD TIME
+              {getTranslation('kpi_lead_time_reduction', lang)}
             </div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, margin: '8px 0 6px' }}>
               <span style={{ fontSize: 28, fontWeight: 900, color: 'var(--accent-emerald)', fontFamily: 'var(--font-mono)' }}>
-                {info.actual_avg_lead_time_minutes} Menit
+                {info.actual_avg_lead_time_minutes} {getTranslation('unit_minutes', lang)}
               </span>
               <span style={{ fontSize: 13, color: 'var(--accent-rose)', textDecoration: 'line-through', fontWeight: 600 }}>
-                ~{info.baseline_lead_time_days} Hari
+                ~{info.baseline_lead_time_days} {getTranslation('unit_days', lang)}
               </span>
             </div>
             <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-              Reduksi jeda waktu: <strong style={{ color: 'var(--accent-emerald)' }}>&gt;99%</strong> dari fisik ke dasbor
+              {getTranslation('kpi_lead_time_reduction_desc', lang)}
             </div>
           </div>
 
@@ -230,13 +250,13 @@ export default function DashboardView({
             border: '1px solid rgba(16, 185, 129, 0.35)'
           }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--status-safe-text)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              DATA AVAILABILITY HARI INI
+              {getTranslation('kpi_data_availability', lang)}
             </div>
             <div style={{ fontSize: 28, fontWeight: 900, color: 'var(--accent-emerald)', margin: '8px 0 6px', fontFamily: 'var(--font-mono)' }}>
               {info.data_availability_percent}%
             </div>
             <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-              <strong style={{ color: 'var(--text-main)' }}>{info.submitted_today}</strong> dari <strong style={{ color: 'var(--text-main)' }}>{info.planned_today}</strong> aktivitas mesin terkirim
+              <strong style={{ color: 'var(--text-main)' }}>{info.submitted_today}</strong> / <strong style={{ color: 'var(--text-main)' }}>{info.planned_today}</strong> {getTranslation('kpi_data_avail_desc', lang)}
             </div>
           </div>
 
@@ -248,13 +268,13 @@ export default function DashboardView({
             border: '1px solid rgba(245, 158, 11, 0.35)'
           }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--status-warn-text)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              AKTIVITAS BELUM TERKIRIM
+              {getTranslation('kpi_pending_activities', lang)}
             </div>
             <div style={{ fontSize: 28, fontWeight: 900, color: 'var(--accent-amber)', margin: '8px 0 6px', fontFamily: 'var(--font-mono)' }}>
-              {info.pending_today} Mesin
+              {info.pending_today} {getTranslation('unit_machines', lang)}
             </div>
             <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-              Menunggu input tablet operator shift ini
+              {getTranslation('kpi_pending_desc', lang)}
             </div>
           </div>
 
@@ -266,13 +286,13 @@ export default function DashboardView({
             border: '1px solid rgba(56, 189, 248, 0.3)'
           }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              REKAP MANUAL TERELIMINASI
+              {getTranslation('kpi_manual_eliminated', lang)}
             </div>
             <div style={{ fontSize: 28, fontWeight: 900, color: 'var(--accent-cyan)', margin: '8px 0 6px', fontFamily: 'var(--font-mono)' }}>
               100%
             </div>
             <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-              Tanpa pengumpulan dan pengetikan ulang formulir kertas
+              {getTranslation('kpi_manual_desc', lang)}
             </div>
           </div>
         </div>
@@ -298,10 +318,10 @@ export default function DashboardView({
             </div>
             <div>
               <h3 className="card-title" style={{ fontSize: 16 }}>
-                2. Status Pemeliharaan & Mesin (Maintenance Field Data)
+                {getTranslation('sec_maintenance', lang)}
               </h3>
               <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0 }}>
-                Kondisi 8 unit mesin utama di lini Stamping, CNC, dan Perakitan
+                {getTranslation('sec_maintenance_desc', lang)}
               </p>
             </div>
           </div>
@@ -312,14 +332,14 @@ export default function DashboardView({
               className="btn btn-primary"
               style={{ minHeight: 34, padding: '0 12px', fontSize: 12.5, gap: 6 }}
             >
-              <span>📱 Tablet Operator</span>
+              <span>{getTranslation('btn_operator_tablet', lang)}</span>
             </button>
             <button
               onClick={() => setView('maintenance_dashboard')}
               className="btn btn-outline"
               style={{ minHeight: 34, padding: '0 12px', fontSize: 12.5, gap: 6, color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }}
             >
-              <span>Dasbor Mesin</span>
+              <span>{getTranslation('btn_machine_dashboard', lang)}</span>
               <ArrowRight size={14} />
             </button>
           </div>
@@ -332,27 +352,39 @@ export default function DashboardView({
           gap: 14
         }}>
           <div style={{ backgroundColor: 'var(--bg-card-inner)', padding: 16, borderRadius: 'var(--radius-md)', border: '1px solid var(--status-safe-border)' }}>
-            <div style={{ fontSize: 12, color: 'var(--status-safe-text)', fontWeight: 800 }}>🟢 Normal Siap Kerja</div>
-            <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--accent-emerald)', margin: '6px 0 4px', fontFamily: 'var(--font-mono)' }}>
-              {mnt.normal_count} Mesin
+            <div style={{ fontSize: 12, color: 'var(--status-safe-text)', fontWeight: 800 }}>
+              {getTranslation('machine_normal', lang)}
             </div>
-            <span style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>Parameter inspeksi baik</span>
+            <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--accent-emerald)', margin: '6px 0 4px', fontFamily: 'var(--font-mono)' }}>
+              {mnt.normal_count} {getTranslation('unit_machines', lang)}
+            </div>
+            <span style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>
+              {lang === 'en' ? 'Inspection parameters optimal' : 'Parameter inspeksi baik'}
+            </span>
           </div>
 
           <div style={{ backgroundColor: 'var(--bg-card-inner)', padding: 16, borderRadius: 'var(--radius-md)', border: '1px solid var(--status-warn-border)' }}>
-            <div style={{ fontSize: 12, color: 'var(--status-warn-text)', fontWeight: 800 }}>🟡 Warning (Pantau)</div>
-            <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--accent-amber)', margin: '6px 0 4px', fontFamily: 'var(--font-mono)' }}>
-              {mnt.warning_count} Mesin
+            <div style={{ fontSize: 12, color: 'var(--status-warn-text)', fontWeight: 800 }}>
+              {getTranslation('machine_warning', lang)}
             </div>
-            <span style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>Perlu top-up oli / monitoring</span>
+            <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--accent-amber)', margin: '6px 0 4px', fontFamily: 'var(--font-mono)' }}>
+              {mnt.warning_count} {getTranslation('unit_machines', lang)}
+            </div>
+            <span style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>
+              {lang === 'en' ? 'Oil top-up / monitoring required' : 'Perlu top-up oli / monitoring'}
+            </span>
           </div>
 
           <div style={{ backgroundColor: 'var(--bg-card-inner)', padding: 16, borderRadius: 'var(--radius-md)', border: '1px solid var(--status-alert-border)' }}>
-            <div style={{ fontSize: 12, color: 'var(--status-alert-text)', fontWeight: 800 }}>🔴 Problem (Bermasalah)</div>
-            <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--accent-rose)', margin: '6px 0 4px', fontFamily: 'var(--font-mono)' }}>
-              {mnt.problem_count} Mesin
+            <div style={{ fontSize: 12, color: 'var(--status-alert-text)', fontWeight: 800 }}>
+              {getTranslation('machine_problem', lang)}
             </div>
-            <span style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>Menunggu tindakan perbaikan</span>
+            <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--accent-rose)', margin: '6px 0 4px', fontFamily: 'var(--font-mono)' }}>
+              {mnt.problem_count} {getTranslation('unit_machines', lang)}
+            </div>
+            <span style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>
+              {lang === 'en' ? 'Corrective maintenance pending' : 'Menunggu tindakan perbaikan'}
+            </span>
           </div>
 
           {/* Highlighted Last Updated Machine Card */}
@@ -366,7 +398,7 @@ export default function DashboardView({
             justifyContent: 'center'
           }}>
             <div style={{ fontSize: 11, color: 'var(--brand-primary)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              UPDATE LAPANGAN TERBARU (LIVE)
+              {getTranslation('latest_field_update', lang)}
             </div>
             {mnt.latest_update ? (
               <div style={{ marginTop: 6 }}>
@@ -374,12 +406,12 @@ export default function DashboardView({
                   {mnt.latest_update.asset_code} — {mnt.latest_update.asset_name}
                 </div>
                 <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>
-                  Teknisi: <strong style={{ color: 'var(--text-main)' }}>{mnt.latest_update.operator_name || 'Teknisi'}</strong> • Jam <strong style={{ color: 'var(--text-main)' }}>{mnt.latest_update.submitted_at ? new Date(mnt.latest_update.submitted_at).toLocaleTimeString('id-ID') : '-'} WIB</strong>
+                  {getTranslation('technician', lang)}: <strong style={{ color: 'var(--text-main)' }}>{mnt.latest_update.operator_name || 'Operator'}</strong> • {getTranslation('at_time', lang)} <strong style={{ color: 'var(--text-main)' }}>{mnt.latest_update.submitted_at ? new Date(mnt.latest_update.submitted_at).toLocaleTimeString(lang === 'en' ? 'en-US' : 'id-ID') : '-'}</strong>
                 </div>
               </div>
             ) : (
               <div style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 6 }}>
-                Belum ada catatan inspeksi baru shift ini
+                {getTranslation('no_new_inspections', lang)}
               </div>
             )}
           </div>
@@ -406,10 +438,10 @@ export default function DashboardView({
             </div>
             <div>
               <h3 className="card-title" style={{ fontSize: 16 }}>
-                3. Inventaris & Pengendalian Material (Material Control)
+                {getTranslation('sec_material_control', lang)}
               </h3>
               <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0 }}>
-                Pengawasan buku besar mutasi dan pencegahan kehilangan material
+                {getTranslation('sec_material_desc', lang)}
               </p>
             </div>
           </div>
@@ -419,7 +451,7 @@ export default function DashboardView({
             className="btn btn-outline"
             style={{ minHeight: 34, padding: '0 12px', fontSize: 12.5, gap: 6, color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }}
           >
-            <span>Katalog Master Material</span>
+            <span>{getTranslation('btn_master_catalog', lang)}</span>
             <ArrowRight size={14} />
           </button>
         </div>
@@ -427,31 +459,31 @@ export default function DashboardView({
         {/* 4 KPI Numbers */}
         <div className="kpi-grid" style={{ marginBottom: 18 }}>
           <div className="kpi-card">
-            <div className="kpi-label">TOTAL JENIS MATERIAL</div>
-            <div className="kpi-value">{kpi.totalMaterials} <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--text-muted)' }}>jenis</span></div>
-            <div className="kpi-subtext">Tersebar di 4 zona gudang pabrik</div>
+            <div className="kpi-label">{getTranslation('kpi_total_materials', lang)}</div>
+            <div className="kpi-value">{kpi.totalMaterials} <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--text-muted)' }}>{getTranslation('unit_types', lang)}</span></div>
+            <div className="kpi-subtext">{getTranslation('kpi_zone_distribution', lang)}</div>
           </div>
 
           <div className="kpi-card">
-            <div className="kpi-label">TOTAL NILAI STOK FISIK</div>
+            <div className="kpi-label">{getTranslation('kpi_total_valuation', lang)}</div>
             <div className="kpi-value">
-              Rp {(kpi.totalStockValue / 1000000000).toFixed(2)} <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--text-muted)' }}>M</span>
+              Rp {(kpi.totalStockValue / 1000000000).toFixed(2)} <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--text-muted)' }}>{lang === 'en' ? 'B' : 'M'}</span>
             </div>
             <div className="kpi-subtext font-mono">Rp {kpi.totalStockValue.toLocaleString('id-ID')}</div>
           </div>
 
           <div className="kpi-card alert-card">
-            <div className="kpi-label" style={{ color: 'var(--status-danger)' }}>MATERIAL SELISIH</div>
+            <div className="kpi-label" style={{ color: 'var(--status-danger)' }}>{getTranslation('kpi_material_variance', lang)}</div>
             <div className="kpi-value">
-              {kpi.discrepant_itemsCount} <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--status-danger)' }}>item</span>
+              {kpi.discrepant_itemsCount} <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--status-danger)' }}>{getTranslation('unit_items', lang)}</span>
             </div>
-            <div className="kpi-subtext" style={{ color: 'var(--status-danger)' }}>Perlu pemeriksaan fisik & opname</div>
+            <div className="kpi-subtext" style={{ color: 'var(--status-danger)' }}>{getTranslation('kpi_need_audit', lang)}</div>
           </div>
 
           <div className="kpi-card alert-card">
-            <div className="kpi-label" style={{ color: 'var(--status-danger)' }}>NILAI SELISIH AKTIF</div>
+            <div className="kpi-label" style={{ color: 'var(--status-danger)' }}>{getTranslation('kpi_active_variance_value', lang)}</div>
             <div className="kpi-value">
-              Rp {(kpi.totalDiscrepancyValue / 1000000).toFixed(1)} <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--status-danger)' }}>Juta</span>
+              Rp {(kpi.totalDiscrepancyValue / 1000000).toFixed(1)} <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--status-danger)' }}>{getTranslation('unit_million', lang)}</span>
             </div>
             <div className="kpi-subtext font-mono" style={{ color: 'var(--status-danger)' }}>
               Rp {kpi.totalDiscrepancyValue.toLocaleString('id-ID')}
@@ -468,9 +500,13 @@ export default function DashboardView({
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <ArrowUpRight size={20} />
-              <span style={{ fontSize: 14, fontWeight: 800 }}>PENGELUARAN MATERIAL</span>
+              <span style={{ fontSize: 14, fontWeight: 800 }}>
+                {lang === 'en' ? 'ISSUE MATERIAL' : 'PENGELUARAN MATERIAL'}
+              </span>
             </div>
-            <span style={{ fontSize: 11.5, opacity: 0.9 }}>Alur Cepat →</span>
+            <span style={{ fontSize: 11.5, opacity: 0.9 }}>
+              {lang === 'en' ? 'Fast Dispense →' : 'Alur Cepat →'}
+            </span>
           </button>
 
           <button
@@ -480,9 +516,13 @@ export default function DashboardView({
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <QrCode size={20} />
-              <span style={{ fontSize: 14, fontWeight: 800 }}>SCAN QR CEPAT</span>
+              <span style={{ fontSize: 14, fontWeight: 800 }}>
+                {lang === 'en' ? 'QUICK SCAN QR' : 'SCAN QR CEPAT'}
+              </span>
             </div>
-            <span style={{ fontSize: 11.5, opacity: 0.9 }}>Mesin / Material →</span>
+            <span style={{ fontSize: 11.5, opacity: 0.9 }}>
+              {lang === 'en' ? 'Asset / Material →' : 'Mesin / Material →'}
+            </span>
           </button>
 
           <button
@@ -492,9 +532,13 @@ export default function DashboardView({
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <ClipboardList size={20} color="#38bdf8" />
-              <span style={{ fontSize: 14, fontWeight: 800 }}>STOCK OPNAME</span>
+              <span style={{ fontSize: 14, fontWeight: 800 }}>
+                {lang === 'en' ? 'STOCK OPNAME' : 'STOCK OPNAME'}
+              </span>
             </div>
-            <span style={{ fontSize: 11.5, color: '#94a3b8' }}>Audit Fisik →</span>
+            <span style={{ fontSize: 11.5, color: '#94a3b8' }}>
+              {lang === 'en' ? 'Physical Audit →' : 'Audit Fisik →'}
+            </span>
           </button>
         </div>
       </div>
@@ -519,10 +563,10 @@ export default function DashboardView({
             </div>
             <div>
               <h3 className="card-title" style={{ fontSize: 16 }}>
-                4. Status Infrastruktur & Kesiapan Sistem Pabrik
+                {lang === 'en' ? '4. Infrastructure & Platform Readiness' : '4. Status Infrastruktur & Kesiapan Sistem Pabrik'}
               </h3>
               <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0 }}>
-                Arsitektur non-AI deterministik, kesiapan offline, dan integritas buku besar audit
+                {lang === 'en' ? 'Deterministic non-AI architecture, offline readiness, and ledger integrity' : 'Arsitektur non-AI deterministik, kesiapan offline, dan integritas buku besar audit'}
               </p>
             </div>
           </div>
@@ -532,7 +576,7 @@ export default function DashboardView({
             className="btn btn-outline"
             style={{ minHeight: 34, padding: '0 12px', fontSize: 12.5, gap: 6, color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }}
           >
-            <span>Arsitektur IoT / Sensor</span>
+            <span>{lang === 'en' ? 'IoT / PLC Architecture' : 'Arsitektur IoT / Sensor'}</span>
             <ArrowRight size={14} />
           </button>
         </div>
@@ -543,30 +587,38 @@ export default function DashboardView({
           gap: 12
         }}>
           <div style={{ backgroundColor: 'var(--bg-card-inner)', padding: 14, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
-            <span style={{ color: 'var(--text-muted)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>Database Engine</span>
+            <span style={{ color: 'var(--text-muted)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>
+              {lang === 'en' ? 'Database Engine' : 'Database Engine'}
+            </span>
             <div style={{ color: 'var(--text-main)', fontWeight: 800, marginTop: 4, fontSize: 13.5 }}>
               SQLite WAL Mode (ACID Compliant)
             </div>
           </div>
 
           <div style={{ backgroundColor: 'var(--bg-card-inner)', padding: 14, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
-            <span style={{ color: 'var(--text-muted)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>Sinkronisasi Tablet Lapangan</span>
+            <span style={{ color: 'var(--text-muted)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>
+              {lang === 'en' ? 'Field Tablet Sync' : 'Sinkronisasi Tablet Lapangan'}
+            </span>
             <div style={{ color: 'var(--accent-emerald)', fontWeight: 800, marginTop: 4, fontSize: 13.5 }}>
-              Online (Offline Queue PWA Siap)
+              {lang === 'en' ? 'Online (Offline Queue PWA Ready)' : 'Online (Offline Queue PWA Siap)'}
             </div>
           </div>
 
           <div style={{ backgroundColor: 'var(--bg-card-inner)', padding: 14, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
-            <span style={{ color: 'var(--text-muted)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>Sensor Telemetry Gateway</span>
+            <span style={{ color: 'var(--text-muted)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>
+              {lang === 'en' ? 'Sensor Telemetry Gateway' : 'Sensor Telemetry Gateway'}
+            </span>
             <div style={{ color: 'var(--accent-cyan)', fontWeight: 800, marginTop: 4, fontSize: 13.5 }}>
               READY LISTENING (Modbus / MQTT)
             </div>
           </div>
 
           <div style={{ backgroundColor: 'var(--bg-card-inner)', padding: 14, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
-            <span style={{ color: 'var(--text-muted)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>Integritas Audit Trail</span>
+            <span style={{ color: 'var(--text-muted)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>
+              {lang === 'en' ? 'Audit Trail Integrity' : 'Integritas Audit Trail'}
+            </span>
             <div style={{ color: 'var(--accent-emerald)', fontWeight: 800, marginTop: 4, fontSize: 13.5 }}>
-              Immutable Ledger Terproteksi
+              {lang === 'en' ? 'Immutable Ledger Protected' : 'Immutable Ledger Terproteksi'}
             </div>
           </div>
         </div>

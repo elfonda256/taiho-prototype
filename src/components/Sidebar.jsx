@@ -15,31 +15,38 @@ import {
   Gauge,
   Clock,
   Calculator,
-  Cpu
+  Cpu,
+  Globe
 } from 'lucide-react';
 import TaihoLogo from './TaihoLogo';
+import { getTranslation } from '../utils/i18n';
 
-export default function Sidebar({ currentView, setView, currentUser, onOpenScanner }) {
+export default function Sidebar({
+  currentView,
+  setView,
+  currentUser,
+  onOpenScanner,
+  lang = 'en',
+  onToggleLang
+}) {
   const role = currentUser?.role || 'WAREHOUSE';
 
   const navSections = [
     {
-      title: 'PABRIK DIGITAL',
+      titleKey: 'catDigitalFactory',
       items: [
         {
           id: 'dashboard',
-          label: 'Ikhtisar Pabrik (Overview)',
           icon: LayoutDashboard,
           roles: ['ADMIN', 'WAREHOUSE', 'PRODUCTION', 'SUPERVISOR', 'MANAGEMENT']
         }
       ]
     },
     {
-      title: 'PEMELIHARAAN (MAINTENANCE)',
+      titleKey: 'catMaintenance',
       items: [
         {
           id: 'maintenance_operator',
-          label: 'Tablet Operator (Lapangan)',
           icon: Wrench,
           highlight: true,
           tabletBadge: true,
@@ -47,95 +54,81 @@ export default function Sidebar({ currentView, setView, currentUser, onOpenScann
         },
         {
           id: 'maintenance_dashboard',
-          label: 'Dasbor Kondisi Mesin',
           icon: Gauge,
           roles: ['ADMIN', 'PRODUCTION', 'SUPERVISOR', 'MANAGEMENT']
         }
       ]
     },
     {
-      title: 'MATERIAL & INVENTARIS',
+      titleKey: 'catMaterial',
       items: [
         {
           id: 'material_keluar',
-          label: 'Material Keluar',
           icon: ArrowUpRight,
           roles: ['ADMIN', 'WAREHOUSE']
         },
         {
           id: 'material_masuk',
-          label: 'Material Masuk',
           icon: ArrowDownLeft,
           roles: ['ADMIN', 'WAREHOUSE']
         },
         {
           id: 'scan_qr',
-          label: 'Pemindai QR Code',
           icon: QrCode,
           roles: ['ADMIN', 'WAREHOUSE', 'PRODUCTION']
         },
         {
           id: 'stock_opname',
-          label: 'Stock Opname Fisik',
           icon: ClipboardList,
           roles: ['ADMIN', 'WAREHOUSE', 'SUPERVISOR']
         },
         {
           id: 'discrepancies',
-          label: 'Pemeriksaan Selisih',
           icon: AlertOctagon,
           roles: ['ADMIN', 'SUPERVISOR', 'MANAGEMENT']
         },
         {
           id: 'materials',
-          label: 'Katalog Material',
           icon: Boxes,
           roles: ['ADMIN', 'WAREHOUSE', 'PRODUCTION', 'SUPERVISOR', 'MANAGEMENT']
         },
         {
           id: 'ledger',
-          label: 'Riwayat Mutasi',
           icon: ScrollText,
           roles: ['ADMIN', 'WAREHOUSE', 'SUPERVISOR', 'MANAGEMENT']
         },
         {
           id: 'locations',
-          label: 'Lokasi Rak & Gudang',
           icon: MapPin,
           roles: ['ADMIN', 'WAREHOUSE', 'SUPERVISOR']
         }
       ]
     },
     {
-      title: 'KPI & EFISIENSI BISNIS',
+      titleKey: 'catKpi',
       items: [
         {
           id: 'lead_time_kpi',
-          label: 'Information Lead Time',
           icon: Clock,
           roles: ['ADMIN', 'SUPERVISOR', 'MANAGEMENT']
         },
         {
           id: 'baseline_simulation',
-          label: 'Simulasi ROI & Baseline',
           icon: Calculator,
           roles: ['ADMIN', 'SUPERVISOR', 'MANAGEMENT']
         },
         {
           id: 'sensor_integration',
-          label: 'Integrasi Sensor / PLC',
           icon: Cpu,
           roles: ['ADMIN', 'SUPERVISOR', 'MANAGEMENT']
         },
         {
           id: 'reports',
-          label: 'Laporan & Finansial',
           icon: FileSpreadsheet,
           roles: ['ADMIN', 'SUPERVISOR', 'MANAGEMENT']
         },
         {
           id: 'demo_mode',
-          label: 'Mode Demo Eksekutif',
           icon: PlayCircle,
           demoBadge: true,
           roles: ['ADMIN', 'WAREHOUSE', 'PRODUCTION', 'SUPERVISOR', 'MANAGEMENT']
@@ -164,12 +157,16 @@ export default function Sidebar({ currentView, setView, currentUser, onOpenScann
             gap: 4
           }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor' }} />
-            ONLINE
+            {getTranslation('factoryOnline', lang)}
           </span>
         </div>
         <div>
-          <h1 className="brand-title" style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-main)' }}>Pabrik Digital</h1>
-          <p className="brand-subtitle" style={{ fontSize: 11, color: 'var(--text-muted)' }}>Platform Operasional • Lapangan</p>
+          <h1 className="brand-title" style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
+            {getTranslation('brandName', lang)}
+          </h1>
+          <p className="brand-subtitle" style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+            {getTranslation('platformSubtitle', lang)}
+          </p>
         </div>
       </div>
 
@@ -180,23 +177,27 @@ export default function Sidebar({ currentView, setView, currentUser, onOpenScann
           if (visibleItems.length === 0) return null;
 
           return (
-            <div key={section.title} style={{ marginBottom: 10 }}>
+            <div key={section.titleKey} style={{ marginBottom: 12 }}>
               <div className="nav-section-title">
-                {section.title}
+                {getTranslation(section.titleKey, lang)}
               </div>
 
               {visibleItems.map(item => {
                 const Icon = item.icon;
                 const isActive = currentView === item.id;
+                const itemLabel = getTranslation(`view_${item.id}`, lang);
 
                 return (
                   <button
                     key={item.id}
                     onClick={() => setView(item.id)}
                     className={`nav-item ${isActive ? 'active' : ''} ${item.highlight ? 'highlight-operator' : ''}`}
+                    title={itemLabel}
                   >
                     <Icon size={17} style={{ opacity: isActive ? 1 : 0.8 }} />
-                    <span style={{ flex: 1, textAlign: 'left' }}>{item.label}</span>
+                    <span style={{ flex: 1, textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {itemLabel}
+                    </span>
                     {item.tabletBadge && (
                       <span className="badge-tag-tablet">
                         TABLET
@@ -215,14 +216,35 @@ export default function Sidebar({ currentView, setView, currentUser, onOpenScann
         })}
       </nav>
 
-      {/* Operator Quick Scan Action */}
-      <div className="sidebar-bottom-action">
+      {/* Sidebar Footer: Language Toggle & Quick Scan */}
+      <div className="sidebar-bottom-action" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {onToggleLang && (
+          <button
+            className="btn btn-outline"
+            style={{
+              width: '100%',
+              minHeight: 36,
+              fontSize: 11.5,
+              fontWeight: 800,
+              gap: 6,
+              justifyContent: 'center',
+              borderColor: 'var(--border-subtle)',
+              backgroundColor: 'var(--bg-surface)'
+            }}
+            onClick={onToggleLang}
+            title={lang === 'en' ? 'Beralih ke Bahasa Indonesia' : 'Switch to English (Shachō Mode)'}
+          >
+            <Globe size={14} color="var(--brand-primary)" />
+            <span>{lang === 'en' ? '🇬🇧 English (Shachō View)' : '🇮🇩 Bahasa Indonesia'}</span>
+          </button>
+        )}
+
         <button
           className="btn btn-primary"
           style={{ width: '100%', minHeight: 44, fontSize: 13, gap: 8 }}
           onClick={onOpenScanner}
         >
-          <QrCode size={16} /> Scan QR (Mesin / Material)
+          <QrCode size={16} /> {getTranslation('btn_scan_qr_quick', lang)}
         </button>
       </div>
     </aside>

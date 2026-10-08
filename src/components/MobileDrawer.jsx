@@ -17,12 +17,13 @@ import {
   Clock,
   Calculator,
   Cpu,
-  UserCheck,
   Sun,
   Moon,
-  RefreshCw
+  RefreshCw,
+  Globe
 } from 'lucide-react';
 import TaihoLogo from './TaihoLogo';
+import { getTranslation } from '../utils/i18n';
 
 export default function MobileDrawer({
   isOpen,
@@ -33,7 +34,9 @@ export default function MobileDrawer({
   onOpenRoleSwitcher,
   theme,
   onToggleTheme,
-  onResetDemo
+  onResetDemo,
+  lang = 'en',
+  onToggleLang
 }) {
   if (!isOpen) return null;
 
@@ -41,118 +44,104 @@ export default function MobileDrawer({
 
   const navSections = [
     {
-      title: 'PABRIK DIGITAL',
+      titleKey: 'catDigitalFactory',
       items: [
         {
           id: 'dashboard',
-          label: 'Ikhtisar Pabrik (Overview)',
           icon: LayoutDashboard,
           roles: ['ADMIN', 'WAREHOUSE', 'PRODUCTION', 'SUPERVISOR', 'MANAGEMENT']
         }
       ]
     },
     {
-      title: 'PEMELIHARAAN (MAINTENANCE)',
+      titleKey: 'catMaintenance',
       items: [
         {
           id: 'maintenance_operator',
-          label: 'Tablet Operator (Lapangan)',
           icon: Wrench,
           highlight: true,
+          tabletBadge: true,
           roles: ['ADMIN', 'PRODUCTION', 'WAREHOUSE', 'SUPERVISOR', 'MANAGEMENT']
         },
         {
           id: 'maintenance_dashboard',
-          label: 'Dasbor Kondisi Mesin',
           icon: Gauge,
           roles: ['ADMIN', 'PRODUCTION', 'SUPERVISOR', 'MANAGEMENT']
         }
       ]
     },
     {
-      title: 'MATERIAL & INVENTARIS',
+      titleKey: 'catMaterial',
       items: [
         {
           id: 'material_keluar',
-          label: 'Material Keluar (Cepat)',
           icon: ArrowUpRight,
           roles: ['ADMIN', 'WAREHOUSE', 'PRODUCTION']
         },
         {
           id: 'material_masuk',
-          label: 'Penerimaan Material',
           icon: ArrowDownLeft,
           roles: ['ADMIN', 'WAREHOUSE']
         },
         {
           id: 'scan_qr',
-          label: 'Scan QR Material',
           icon: QrCode,
           roles: ['ADMIN', 'WAREHOUSE', 'PRODUCTION', 'SUPERVISOR']
         },
         {
           id: 'stock_opname',
-          label: 'Stock Opname Fisik',
           icon: ClipboardList,
           roles: ['ADMIN', 'WAREHOUSE', 'SUPERVISOR']
         },
         {
           id: 'discrepancies',
-          label: 'Kasus Selisih',
           icon: AlertOctagon,
           roles: ['ADMIN', 'WAREHOUSE', 'SUPERVISOR', 'MANAGEMENT']
         },
         {
           id: 'materials',
-          label: 'Katalog Master Material',
           icon: Boxes,
           roles: ['ADMIN', 'WAREHOUSE', 'PRODUCTION', 'SUPERVISOR', 'MANAGEMENT']
         },
         {
           id: 'ledger',
-          label: 'Riwayat Mutasi',
           icon: ScrollText,
           roles: ['ADMIN', 'WAREHOUSE', 'SUPERVISOR', 'MANAGEMENT']
         },
         {
           id: 'locations',
-          label: 'Lokasi Rak & Gudang',
           icon: MapPin,
           roles: ['ADMIN', 'WAREHOUSE', 'SUPERVISOR']
         }
       ]
     },
     {
-      title: 'KPI & EFISIENSI BISNIS',
+      titleKey: 'catKpi',
       items: [
         {
           id: 'lead_time_kpi',
-          label: 'Information Lead Time',
           icon: Clock,
           roles: ['ADMIN', 'SUPERVISOR', 'MANAGEMENT']
         },
         {
           id: 'baseline_simulation',
-          label: 'Simulasi ROI & Baseline',
           icon: Calculator,
           roles: ['ADMIN', 'SUPERVISOR', 'MANAGEMENT']
         },
         {
           id: 'sensor_integration',
-          label: 'Integrasi Sensor / PLC',
           icon: Cpu,
           roles: ['ADMIN', 'SUPERVISOR', 'MANAGEMENT']
         },
         {
           id: 'reports',
-          label: 'Laporan & Finansial',
           icon: FileSpreadsheet,
           roles: ['ADMIN', 'SUPERVISOR', 'MANAGEMENT']
         },
         {
           id: 'demo_mode',
-          label: 'Mode Demo Eksekutif',
           icon: PlayCircle,
+          demoBadge: true,
           roles: ['ADMIN', 'WAREHOUSE', 'PRODUCTION', 'SUPERVISOR', 'MANAGEMENT']
         }
       ]
@@ -216,8 +205,12 @@ export default function MobileDrawer({
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <TaihoLogo height={30} />
             <div>
-              <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-main)' }}>Pabrik Digital</div>
-              <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>Platform Lapangan • TAIHO</div>
+              <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
+                {getTranslation('brandName', lang)}
+              </div>
+              <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>
+                {getTranslation('platformSubtitle', lang)}
+              </div>
             </div>
           </div>
 
@@ -234,13 +227,13 @@ export default function MobileDrawer({
               justifyContent: 'center',
               border: '1px solid var(--border-subtle)'
             }}
-            aria-label="Tutup Menu"
+            aria-label={getTranslation('btn_close', lang)}
           >
             <X size={18} />
           </button>
         </div>
 
-        {/* Quick User & Theme Actions */}
+        {/* Quick User, Language & Theme Actions */}
         <div
           style={{
             padding: '12px 14px',
@@ -248,7 +241,7 @@ export default function MobileDrawer({
             backgroundColor: 'var(--bg-card-inner)',
             display: 'flex',
             flexDirection: 'column',
-            gap: 10
+            gap: 8
           }}
         >
           {/* User profile pill */}
@@ -288,7 +281,7 @@ export default function MobileDrawer({
               </div>
               <div style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text-main)', lineHeight: 1.2 }}>
-                  {currentUser?.full_name?.split(' ')[0] || 'Pengguna'}
+                  {currentUser?.full_name?.split(' ')[0] || (lang === 'en' ? 'User' : 'Pengguna')}
                 </div>
                 <div style={{ fontSize: 10.5, color: 'var(--brand-primary)', fontWeight: 600 }}>
                   {currentUser?.role_display || currentUser?.role || 'Operator'}
@@ -297,9 +290,34 @@ export default function MobileDrawer({
             </div>
 
             <span style={{ fontSize: 11, color: 'var(--brand-primary)', fontWeight: 700, flexShrink: 0 }}>
-              Ganti ▾
+              {lang === 'en' ? 'Switch ▾' : 'Ganti ▾'}
             </span>
           </div>
+
+          {/* Bilingual Language Switcher */}
+          {onToggleLang && (
+            <button
+              onClick={onToggleLang}
+              className="btn btn-outline"
+              style={{
+                width: '100%',
+                minHeight: 36,
+                padding: '0 12px',
+                fontSize: 12,
+                justifyContent: 'space-between',
+                fontWeight: 700,
+                borderColor: 'rgba(56, 189, 248, 0.28)'
+              }}
+            >
+              <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Globe size={15} color="var(--brand-primary)" />
+                {lang === 'en' ? '🇬🇧 English (Shachō Mode)' : '🇮🇩 Bahasa Indonesia'}
+              </span>
+              <span style={{ fontSize: 10, color: 'var(--brand-primary)', fontWeight: 800, padding: '1px 6px', borderRadius: 4, background: 'rgba(2, 132, 199, 0.12)' }}>
+                {lang === 'en' ? 'Change ⇄' : 'Ubah ⇄'}
+              </span>
+            </button>
+          )}
 
           {/* Theme switcher toggle */}
           <button
@@ -316,10 +334,10 @@ export default function MobileDrawer({
           >
             <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               {theme === 'dark' ? <Sun size={15} color="#fbbf24" /> : <Moon size={15} color="#0284c7" />}
-              {theme === 'dark' ? 'Beralih ke Mode Terang' : 'Beralih ke Mode Gelap'}
+              {theme === 'dark' ? (lang === 'en' ? 'Switch to Light Mode' : 'Beralih ke Mode Terang') : (lang === 'en' ? 'Switch to Dark Mode' : 'Beralih ke Mode Gelap')}
             </span>
             <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>
-              {theme === 'dark' ? '☀️ Terang' : '🌙 Gelap'}
+              {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
             </span>
           </button>
         </div>
@@ -339,7 +357,7 @@ export default function MobileDrawer({
             if (visibleItems.length === 0) return null;
 
             return (
-              <div key={section.title} style={{ marginBottom: 14 }}>
+              <div key={section.titleKey} style={{ marginBottom: 14 }}>
                 <div
                   style={{
                     fontSize: 10,
@@ -350,13 +368,14 @@ export default function MobileDrawer({
                     padding: '4px 8px 6px'
                   }}
                 >
-                  {section.title}
+                  {getTranslation(section.titleKey, lang)}
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                   {visibleItems.map(item => {
                     const Icon = item.icon;
                     const isActive = currentView === item.id;
+                    const itemLabel = getTranslation(`view_${item.id}`, lang);
 
                     return (
                       <button
@@ -380,7 +399,9 @@ export default function MobileDrawer({
                         }}
                       >
                         <Icon size={18} style={{ opacity: isActive ? 1 : 0.8, flexShrink: 0 }} />
-                        <span style={{ flex: 1 }}>{item.label}</span>
+                        <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {itemLabel}
+                        </span>
                         {isActive && (
                           <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: 'var(--brand-primary)' }} />
                         )}
@@ -418,7 +439,7 @@ export default function MobileDrawer({
               gap: 6
             }}
           >
-            <RefreshCw size={13} /> Reset Demo Data
+            <RefreshCw size={13} /> {getTranslation('btn_reset_demo', lang)}
           </button>
         </div>
       </div>

@@ -57,6 +57,19 @@ export default function App() {
     localStorage.setItem('taiho_theme', theme);
   }, [theme]);
 
+  // Language Management (English default for Japanese Shacho & Management, Indonesian for local operations)
+  const [lang, setLang] = useState(() => {
+    return localStorage.getItem('taiho_lang') || 'en';
+  });
+
+  const toggleLang = () => {
+    setLang(prev => {
+      const next = prev === 'en' ? 'id' : 'en';
+      localStorage.setItem('taiho_lang', next);
+      return next;
+    });
+  };
+
   const toggleTheme = () => {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
@@ -174,6 +187,8 @@ export default function App() {
         }}
         currentUser={currentUser}
         onOpenScanner={() => setIsScannerOpen(true)}
+        lang={lang}
+        onToggleLang={toggleLang}
       />
 
       <div className="main-wrapper">
@@ -194,7 +209,7 @@ export default function App() {
               zIndex: 9999
             }}
           >
-            <span>⚠️ KONEKSI TERPUTUS: Wi-Fi pabrik sedang offline. Data pemeliharaan yang diinput akan disimpan otomatis di tablet dan disinkronkan saat online kembali.</span>
+            <span>{lang === 'en' ? '⚠️ OFFLINE: Factory Wi-Fi disconnected. Tablet entries are saved locally and will auto-sync once connected.' : '⚠️ KONEKSI TERPUTUS: Wi-Fi pabrik sedang offline. Data pemeliharaan yang diinput akan disimpan otomatis di tablet dan disinkronkan saat online kembali.'}</span>
           </div>
         )}
 
@@ -210,6 +225,8 @@ export default function App() {
           discrepanciesCount={dashboardData?.kpi?.discrepant_itemsCount || 0}
           theme={theme}
           onToggleTheme={toggleTheme}
+          lang={lang}
+          onToggleLang={toggleLang}
         />
 
         {/* View Router */}
@@ -222,6 +239,7 @@ export default function App() {
               setView={setView}
               onOpenScanner={() => setIsScannerOpen(true)}
               onSelectMaterial={handleSelectMaterial}
+              lang={lang}
             />
           )}
 
@@ -321,7 +339,7 @@ export default function App() {
             <LocationsView onSelectMaterial={handleSelectMaterial} />
           )}
 
-          {currentView === 'reports' && <ReportsView />}
+          {currentView === 'reports' && <ReportsView lang={lang} />}
 
           {currentView === 'demo_mode' && (
             <DemoModeView setView={setView} onSelectMaterial={handleSelectMaterial} />
@@ -337,6 +355,7 @@ export default function App() {
           }}
           onOpenScanner={() => setIsScannerOpen(true)}
           onOpenMobileDrawer={() => setIsMobileDrawerOpen(true)}
+          lang={lang}
         />
       </div>
 
@@ -354,6 +373,8 @@ export default function App() {
         theme={theme}
         onToggleTheme={toggleTheme}
         onResetDemo={handleResetDemo}
+        lang={lang}
+        onToggleLang={toggleLang}
       />
 
       {/* Global Modals */}

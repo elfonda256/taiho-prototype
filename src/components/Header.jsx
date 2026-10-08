@@ -2,14 +2,15 @@ import React from 'react';
 import {
   Menu,
   RefreshCw,
-  QrCode,
   PlayCircle,
   ShieldAlert,
   CheckCircle2,
   Sun,
-  Moon
+  Moon,
+  Globe
 } from 'lucide-react';
 import TaihoLogo from './TaihoLogo';
+import { getTranslation } from '../utils/i18n';
 
 export default function Header({
   currentView,
@@ -21,28 +22,10 @@ export default function Header({
   setView,
   discrepanciesCount = 0,
   theme = 'dark',
-  onToggleTheme
+  onToggleTheme,
+  lang = 'en',
+  onToggleLang
 }) {
-  const titles = {
-    dashboard: 'Ikhtisar Pabrik Digital (Digital Factory Overview)',
-    maintenance_operator: 'Tablet Operator Lapangan (Mesin)',
-    maintenance_dashboard: 'Dasbor Kondisi Mesin Real-time',
-    lead_time_kpi: 'Analisis Information Lead Time',
-    baseline_simulation: 'Konfigurasi Baseline & ROI Investasi',
-    sensor_integration: 'Arsitektur Integrasi Sensor & PLC',
-    material_keluar: 'Material Keluar (Pengeluaran Cepat)',
-    material_masuk: 'Penerimaan Material Baru',
-    scan_qr: 'Pemindai & Label QR Material',
-    stock_opname: 'Stock Opname Fisik & Audit Selisih',
-    discrepancies: 'Daftar Pemeriksaan Kasus Selisih',
-    materials: 'Katalog Master Material Pabrik',
-    material_detail: 'Detail Material & Jejak Digital',
-    ledger: 'Riwayat Mutasi & Audit Trail',
-    locations: 'Hierarki Gudang & Lokasi Rak',
-    reports: 'Laporan Finansial & Sebelum vs Sesudah',
-    demo_mode: 'Mode Demo 3 Menit untuk Manajemen'
-  };
-
   const getRoleBadgeColor = (role) => {
     switch (role) {
       case 'ADMIN': return { bg: 'rgba(56, 189, 248, 0.16)', text: '#0284c7', border: 'rgba(56, 189, 248, 0.4)' };
@@ -56,6 +39,7 @@ export default function Header({
   };
 
   const roleColor = getRoleBadgeColor(currentUser?.role);
+  const currentTitle = getTranslation(`view_${currentView}`, lang);
 
   return (
     <header className="top-header">
@@ -79,7 +63,7 @@ export default function Header({
                 border: '1px solid var(--border-subtle)',
                 backgroundColor: 'var(--bg-surface)'
               }}
-              aria-label="Buka Menu"
+              aria-label="Open Menu"
             >
               <Menu size={20} />
             </button>
@@ -87,7 +71,28 @@ export default function Header({
             <TaihoLogo height={28} />
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            {/* Language Switcher Badge on Mobile */}
+            <button
+              onClick={onToggleLang}
+              className="btn btn-outline"
+              style={{
+                height: 34,
+                padding: '0 8px',
+                borderRadius: 8,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4,
+                border: '1px solid var(--border-subtle)',
+                fontSize: 11.5,
+                fontWeight: 800
+              }}
+              title={lang === 'en' ? 'Beralih ke Bahasa Indonesia' : 'Switch to English (Shachō Mode)'}
+            >
+              <span>{lang === 'en' ? '🇬🇧' : '🇮🇩'}</span>
+              <span>{lang === 'en' ? 'EN' : 'ID'}</span>
+            </button>
+
             {discrepanciesCount > 0 && (
               <button
                 className="badge badge-selisih"
@@ -98,7 +103,7 @@ export default function Header({
                   fontSize: 11
                 }}
                 onClick={() => setView('discrepancies')}
-                title="Klik untuk membuka kasus selisih"
+                title="View active discrepancy cases"
               >
                 <ShieldAlert size={12} color="var(--status-alert-text)" />
                 <span>{discrepanciesCount}</span>
@@ -109,8 +114,8 @@ export default function Header({
             <button
               className="btn btn-outline"
               style={{
-                width: 36,
-                height: 36,
+                width: 34,
+                height: 34,
                 padding: 0,
                 borderRadius: 8,
                 display: 'flex',
@@ -119,18 +124,18 @@ export default function Header({
                 border: '1px solid var(--border-subtle)'
               }}
               onClick={onToggleTheme}
-              title={theme === 'dark' ? 'Mode Terang' : 'Mode Gelap'}
-              aria-label="Ganti Tema"
+              title={theme === 'dark' ? getTranslation('btn_theme_light', lang) : getTranslation('btn_theme_dark', lang)}
+              aria-label="Toggle Theme"
             >
-              {theme === 'dark' ? <Sun size={16} color="#fbbf24" /> : <Moon size={16} color="#0284c7" />}
+              {theme === 'dark' ? <Sun size={15} color="#fbbf24" /> : <Moon size={15} color="#0284c7" />}
             </button>
 
             {/* Compact Role Switcher Avatar */}
             <button
               onClick={onOpenRoleSwitcher}
               style={{
-                width: 36,
-                height: 36,
+                width: 34,
+                height: 34,
                 borderRadius: '50%',
                 backgroundColor: roleColor.bg,
                 color: roleColor.text,
@@ -139,11 +144,11 @@ export default function Header({
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontWeight: 800,
-                fontSize: 13,
+                fontSize: 12.5,
                 cursor: 'pointer'
               }}
-              title={`Pengguna: ${currentUser?.full_name} (${currentUser?.role_display})`}
-              aria-label="Ganti Akun"
+              title={`User: ${currentUser?.full_name} (${currentUser?.role_display})`}
+              aria-label="Switch Role"
             >
               {currentUser?.full_name ? currentUser.full_name.charAt(0) : 'U'}
             </button>
@@ -152,12 +157,17 @@ export default function Header({
 
         {/* View Title Bar on Mobile */}
         <div className="mobile-header-title-bar">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#10b981', display: 'inline-block' }} />
-            <h1 style={{ fontSize: 13.5, fontWeight: 800, color: 'var(--text-main)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {titles[currentView] || 'Sistem Operasional'}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#10b981', display: 'inline-block', flexShrink: 0 }} />
+            <h1 style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-main)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {currentTitle}
             </h1>
           </div>
+          {lang === 'en' && (
+            <span style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--brand-primary)', padding: '1px 5px', borderRadius: 4, background: 'rgba(2, 132, 199, 0.12)', flexShrink: 0 }}>
+              社長 Shachō View
+            </span>
+          )}
         </div>
       </div>
 
@@ -177,10 +187,10 @@ export default function Header({
                 display: 'inline-block'
               }} />
               <span style={{ fontSize: 10, fontWeight: 800, color: 'var(--accent-cyan)', letterSpacing: '0.8px', textTransform: 'uppercase' }}>
-                TAIHO INDONESIA • SISTEM DIGITAL PABRIK
+                {getTranslation('brandName', lang)} • {getTranslation('platformTitle', lang)}
               </span>
             </div>
-            <h2 className="page-title">{titles[currentView] || 'Sistem Operasional Pabrik'}</h2>
+            <h2 className="page-title">{currentTitle}</h2>
           </div>
 
           {discrepanciesCount > 0 ? (
@@ -188,41 +198,59 @@ export default function Header({
               className="badge badge-selisih"
               style={{ cursor: 'pointer', border: '1px solid var(--status-alert-border)' }}
               onClick={() => setView('discrepancies')}
-              title="Klik untuk membuka investigasi selisih"
+              title="Click to inspect variance cases"
             >
               <ShieldAlert size={13} color="var(--status-alert-text)" />
-              <span>{discrepanciesCount} Selisih Perlu Review</span>
+              <span>{discrepanciesCount} {getTranslation('varianceReview', lang)}</span>
             </button>
           ) : (
             <span className="badge badge-tersedia">
               <CheckCircle2 size={13} color="var(--status-safe-text)" />
-              <span>Stok Terkendali</span>
+              <span>{getTranslation('controlledStock', lang)}</span>
             </span>
           )}
         </div>
 
         <div className="header-actions">
+          {/* Language Switcher Button (English for Japanese Management / Indonesian) */}
+          <button
+            className="btn btn-outline"
+            style={{
+              minHeight: 38,
+              padding: '0 12px',
+              fontSize: 12.5,
+              gap: 6,
+              fontWeight: 800,
+              borderColor: 'rgba(56, 189, 248, 0.3)'
+            }}
+            onClick={onToggleLang}
+            title={lang === 'en' ? 'Beralih ke Bahasa Indonesia' : 'Switch to English (President Director Review)'}
+          >
+            <Globe size={15} color="var(--brand-primary)" />
+            <span>{lang === 'en' ? '🇬🇧 English' : '🇮🇩 Bahasa ID'}</span>
+          </button>
+
           {/* Theme Toggle Button */}
           <button
             className="btn btn-outline"
             style={{ minHeight: 38, padding: '0 12px', fontSize: 12.5, gap: 6 }}
             onClick={onToggleTheme}
-            title={theme === 'dark' ? 'Beralih ke Mode Terang' : 'Beralih ke Mode Gelap'}
+            title={theme === 'dark' ? getTranslation('btn_theme_light', lang) : getTranslation('btn_theme_dark', lang)}
           >
             {theme === 'dark' ? (
               <>
                 <Sun size={15} color="#fbbf24" />
-                <span style={{ fontSize: 12, fontWeight: 700 }}>Mode Terang</span>
+                <span style={{ fontSize: 12, fontWeight: 700 }}>{getTranslation('btn_theme_light', lang)}</span>
               </>
             ) : (
               <>
                 <Moon size={15} color="#0284c7" />
-                <span style={{ fontSize: 12, fontWeight: 700 }}>Mode Gelap</span>
+                <span style={{ fontSize: 12, fontWeight: 700 }}>{getTranslation('btn_theme_dark', lang)}</span>
               </>
             )}
           </button>
 
-          {/* Tombol Demo Cepat */}
+          {/* Quick Demo Mode Button */}
           <button
             className="btn btn-outline"
             style={{
@@ -234,18 +262,18 @@ export default function Header({
               background: 'var(--status-warn-bg)'
             }}
             onClick={() => setView('demo_mode')}
-            title="Buka panduan demo 3 menit untuk manajemen"
+            title="Open 3-minute executive guided walkthrough"
           >
             <PlayCircle size={15} color="var(--status-warn-text)" />
-            <span style={{ color: 'var(--status-warn-text)', fontWeight: 700 }}>Mode Demo</span>
+            <span style={{ color: 'var(--status-warn-text)', fontWeight: 700 }}>{getTranslation('btn_demo_mode', lang)}</span>
           </button>
 
-          {/* Tombol Reset Data Demo */}
+          {/* Reset Demo Data Button */}
           <button
             className="btn btn-outline"
             style={{ minHeight: 38, padding: '0 10px', fontSize: 13 }}
             onClick={onResetDemo}
-            title="Reset database ke kondisi awal demo pabrik"
+            title="Reset database to factory demo baseline"
           >
             <RefreshCw size={14} color="var(--text-muted)" />
           </button>
@@ -261,7 +289,7 @@ export default function Header({
               background: 'var(--bg-surface)'
             }}
             onClick={onOpenRoleSwitcher}
-            title="Klik untuk mengganti akun / peran pengguna"
+            title="Click to switch user account / role"
           >
             <div
               style={{
@@ -282,7 +310,7 @@ export default function Header({
 
             <div style={{ textAlign: 'left', lineHeight: 1.2 }}>
               <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text-main)' }}>
-                {currentUser?.full_name?.split(' ')[0] || 'Pengguna'}
+                {currentUser?.full_name?.split(' ')[0] || 'User'}
               </div>
               <div style={{ fontSize: 10, color: roleColor.text, fontWeight: 700 }}>
                 {currentUser?.role_display || currentUser?.role || 'Operator'}
