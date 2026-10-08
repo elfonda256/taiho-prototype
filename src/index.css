@@ -357,7 +357,7 @@ body {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  padding-bottom: 74px;
+  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
   background-color: var(--bg-app);
 }
 
@@ -372,21 +372,59 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-subtle);
-  padding: 12px 18px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  padding: 10px 14px;
+  padding-top: max(10px, env(safe-area-inset-top));
   position: sticky;
   top: 0;
   z-index: 30;
   transition: background-color 200ms ease, border-color 200ms ease;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .top-header {
     padding: 14px 28px;
   }
+}
+
+/* Mobile vs Desktop Header Switching */
+.mobile-header-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.desktop-header-container {
+  display: none;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .mobile-header-container {
+    display: none;
+  }
+  .desktop-header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.mobile-header-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.mobile-header-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 6px;
+  background-color: var(--bg-card-inner);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
 }
 
 .header-title-area {
@@ -419,7 +457,7 @@ body {
    CONTENT CONTAINER
    ========================================================================== */
 .content-body {
-  padding: 18px;
+  padding: 12px 14px;
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
@@ -848,7 +886,7 @@ body {
   -webkit-backdrop-filter: blur(14px);
   border-top: 1px solid var(--border-subtle);
   z-index: 40;
-  padding: 6px 4px env(safe-area-inset-bottom, 6px);
+  padding: 8px 6px max(10px, env(safe-area-inset-bottom, 10px));
   box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.2);
 }
 
@@ -874,11 +912,42 @@ body {
   cursor: pointer;
   border-radius: 8px;
   transition: color 120ms ease;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .mobile-nav-btn.active {
   color: var(--accent-cyan);
   font-weight: 700;
+}
+
+/* Slide in animation for mobile drawer */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0.7;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Touch friendly responsive table wrapper */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+/* Inputs minimum 16px to prevent mobile browser auto-zoom */
+@media (max-width: 768px) {
+  input, textarea, select {
+    font-size: 16px !important;
+  }
 }
 
 @keyframes spin {
@@ -888,4 +957,53 @@ body {
 
 .spin {
   animation: spin 1s linear infinite;
+}
+
+/* ==========================================================================
+   MOBILE SMARTPHONE REFINEMENTS (< 640px)
+   ========================================================================== */
+@media (max-width: 640px) {
+  /* Prevent any flex/grid children from overflowing horizontal viewport */
+  * {
+    min-width: 0;
+  }
+
+  /* Compact KPI layout for mobile */
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-bottom: 14px !important;
+  }
+  .kpi-card {
+    padding: 12px 10px !important;
+    border-radius: 10px !important;
+  }
+  .kpi-value {
+    font-size: 19px !important;
+  }
+  .kpi-label {
+    font-size: 9.5px !important;
+    letter-spacing: 0.04em !important;
+    margin-bottom: 4px !important;
+  }
+  .kpi-subtext {
+    font-size: 10px !important;
+    margin-top: 4px !important;
+  }
+
+  /* Cards responsive padding */
+  .card {
+    padding: 14px 12px !important;
+    border-radius: 10px !important;
+  }
+
+  /* Modal bottom sheets on small screens */
+  .modal-overlay {
+    padding: 10px;
+    align-items: flex-end;
+  }
+  .modal-content {
+    border-radius: 16px 16px 8px 8px;
+    max-height: 88vh;
+  }
 }

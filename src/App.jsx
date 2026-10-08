@@ -4,6 +4,7 @@ import Header from './components/Header';
 import MobileNav from './components/MobileNav';
 import RoleSwitcherModal from './components/RoleSwitcherModal';
 import QRScannerModal from './components/QRScannerModal';
+import MobileDrawer from './components/MobileDrawer';
 
 // Existing Material Views (100% Preserved)
 import DashboardView from './views/DashboardView';
@@ -41,6 +42,7 @@ export default function App() {
   // Modals
   const [isRoleSwitcherOpen, setIsRoleSwitcherOpen] = useState(false);
   const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [pendingOfflineCount, setPendingOfflineCount] = useState(getQueuedRecords().length);
@@ -201,6 +203,7 @@ export default function App() {
           currentView={currentView}
           currentUser={currentUser}
           onOpenRoleSwitcher={() => setIsRoleSwitcherOpen(true)}
+          onOpenMobileDrawer={() => setIsMobileDrawerOpen(true)}
           onOpenScanner={() => setIsScannerOpen(true)}
           onResetDemo={handleResetDemo}
           setView={setView}
@@ -333,8 +336,25 @@ export default function App() {
             window.scrollTo(0, 0);
           }}
           onOpenScanner={() => setIsScannerOpen(true)}
+          onOpenMobileDrawer={() => setIsMobileDrawerOpen(true)}
         />
       </div>
+
+      {/* Mobile Drawer (Slide-Over Navigation for Phones) */}
+      <MobileDrawer
+        isOpen={isMobileDrawerOpen}
+        onClose={() => setIsMobileDrawerOpen(false)}
+        currentView={currentView}
+        setView={v => {
+          setView(v);
+          window.scrollTo(0, 0);
+        }}
+        currentUser={currentUser}
+        onOpenRoleSwitcher={() => setIsRoleSwitcherOpen(true)}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        onResetDemo={handleResetDemo}
+      />
 
       {/* Global Modals */}
       <RoleSwitcherModal
