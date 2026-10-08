@@ -45,6 +45,20 @@ export default function App() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [pendingOfflineCount, setPendingOfflineCount] = useState(getQueuedRecords().length);
 
+  // Theme Management (Dark & Light Mode with Persisted Preference)
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('taiho_theme') || 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('taiho_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
   // Fetch current user and dashboard stats
   const fetchDashboardStats = () => {
     setIsLoadingDashboard(true);
@@ -186,11 +200,13 @@ export default function App() {
         <Header
           currentView={currentView}
           currentUser={currentUser}
-          onOpenRoleSwitcher={() => setIsRoleSwitcherOpen(false) /* or true */}
+          onOpenRoleSwitcher={() => setIsRoleSwitcherOpen(true)}
           onOpenScanner={() => setIsScannerOpen(true)}
           onResetDemo={handleResetDemo}
           setView={setView}
           discrepanciesCount={dashboardData?.kpi?.discrepant_itemsCount || 0}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
 
         {/* View Router */}

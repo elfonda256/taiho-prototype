@@ -17,6 +17,7 @@ import {
   Calculator,
   Cpu
 } from 'lucide-react';
+import TaihoLogo from './TaihoLogo';
 
 export default function Sidebar({ currentView, setView, currentUser, onOpenScanner }) {
   const role = currentUser?.role || 'WAREHOUSE';
@@ -145,29 +146,42 @@ export default function Sidebar({ currentView, setView, currentUser, onOpenScann
 
   return (
     <aside className="sidebar">
-      <div className="sidebar-header">
-        <div className="brand-badge" style={{ backgroundColor: '#0284c7', color: '#ffffff' }}>TAIHO</div>
+      {/* Brand Header */}
+      <div className="sidebar-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10, padding: '16px 16px 14px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+          <TaihoLogo height={32} />
+          <span style={{
+            fontSize: 10,
+            fontWeight: 800,
+            letterSpacing: '0.6px',
+            padding: '2px 7px',
+            borderRadius: 6,
+            background: 'var(--status-safe-bg)',
+            color: 'var(--status-safe-text)',
+            border: '1px solid var(--status-safe-border)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 4
+          }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor' }} />
+            ONLINE
+          </span>
+        </div>
         <div>
-          <h1 className="brand-title">Data Lapangan Digital</h1>
-          <p className="brand-subtitle">Platform Operasional • Non-AI</p>
+          <h1 className="brand-title" style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-main)' }}>Pabrik Digital</h1>
+          <p className="brand-subtitle" style={{ fontSize: 11, color: 'var(--text-muted)' }}>Platform Operasional • Lapangan</p>
         </div>
       </div>
 
-      <nav className="sidebar-nav" style={{ paddingBottom: 20 }}>
+      {/* Navigation Sections */}
+      <nav className="sidebar-nav">
         {navSections.map(section => {
           const visibleItems = section.items.filter(item => item.roles.includes(role));
           if (visibleItems.length === 0) return null;
 
           return (
-            <div key={section.title} style={{ marginBottom: 12 }}>
-              <div style={{
-                fontSize: 10,
-                fontWeight: 800,
-                color: '#64748b',
-                padding: '8px 14px 4px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.8px'
-              }}>
+            <div key={section.title} style={{ marginBottom: 10 }}>
+              <div className="nav-section-title">
                 {section.title}
               </div>
 
@@ -181,33 +195,15 @@ export default function Sidebar({ currentView, setView, currentUser, onOpenScann
                     onClick={() => setView(item.id)}
                     className={`nav-item ${isActive ? 'active' : ''} ${item.highlight ? 'highlight-operator' : ''}`}
                   >
-                    <Icon size={18} />
+                    <Icon size={17} style={{ opacity: isActive ? 1 : 0.8 }} />
                     <span style={{ flex: 1, textAlign: 'left' }}>{item.label}</span>
                     {item.tabletBadge && (
-                      <span
-                        style={{
-                          backgroundColor: '#0284c7',
-                          color: '#ffffff',
-                          fontSize: 9,
-                          fontWeight: 800,
-                          padding: '2px 6px',
-                          borderRadius: 4
-                        }}
-                      >
+                      <span className="badge-tag-tablet">
                         TABLET
                       </span>
                     )}
                     {item.demoBadge && (
-                      <span
-                        style={{
-                          backgroundColor: '#fef08a',
-                          color: '#854d0e',
-                          fontSize: 9,
-                          fontWeight: 800,
-                          padding: '2px 6px',
-                          borderRadius: 4
-                        }}
-                      >
+                      <span className="badge-tag-demo">
                         DEMO
                       </span>
                     )}
@@ -220,7 +216,7 @@ export default function Sidebar({ currentView, setView, currentUser, onOpenScann
       </nav>
 
       {/* Operator Quick Scan Action */}
-      <div style={{ padding: 14, borderTop: '1px solid var(--border-subtle)', backgroundColor: 'var(--bg-subtle)' }}>
+      <div className="sidebar-bottom-action">
         <button
           className="btn btn-primary"
           style={{ width: '100%', minHeight: 44, fontSize: 13, gap: 8 }}

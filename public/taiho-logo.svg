@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 160" width="100%" height="100%">
+  <defs>
+    <!-- 3D Shadow for Blue TAIHO Letters -->
+    <filter id="taihoShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="3" dy="4" stdDeviation="0.5" flood-color="#143464" flood-opacity="0.9" />
+    </filter>
+    
+    <!-- Red Emblem Gradient -->
+    <linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#cf1b24" />
+      <stop offset="100%" stop-color="#9e0c14" />
+    </linearGradient>
+
+    <!-- Blue Text Gradient -->
+    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3b7bc4" />
+      <stop offset="100%" stop-color="#215ba3" />
+    </linearGradient>
+  </defs>
+
+  <!-- LEFT EMBLEM: RED CIRCULAR TAIHO MONOGRAM -->
+  <g transform="translate(15, 10)">
+    <!-- Outer Red Ring with Depth -->
+    <circle cx="70" cy="70" r="62" fill="none" stroke="#68040a" stroke-width="14" />
+    <circle cx="68" cy="68" r="62" fill="none" stroke="url(#redGradient)" stroke-width="13" />
+
+    <!-- Stylized Central Monogram Elements ("th" / vertical split) -->
+    <!-- Left vertical bar -->
+    <path d="M 50 24 L 62 24 L 54 114 L 42 114 Z" fill="#68040a" />
+    <path d="M 48 22 L 60 22 L 52 112 L 40 112 Z" fill="url(#redGradient)" />
+
+    <!-- Center vertical bar -->
+    <path d="M 72 46 L 84 46 L 80 114 L 68 114 Z" fill="#68040a" />
+    <path d="M 70 44 L 82 44 L 78 112 L 66 112 Z" fill="url(#redGradient)" />
+
+    <!-- Horizontal connector bar -->
+    <path d="M 60 76 L 86 76 L 86 88 L 60 88 Z" fill="#68040a" />
+    <path d="M 58 74 L 84 74 L 84 86 L 58 86 Z" fill="url(#redGradient)" />
+  </g>
+
+  <!-- RIGHT TEXT: BOLD 3D BLUE "TAIHO" LETTERING -->
+  <g transform="translate(165, 114)" filter="url(#taihoShadow)">
+    <text
+      x="0"
+      y="0"
+      font-family="'Arial Black', 'Impact', 'Montserrat', 'Trebuchet MS', sans-serif"
+      font-size="94"
+      font-weight="900"
+      font-style="italic"
+      letter-spacing="1"
+      fill="url(#blueGradient)"
+      stroke="#184277"
+      stroke-width="1.5"
+    >
+      TAIHO
+    </text>
+  </g>
+</svg>

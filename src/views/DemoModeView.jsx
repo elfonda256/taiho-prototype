@@ -66,8 +66,8 @@ export default function DemoModeView({ setView, onSelectMaterial }) {
       {/* BANNER DEMO */}
       <div
         style={{
-          backgroundColor: '#0f172a',
-          color: '#ffffff',
+          backgroundColor: 'var(--bg-surface)',
+          color: 'var(--text-main)',
           borderRadius: 'var(--radius-md)',
           padding: '24px 28px',
           marginBottom: 24,
@@ -75,23 +75,25 @@ export default function DemoModeView({ setView, onSelectMaterial }) {
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
-          gap: 16
+          gap: 16,
+          border: '1px solid var(--border-subtle)',
+          boxShadow: 'var(--shadow-sm)'
         }}
       >
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-            <span style={{ backgroundColor: '#f59e0b', color: '#000', fontSize: 11, fontWeight: 800, padding: '2px 8px', borderRadius: 4 }}>
+            <span style={{ backgroundColor: 'var(--status-warn-bg)', color: 'var(--status-warn-text)', border: '1px solid var(--status-warn-border)', fontSize: 11, fontWeight: 800, padding: '2px 8px', borderRadius: 4 }}>
               MODE DEMO 3 MENIT
             </span>
-            <span style={{ fontSize: 12, opacity: 0.8 }}>Panduan Eksekutif Pabrik</span>
+            <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Panduan Eksekutif Pabrik</span>
           </div>
-          <h3 style={{ fontSize: 24, fontWeight: 800 }}>Simulasi Alur Siklus Hidup & Nilai Finansial</h3>
-          <p style={{ fontSize: 14, opacity: 0.85, marginTop: 4 }}>
+          <h3 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text-main)' }}>Simulasi Alur Siklus Hidup & Nilai Finansial</h3>
+          <p style={{ fontSize: 14, color: 'var(--text-muted)', marginTop: 4 }}>
             Material → QR Code → Mutasi Cepat → Jejak Digital → Deteksi Selisih → Perlindungan Finansial
           </p>
         </div>
 
-        <button className="btn btn-outline" style={{ borderColor: '#475569', color: '#fff' }} onClick={handleReset}>
+        <button className="btn btn-outline" onClick={handleReset}>
           <RefreshCw size={15} /> Reset Demo Awal
         </button>
       </div>
@@ -99,21 +101,21 @@ export default function DemoModeView({ setView, onSelectMaterial }) {
       {/* PROGRESS TRACKER */}
       <div className="card" style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
-          <span style={{ fontSize: 13, fontWeight: 700 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-main)' }}>
             Langkah {currentStep} dari 10: {activeStepData?.title}
           </span>
-          <span className="font-mono" style={{ fontSize: 13, fontWeight: 700, color: '#059669' }}>
+          <span className="font-mono" style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent-emerald)' }}>
             {Math.round((currentStep / 10) * 100)}% Selesai
           </span>
         </div>
 
         {/* Bar */}
-        <div style={{ width: '100%', height: 8, backgroundColor: '#e2e8f0', borderRadius: 99, overflow: 'hidden' }}>
+        <div style={{ width: '100%', height: 8, backgroundColor: 'var(--bg-subtle)', borderRadius: 99, overflow: 'hidden' }}>
           <div
             style={{
               width: `${(currentStep / 10) * 100}%`,
               height: '100%',
-              backgroundColor: '#059669',
+              backgroundColor: 'var(--accent-emerald)',
               transition: 'width 300ms ease'
             }}
           />
@@ -135,9 +137,9 @@ export default function DemoModeView({ setView, onSelectMaterial }) {
                   borderRadius: 'var(--radius-sm)',
                   fontSize: 12,
                   fontWeight: 700,
-                  border: isCurr ? '2px solid var(--primary-900)' : '1px solid var(--border-subtle)',
-                  backgroundColor: isCurr ? 'var(--primary-900)' : isDone ? '#dcfce7' : '#ffffff',
-                  color: isCurr ? '#ffffff' : isDone ? '#166534' : 'var(--text-secondary)',
+                  border: isCurr ? '1px solid var(--brand-primary)' : isDone ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid var(--border-subtle)',
+                  backgroundColor: isCurr ? 'rgba(56, 189, 248, 0.15)' : isDone ? 'rgba(16, 185, 129, 0.12)' : 'var(--bg-card-inner)',
+                  color: isCurr ? 'var(--brand-primary)' : isDone ? 'var(--status-safe)' : 'var(--text-muted)',
                   cursor: 'pointer'
                 }}
               >
@@ -150,7 +152,7 @@ export default function DemoModeView({ setView, onSelectMaterial }) {
 
       {/* ACTIVE STEP CARD DETAILS */}
       {activeStepData && (
-        <div className="card" style={{ border: '2px solid var(--border-strong)', marginBottom: 24 }}>
+        <div className="card" style={{ border: '1px solid var(--border-subtle)', marginBottom: 24 }}>
           <div className="card-header">
             <div>
               <span className="badge badge-dialokasikan" style={{ marginBottom: 6 }}>
@@ -164,11 +166,11 @@ export default function DemoModeView({ setView, onSelectMaterial }) {
 
           <div
             style={{
-              backgroundColor: '#f8fafc',
+              backgroundColor: 'var(--bg-card-inner)',
               border: '1px solid var(--border-subtle)',
               borderRadius: 'var(--radius-sm)',
               padding: 18,
-              fontSize: 15,
+              fontSize: 14.5,
               lineHeight: 1.6,
               color: 'var(--text-main)',
               marginBottom: 20
@@ -180,8 +182,8 @@ export default function DemoModeView({ setView, onSelectMaterial }) {
           {executionMessage && (
             <div
               style={{
-                backgroundColor: '#f0fdf4',
-                border: '1.5px solid #16a34a',
+                backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                border: '1px solid rgba(16, 185, 129, 0.4)',
                 borderRadius: 'var(--radius-sm)',
                 padding: 14,
                 marginBottom: 20,
@@ -190,8 +192,8 @@ export default function DemoModeView({ setView, onSelectMaterial }) {
                 gap: 12
               }}
             >
-              <CheckCircle2 color="#16a34a" size={24} />
-              <div style={{ color: '#15803d', fontWeight: 700 }}>{executionMessage}</div>
+              <CheckCircle2 color="#34d399" size={24} />
+              <div style={{ color: '#34d399', fontWeight: 700 }}>{executionMessage}</div>
             </div>
           )}
 
@@ -237,8 +239,9 @@ export default function DemoModeView({ setView, onSelectMaterial }) {
               style={{
                 padding: '10px 14px',
                 borderRadius: 'var(--radius-sm)',
-                backgroundColor: s.step === currentStep ? '#f1f5f9' : '#ffffff',
-                border: s.step === currentStep ? '1.5px solid var(--primary-900)' : '1px solid var(--border-subtle)',
+                backgroundColor: s.step === currentStep ? 'var(--bg-subtle)' : 'var(--bg-card-inner)',
+                border: s.step === currentStep ? '1.5px solid var(--brand-primary)' : '1px solid var(--border-subtle)',
+                color: 'var(--text-main)',
                 cursor: 'pointer'
               }}
             >

@@ -66,10 +66,10 @@ export default function ReportsView() {
       </div>
 
       {/* BEFORE VS AFTER SHOWCASE (SECTION 34 - CRITICAL FOR MANAGEMENT BUY-IN) */}
-      <div className="card" style={{ marginBottom: 24, border: '2px solid var(--primary-900)' }}>
+      <div className="card" style={{ marginBottom: 24, border: '1.5px solid var(--border-subtle)' }}>
         <div className="card-header">
           <div>
-            <span style={{ fontSize: 11, fontWeight: 800, color: '#0284c7', textTransform: 'uppercase' }}>
+            <span style={{ fontSize: 11, fontWeight: 800, color: 'var(--brand-primary)', textTransform: 'uppercase' }}>
               EVALUASI INVESTASI SISTEM
             </span>
             <h4 className="card-title" style={{ fontSize: 18 }}>
@@ -85,18 +85,18 @@ export default function ReportsView() {
           {/* SEBELUM (MANUAL EXCEL) */}
           <div
             style={{
-              backgroundColor: '#fffaf9',
-              border: '1.5px solid #fecaca',
+              backgroundColor: 'rgba(239, 68, 68, 0.08)',
+              border: '1px solid rgba(239, 68, 68, 0.3)',
               borderRadius: 'var(--radius-md)',
               padding: 18
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
               <span className="badge badge-selisih">SEBELUM SISTEM</span>
-              <span style={{ fontWeight: 800, fontSize: 14 }}>Metode Manual & Excel Terpisah</span>
+              <span style={{ fontWeight: 800, fontSize: 14, color: 'var(--text-main)' }}>Metode Manual & Excel Terpisah</span>
             </div>
 
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13 }}>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13, color: 'var(--text-secondary)' }}>
               <li>❌ <strong>Pencatatan:</strong> Kertas Surat Jalan & Input ulang di Excel sore hari.</li>
               <li>❌ <strong>Waktu Pelacakan:</strong> 45 - 90 Menit per kasus selisih.</li>
               <li>❌ <strong>Tingkat Selisih:</strong> ~4.8% dari pergerakan material.</li>
@@ -108,18 +108,18 @@ export default function ReportsView() {
           {/* SESUDAH (DIGITAL QR TRACEABILITY) */}
           <div
             style={{
-              backgroundColor: '#f0fdf4',
-              border: '1.5px solid #86efac',
+              backgroundColor: 'rgba(16, 185, 129, 0.08)',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
               borderRadius: 'var(--radius-md)',
               padding: 18
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
               <span className="badge badge-tersedia">SESUDAH SISTEM</span>
-              <span style={{ fontWeight: 800, fontSize: 14 }}>Sistem QR Code & Immutable Ledger</span>
+              <span style={{ fontWeight: 800, fontSize: 14, color: 'var(--text-main)' }}>Sistem QR Code & Immutable Ledger</span>
             </div>
 
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13 }}>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13, color: 'var(--text-secondary)' }}>
               <li>✅ <strong>Pencatatan:</strong> Seketika (Real-time) di titik sentuh operator.</li>
               <li>✅ <strong>Waktu Pelacakan:</strong> &lt; 15 Detik (Sekali scan langsung muncul riwayat).</li>
               <li>✅ <strong>Tingkat Selisih:</strong> Turun ke &lt; 1% karena validasi ketat.</li>
@@ -133,10 +133,11 @@ export default function ReportsView() {
         <div
           style={{
             marginTop: 18,
-            padding: '14px 18px',
-            backgroundColor: '#0f172a',
+            padding: '16px 20px',
+            backgroundColor: 'var(--bg-card-inner)',
+            border: '1px solid var(--border-subtle)',
             borderRadius: 'var(--radius-sm)',
-            color: '#ffffff',
+            color: 'var(--text-main)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -145,12 +146,12 @@ export default function ReportsView() {
           }}
         >
           <div>
-            <div style={{ fontSize: 12, opacity: 0.8 }}>ESTIMASI PENGHEMATAN FINANSIAL TAHUNAN:</div>
-            <div style={{ fontSize: 20, fontWeight: 800, color: '#4ade80' }}>
+            <div style={{ fontSize: 11.5, color: 'var(--text-muted)', fontWeight: 800, textTransform: 'uppercase' }}>ESTIMASI PENGHEMATAN FINANSIAL TAHUNAN:</div>
+            <div style={{ fontSize: 22, fontWeight: 900, color: 'var(--status-safe)', fontFamily: 'var(--font-mono)' }}>
               Rp 145.000.000 / Tahun
             </div>
           </div>
-          <span style={{ fontSize: 13, opacity: 0.9 }}>
+          <span style={{ fontSize: 13, color: 'var(--text-muted)', maxWidth: 460 }}>
             Dari penurunan tingkat kehilangan material dan pemangkasan 120+ jam audit bulanan
           </span>
         </div>

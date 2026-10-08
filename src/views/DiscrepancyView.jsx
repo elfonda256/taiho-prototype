@@ -103,9 +103,9 @@ export default function DiscrepancyView({ currentUser, onViewChainOfCustody }) {
             marginBottom: 20
           }}
         >
-          <div className="card" style={{ borderLeft: '4px solid #dc2626' }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)' }}>KASUS SELISIH AKTIF</div>
-            <div className="font-mono" style={{ fontSize: 28, fontWeight: 800, color: '#dc2626', marginTop: 4 }}>
+          <div className="card" style={{ borderLeft: '4px solid #ef4444' }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: '#f87171', textTransform: 'uppercase' }}>KASUS SELISIH AKTIF</div>
+            <div className="font-mono" style={{ fontSize: 28, fontWeight: 900, color: '#f87171', marginTop: 4 }}>
               {summary.active_cases} <span style={{ fontSize: 16, fontWeight: 600 }}>kasus</span>
             </div>
             <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 4 }}>
@@ -113,9 +113,9 @@ export default function DiscrepancyView({ currentUser, onViewChainOfCustody }) {
             </div>
           </div>
 
-          <div className="card" style={{ borderLeft: '4px solid #0f172a' }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)' }}>POTENSI DAMPAK FINANSIAL</div>
-            <div className="font-mono" style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', marginTop: 4 }}>
+          <div className="card" style={{ borderLeft: '4px solid #38bdf8' }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: '#38bdf8', textTransform: 'uppercase' }}>POTENSI DAMPAK FINANSIAL</div>
+            <div className="font-mono" style={{ fontSize: 28, fontWeight: 900, color: '#38bdf8', marginTop: 4 }}>
               Rp {summary.total_potential_loss.toLocaleString('id-ID')}
             </div>
             <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 4 }}>
@@ -184,10 +184,10 @@ export default function DiscrepancyView({ currentUser, onViewChainOfCustody }) {
                     </td>
                     <td className="font-mono">{item.system_stock.toLocaleString('id-ID')}</td>
                     <td className="font-mono">{item.physical_stock.toLocaleString('id-ID')}</td>
-                    <td className="font-mono" style={{ fontWeight: 800, color: '#dc2626' }}>
+                    <td className="font-mono" style={{ fontWeight: 800, color: '#f87171' }}>
                       {item.variance_qty} {item.unit_code}
                     </td>
-                    <td className="font-mono" style={{ fontWeight: 800, color: '#0f172a' }}>
+                    <td className="font-mono" style={{ fontWeight: 800, color: '#fbbf24' }}>
                       Rp {item.variance_value.toLocaleString('id-ID')}
                     </td>
                     <td>
@@ -253,8 +253,8 @@ export default function DiscrepancyView({ currentUser, onViewChainOfCustody }) {
               {/* Detail Box */}
               <div
                 style={{
-                  backgroundColor: '#f8fafc',
-                  border: '1px solid var(--border-strong)',
+                  backgroundColor: 'var(--bg-card-inner)',
+                  border: '1px solid var(--border-subtle)',
                   borderRadius: 'var(--radius-sm)',
                   padding: 14,
                   marginBottom: 16
@@ -263,27 +263,27 @@ export default function DiscrepancyView({ currentUser, onViewChainOfCustody }) {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, textAlign: 'center' }}>
                   <div>
                     <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Stok Sistem</div>
-                    <div className="font-mono" style={{ fontSize: 16, fontWeight: 700 }}>
+                    <div className="font-mono" style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-main)' }}>
                       {selectedCase.system_stock.toLocaleString('id-ID')}
                     </div>
                   </div>
                   <div>
                     <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Stok Fisik</div>
-                    <div className="font-mono" style={{ fontSize: 16, fontWeight: 700 }}>
+                    <div className="font-mono" style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-main)' }}>
                       {selectedCase.physical_stock.toLocaleString('id-ID')}
                     </div>
                   </div>
                   <div>
-                    <div style={{ fontSize: 11, color: '#dc2626' }}>Selisih Unit</div>
-                    <div className="font-mono" style={{ fontSize: 16, fontWeight: 800, color: '#dc2626' }}>
+                    <div style={{ fontSize: 11, color: '#f87171' }}>Selisih Unit</div>
+                    <div className="font-mono" style={{ fontSize: 16, fontWeight: 800, color: '#f87171' }}>
                       {selectedCase.variance_qty}
                     </div>
                   </div>
                 </div>
 
-                <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid #cbd5e1', textAlign: 'center' }}>
+                <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid var(--border-subtle)', textAlign: 'center' }}>
                   <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>POTENSI SELISIH NILAI: </span>
-                  <span className="font-mono" style={{ fontSize: 18, fontWeight: 800, color: '#0f172a' }}>
+                  <span className="font-mono" style={{ fontSize: 18, fontWeight: 800, color: '#fbbf24' }}>
                     Rp {selectedCase.variance_value.toLocaleString('id-ID')}
                   </span>
                 </div>

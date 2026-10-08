@@ -44,40 +44,42 @@ export default function InformationLeadTimeView() {
   const dataAvailabilityRate = leadTimeData?.data_availability_percent ?? 95;
 
   return (
-    <div style={{ padding: '20px', maxWidth: 1200, margin: '0 auto', fontFamily: 'system-ui, sans-serif' }}>
+    <div className="content-body" style={{ maxWidth: 1200 }}>
       {/* Header */}
       <div style={{
-        backgroundColor: '#1e293b',
+        backgroundColor: 'var(--bg-surface)',
         borderRadius: 14,
         padding: '20px 24px',
         marginBottom: 24,
-        border: '1px solid #334155',
+        border: '1px solid var(--border-subtle)',
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
         alignItems: 'center',
-        gap: 16
+        gap: 16,
+        boxShadow: 'var(--shadow-sm)'
       }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
             <span style={{
               padding: '4px 10px',
-              backgroundColor: '#064e3b',
-              color: '#34d399',
+              backgroundColor: 'var(--status-safe-bg)',
+              color: 'var(--status-safe-text)',
+              border: '1px solid var(--status-safe-border)',
               borderRadius: 20,
               fontSize: 12,
               fontWeight: 800
             }}>
               KPI STRATEGIS PABRIK DIGITAL
             </span>
-            <span style={{ fontSize: 12, color: '#94a3b8' }}>
+            <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
               Target untuk Divalidasi (Bukan Klaim Sekat)
             </span>
           </div>
-          <h2 style={{ margin: '4px 0', fontSize: 22, fontWeight: 800, color: '#f8fafc' }}>
+          <h2 style={{ margin: '4px 0', fontSize: 22, fontWeight: 800, color: 'var(--text-main)' }}>
             Information Lead Time & Ketersediaan Data Lapangan
           </h2>
-          <p style={{ margin: 0, fontSize: 13, color: '#94a3b8' }}>
+          <p style={{ margin: 0, fontSize: 13, color: 'var(--text-muted)' }}>
             Mengukur kecepatan perpindahan data dari saat fisik selesai hingga tersedia di layar manajemen
           </p>
         </div>
@@ -86,9 +88,9 @@ export default function InformationLeadTimeView() {
           onClick={fetchData}
           style={{
             padding: '8px 16px',
-            backgroundColor: '#334155',
-            color: '#ffffff',
-            border: 'none',
+            backgroundColor: 'var(--bg-subtle)',
+            color: 'var(--text-main)',
+            border: '1px solid var(--border-subtle)',
             borderRadius: 8,
             fontSize: 13,
             fontWeight: 600,
@@ -111,18 +113,18 @@ export default function InformationLeadTimeView() {
       }}>
         {/* KPI 1: INFORMATION LEAD TIME */}
         <div style={{
-          backgroundColor: '#0f172a',
+          backgroundColor: 'var(--bg-surface)',
           borderRadius: 14,
           padding: 24,
-          border: '2px solid #0284c7',
-          boxShadow: '0 10px 25px -5px rgba(2, 132, 199, 0.2)'
+          border: '1px solid var(--border-subtle)',
+          boxShadow: 'var(--shadow-sm)'
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
             <div>
-              <span style={{ fontSize: 12, color: '#38bdf8', fontWeight: 800, textTransform: 'uppercase' }}>
+              <span style={{ fontSize: 12, color: 'var(--accent-cyan)', fontWeight: 800, textTransform: 'uppercase' }}>
                 KPI #1 — INFORMATION LEAD TIME
               </span>
-              <h3 style={{ margin: '4px 0 0', fontSize: 18, fontWeight: 800, color: '#f8fafc' }}>
+              <h3 style={{ margin: '4px 0 0', fontSize: 18, fontWeight: 800, color: 'var(--text-main)' }}>
                 Waktu Tiba Informasi ke Manajemen
               </h3>
             </div>
@@ -130,7 +132,7 @@ export default function InformationLeadTimeView() {
               width: 44,
               height: 44,
               borderRadius: 10,
-              backgroundColor: '#0369a1',
+              backgroundColor: 'var(--accent-blue)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
@@ -145,42 +147,42 @@ export default function InformationLeadTimeView() {
             gap: 12,
             margin: '20px 0 16px',
             paddingBottom: 16,
-            borderBottom: '1px solid #1e293b'
+            borderBottom: '1px solid var(--border-subtle)'
           }}>
             <div>
-              <span style={{ fontSize: 12, color: '#94a3b8' }}>Baseline Manual:</span>
-              <div style={{ fontSize: 24, fontWeight: 800, color: '#ef4444' }}>
+              <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Baseline Manual:</span>
+              <div style={{ fontSize: 24, fontWeight: 800, color: 'var(--accent-rose)' }}>
                 ~{baselineDays} Hari
               </div>
             </div>
-            <ArrowRight size={24} color="#64748b" />
+            <ArrowRight size={24} color="var(--text-dim)" />
             <div>
-              <span style={{ fontSize: 12, color: '#34d399' }}>Sistem Digital Aktual:</span>
-              <div style={{ fontSize: 32, fontWeight: 900, color: '#10b981' }}>
+              <span style={{ fontSize: 12, color: 'var(--status-safe-text)' }}>Sistem Digital Aktual:</span>
+              <div style={{ fontSize: 32, fontWeight: 900, color: 'var(--accent-emerald)' }}>
                 {actualAvgMinutes} Menit
               </div>
             </div>
           </div>
 
-          <p style={{ margin: 0, fontSize: 13, color: '#94a3b8', lineHeight: 1.5 }}>
+          <p style={{ margin: 0, fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.5 }}>
             Dihitung dari selisih waktu <b>completion_time</b> (saat teknisi selesai) sampai <b>submitted_at</b> (data masuk database). Mereduksi waktu tunggu keputusan hingga <b>&gt;99%</b>.
           </p>
         </div>
 
         {/* KPI 2: DATA AVAILABILITY */}
         <div style={{
-          backgroundColor: '#0f172a',
+          backgroundColor: 'var(--bg-surface)',
           borderRadius: 14,
           padding: 24,
-          border: '2px solid #10b981',
-          boxShadow: '0 10px 25px -5px rgba(16, 185, 129, 0.2)'
+          border: '1px solid var(--border-subtle)',
+          boxShadow: 'var(--shadow-sm)'
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
             <div>
-              <span style={{ fontSize: 12, color: '#34d399', fontWeight: 800, textTransform: 'uppercase' }}>
+              <span style={{ fontSize: 12, color: 'var(--status-safe-text)', fontWeight: 800, textTransform: 'uppercase' }}>
                 KPI #2 — DATA AVAILABILITY
               </span>
-              <h3 style={{ margin: '4px 0 0', fontSize: 18, fontWeight: 800, color: '#f8fafc' }}>
+              <h3 style={{ margin: '4px 0 0', fontSize: 18, fontWeight: 800, color: 'var(--text-main)' }}>
                 Ketersediaan Data Lapangan Hari Ini
               </h3>
             </div>
@@ -188,7 +190,7 @@ export default function InformationLeadTimeView() {
               width: 44,
               height: 44,
               borderRadius: 10,
-              backgroundColor: '#065f46',
+              backgroundColor: 'var(--accent-emerald)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
@@ -203,12 +205,12 @@ export default function InformationLeadTimeView() {
             gap: 16,
             margin: '20px 0 16px',
             paddingBottom: 16,
-            borderBottom: '1px solid #1e293b'
+            borderBottom: '1px solid var(--border-subtle)'
           }}>
-            <div style={{ fontSize: 42, fontWeight: 900, color: '#10b981' }}>
+            <div style={{ fontSize: 42, fontWeight: 900, color: 'var(--accent-emerald)' }}>
               {dataAvailabilityRate}%
             </div>
-            <div style={{ fontSize: 13, color: '#94a3b8' }}>
+            <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>
               <b>{leadTimeData?.submitted_today ?? 0}</b> dari <b>{leadTimeData?.planned_today ?? 8}</b> aktivitas mesin telah masuk ke dasbor.
             </div>
           </div>
@@ -219,17 +221,17 @@ export default function InformationLeadTimeView() {
             gap: 8,
             textAlign: 'center'
           }}>
-            <div style={{ backgroundColor: '#1e293b', padding: 8, borderRadius: 8 }}>
-              <span style={{ fontSize: 11, color: '#94a3b8' }}>Direncanakan</span>
-              <div style={{ fontSize: 16, fontWeight: 800, color: '#f8fafc' }}>{leadTimeData?.planned_today ?? 8}</div>
+            <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 8, borderRadius: 8, border: '1px solid var(--border-subtle)' }}>
+              <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Direncanakan</span>
+              <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text-main)' }}>{leadTimeData?.planned_today ?? 8}</div>
             </div>
-            <div style={{ backgroundColor: '#1e293b', padding: 8, borderRadius: 8 }}>
-              <span style={{ fontSize: 11, color: '#34d399' }}>Terkirim</span>
-              <div style={{ fontSize: 16, fontWeight: 800, color: '#10b981' }}>{leadTimeData?.submitted_today ?? 0}</div>
+            <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 8, borderRadius: 8, border: '1px solid var(--status-safe-border)' }}>
+              <span style={{ fontSize: 11, color: 'var(--status-safe-text)' }}>Terkirim</span>
+              <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--accent-emerald)' }}>{leadTimeData?.submitted_today ?? 0}</div>
             </div>
-            <div style={{ backgroundColor: '#1e293b', padding: 8, borderRadius: 8 }}>
-              <span style={{ fontSize: 11, color: '#fbbf24' }}>Pending</span>
-              <div style={{ fontSize: 16, fontWeight: 800, color: '#f59e0b' }}>{leadTimeData?.pending_today ?? 0}</div>
+            <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 8, borderRadius: 8, border: '1px solid var(--status-warn-border)' }}>
+              <span style={{ fontSize: 11, color: 'var(--status-warn-text)' }}>Pending</span>
+              <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--accent-amber)' }}>{leadTimeData?.pending_today ?? 0}</div>
             </div>
           </div>
         </div>
@@ -237,29 +239,30 @@ export default function InformationLeadTimeView() {
 
       {/* PERBANDINGAN ALUR OPERASIONAL (CURRENT VS TARGET) */}
       <div style={{
-        backgroundColor: '#1e293b',
+        backgroundColor: 'var(--bg-surface)',
         borderRadius: 14,
         padding: 24,
         marginBottom: 28,
-        border: '1px solid #334155'
+        border: '1px solid var(--border-subtle)',
+        boxShadow: 'var(--shadow-sm)'
       }}>
-        <h3 style={{ margin: '0 0 16px', fontSize: 18, fontWeight: 800, color: '#f8fafc' }}>
+        <h3 style={{ margin: '0 0 16px', fontSize: 18, fontWeight: 800, color: 'var(--text-main)' }}>
           Visualisasi Transformasi Aliran Data (Current vs Target)
         </h3>
 
         {/* ALUR LAMA (MANUAL) */}
         <div style={{
-          backgroundColor: '#0f172a',
+          backgroundColor: 'var(--bg-card-inner)',
           padding: 18,
           borderRadius: 12,
-          border: '1px dashed #ef4444',
+          border: '1px dashed var(--accent-rose)',
           marginBottom: 16
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-            <span style={{ fontSize: 13, fontWeight: 800, color: '#ef4444' }}>
+            <span style={{ fontSize: 13, fontWeight: 800, color: 'var(--accent-rose)' }}>
               🔴 KONDISI SAAT INI (MANUAL - RENTAN KETERLAMBATAN ~7 HARI)
             </span>
-            <span style={{ fontSize: 12, color: '#ef4444', fontWeight: 700 }}>Lead Time: ~7 Hari</span>
+            <span style={{ fontSize: 12, color: 'var(--accent-rose)', fontWeight: 700 }}>Lead Time: ~7 Hari</span>
           </div>
 
           <div style={{
@@ -268,21 +271,21 @@ export default function InformationLeadTimeView() {
             alignItems: 'center',
             gap: 8,
             fontSize: 12,
-            color: '#cbd5e1'
+            color: 'var(--text-secondary)'
           }}>
-            <span style={{ padding: '6px 10px', backgroundColor: '#334155', borderRadius: 6 }}>1. Lapangan</span>
-            <ArrowRight size={14} color="#64748b" />
-            <span style={{ padding: '6px 10px', backgroundColor: '#334155', borderRadius: 6 }}>2. Catat Kertas</span>
-            <ArrowRight size={14} color="#64748b" />
-            <span style={{ padding: '6px 10px', backgroundColor: '#334155', borderRadius: 6 }}>3. Kumpul Lembar</span>
-            <ArrowRight size={14} color="#64748b" />
-            <span style={{ padding: '6px 10px', backgroundColor: '#334155', borderRadius: 6 }}>4. Input Ulang PC</span>
-            <ArrowRight size={14} color="#64748b" />
-            <span style={{ padding: '6px 10px', backgroundColor: '#334155', borderRadius: 6 }}>5. Koreksi & Cek</span>
-            <ArrowRight size={14} color="#64748b" />
-            <span style={{ padding: '6px 10px', backgroundColor: '#334155', borderRadius: 6 }}>6. Rekap Mingguan</span>
-            <ArrowRight size={14} color="#64748b" />
-            <span style={{ padding: '6px 10px', backgroundColor: '#7f1d1d', color: '#fca5a5', borderRadius: 6, fontWeight: 700 }}>
+            <span style={{ padding: '6px 10px', backgroundColor: 'var(--bg-subtle)', color: 'var(--text-main)', border: '1px solid var(--border-subtle)', borderRadius: 6 }}>1. Lapangan</span>
+            <ArrowRight size={14} color="var(--text-dim)" />
+            <span style={{ padding: '6px 10px', backgroundColor: 'var(--bg-subtle)', color: 'var(--text-main)', border: '1px solid var(--border-subtle)', borderRadius: 6 }}>2. Catat Kertas</span>
+            <ArrowRight size={14} color="var(--text-dim)" />
+            <span style={{ padding: '6px 10px', backgroundColor: 'var(--bg-subtle)', color: 'var(--text-main)', border: '1px solid var(--border-subtle)', borderRadius: 6 }}>3. Kumpul Lembar</span>
+            <ArrowRight size={14} color="var(--text-dim)" />
+            <span style={{ padding: '6px 10px', backgroundColor: 'var(--bg-subtle)', color: 'var(--text-main)', border: '1px solid var(--border-subtle)', borderRadius: 6 }}>4. Input Ulang PC</span>
+            <ArrowRight size={14} color="var(--text-dim)" />
+            <span style={{ padding: '6px 10px', backgroundColor: 'var(--bg-subtle)', color: 'var(--text-main)', border: '1px solid var(--border-subtle)', borderRadius: 6 }}>5. Koreksi & Cek</span>
+            <ArrowRight size={14} color="var(--text-dim)" />
+            <span style={{ padding: '6px 10px', backgroundColor: 'var(--bg-subtle)', color: 'var(--text-main)', border: '1px solid var(--border-subtle)', borderRadius: 6 }}>6. Rekap Mingguan</span>
+            <ArrowRight size={14} color="var(--text-dim)" />
+            <span style={{ padding: '6px 10px', backgroundColor: 'var(--status-alert-bg)', color: 'var(--status-alert-text)', border: '1px solid var(--status-alert-border)', borderRadius: 6, fontWeight: 700 }}>
               7. Manajemen (Terlambat)
             </span>
           </div>
@@ -290,16 +293,16 @@ export default function InformationLeadTimeView() {
 
         {/* ALUR BARU (DIGITAL TAIHO) */}
         <div style={{
-          backgroundColor: '#0f172a',
+          backgroundColor: 'var(--bg-card-inner)',
           padding: 18,
           borderRadius: 12,
-          border: '1px solid #10b981'
+          border: '1px solid var(--status-safe-border)'
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-            <span style={{ fontSize: 13, fontWeight: 800, color: '#10b981' }}>
+            <span style={{ fontSize: 13, fontWeight: 800, color: 'var(--accent-emerald)' }}>
               🟢 TARGET PLATFORM DIGITAL (DATA CAPTURED AT SOURCE)
             </span>
-            <span style={{ fontSize: 12, color: '#34d399', fontWeight: 700 }}>Lead Time: Real-Time / ≤ 1 Hari</span>
+            <span style={{ fontSize: 12, color: 'var(--status-safe-text)', fontWeight: 700 }}>Lead Time: Real-Time / ≤ 1 Hari</span>
           </div>
 
           <div style={{
@@ -308,21 +311,21 @@ export default function InformationLeadTimeView() {
             alignItems: 'center',
             gap: 8,
             fontSize: 12,
-            color: '#cbd5e1'
+            color: 'var(--text-secondary)'
           }}>
-            <span style={{ padding: '6px 12px', backgroundColor: '#0284c7', color: '#ffffff', borderRadius: 6, fontWeight: 700 }}>
+            <span style={{ padding: '6px 12px', backgroundColor: 'var(--accent-blue)', color: '#ffffff', borderRadius: 6, fontWeight: 700 }}>
               1. Operator Tablet (Touch/QR)
             </span>
-            <ArrowRight size={14} color="#10b981" />
-            <span style={{ padding: '6px 12px', backgroundColor: '#064e3b', color: '#34d399', borderRadius: 6, fontWeight: 700 }}>
+            <ArrowRight size={14} color="var(--accent-emerald)" />
+            <span style={{ padding: '6px 12px', backgroundColor: 'var(--status-safe-bg)', color: 'var(--status-safe-text)', border: '1px solid var(--status-safe-border)', borderRadius: 6, fontWeight: 700 }}>
               2. Sistem Digital Langsung
             </span>
-            <ArrowRight size={14} color="#10b981" />
-            <span style={{ padding: '6px 12px', backgroundColor: '#064e3b', color: '#34d399', borderRadius: 6, fontWeight: 700 }}>
+            <ArrowRight size={14} color="var(--accent-emerald)" />
+            <span style={{ padding: '6px 12px', backgroundColor: 'var(--status-safe-bg)', color: 'var(--status-safe-text)', border: '1px solid var(--status-safe-border)', borderRadius: 6, fontWeight: 700 }}>
               3. Database Pusat
             </span>
-            <ArrowRight size={14} color="#10b981" />
-            <span style={{ padding: '6px 12px', backgroundColor: '#065f46', color: '#ffffff', borderRadius: 6, fontWeight: 800 }}>
+            <ArrowRight size={14} color="var(--accent-emerald)" />
+            <span style={{ padding: '6px 12px', backgroundColor: 'var(--accent-emerald)', color: '#ffffff', borderRadius: 6, fontWeight: 800 }}>
               4. Dasbor Manajemen (Seketika)
             </span>
           </div>
@@ -330,15 +333,15 @@ export default function InformationLeadTimeView() {
       </div>
 
       {/* LIVE AUDIT STREAM: BUKTI DATA REAL-TIME */}
-      <div style={{ backgroundColor: '#1e293b', borderRadius: 14, padding: 20, border: '1px solid #334155' }}>
-        <h3 style={{ margin: '0 0 14px', fontSize: 18, fontWeight: 800, color: '#f8fafc' }}>
+      <div style={{ backgroundColor: 'var(--bg-surface)', borderRadius: 14, padding: 20, border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
+        <h3 style={{ margin: '0 0 14px', fontSize: 18, fontWeight: 800, color: 'var(--text-main)' }}>
           Aliran Data Riil Masuk (Audit Log Lead Time Aktual)
         </h3>
         
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, textAlign: 'left' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid #334155', color: '#94a3b8' }}>
+              <tr style={{ borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}>
                 <th style={{ padding: '10px 12px' }}>Waktu Selesai Kerja</th>
                 <th style={{ padding: '10px 12px' }}>Waktu Submit Sistem</th>
                 <th style={{ padding: '10px 12px' }}>Mesin</th>
@@ -349,24 +352,25 @@ export default function InformationLeadTimeView() {
             </thead>
             <tbody>
               {records.map(rec => (
-                <tr key={rec.id} style={{ borderBottom: '1px solid #334155' }}>
-                  <td style={{ padding: '12px', color: '#f8fafc' }}>
+                <tr key={rec.id} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                  <td style={{ padding: '12px', color: 'var(--text-main)' }}>
                     {rec.completion_time ? new Date(rec.completion_time).toLocaleTimeString('id-ID') : '-'}
                   </td>
-                  <td style={{ padding: '12px', color: '#38bdf8' }}>
+                  <td style={{ padding: '12px', color: 'var(--accent-cyan)' }}>
                     {rec.submitted_at ? new Date(rec.submitted_at).toLocaleTimeString('id-ID') : '-'}
                   </td>
-                  <td style={{ padding: '12px', fontWeight: 700, color: '#f8fafc' }}>
+                  <td style={{ padding: '12px', fontWeight: 700, color: 'var(--text-main)' }}>
                     {rec.asset_code}
                   </td>
-                  <td style={{ padding: '12px', color: '#94a3b8' }}>
+                  <td style={{ padding: '12px', color: 'var(--text-muted)' }}>
                     {rec.operator_name || 'Operator Lapangan'}
                   </td>
                   <td style={{ padding: '12px' }}>
                     <span style={{
                       padding: '3px 8px',
-                      backgroundColor: '#064e3b',
-                      color: '#34d399',
+                      backgroundColor: 'var(--status-safe-bg)',
+                      color: 'var(--status-safe-text)',
+                      border: '1px solid var(--status-safe-border)',
                       borderRadius: 6,
                       fontWeight: 800,
                       fontSize: 12
@@ -374,7 +378,7 @@ export default function InformationLeadTimeView() {
                       ⏱️ {rec.lead_time_seconds < 60 ? `${rec.lead_time_seconds} Detik` : `${Math.floor(rec.lead_time_seconds / 60)} Menit`}
                     </span>
                   </td>
-                  <td style={{ padding: '12px', color: '#94a3b8', fontSize: 12 }}>
+                  <td style={{ padding: '12px', color: 'var(--text-muted)', fontSize: 12 }}>
                     📱 Tablet Digital Langsung
                   </td>
                 </tr>

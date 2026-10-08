@@ -226,24 +226,24 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
   };
 
   return (
-    <div style={{ padding: '16px', maxWidth: 1100, margin: '0 auto', fontFamily: 'system-ui, sans-serif' }}>
+    <div className="content-body" style={{ maxWidth: 1100 }}>
       {/* Tablet Status Header */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '12px 18px',
-        backgroundColor: '#1e293b',
+        backgroundColor: 'var(--bg-surface)',
         borderRadius: 12,
         marginBottom: 20,
-        border: '1px solid #334155'
+        border: '1px solid var(--border-subtle)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{
             width: 44,
             height: 44,
             borderRadius: 10,
-            backgroundColor: '#0284c7',
+            backgroundColor: 'var(--accent-blue)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -251,10 +251,10 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
             <Wrench size={26} color="#ffffff" />
           </div>
           <div>
-            <h2 style={{ fontSize: 18, fontWeight: 800, margin: 0, color: '#f8fafc' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, margin: 0, color: 'var(--text-main)' }}>
               Mode Pemeliharaan Lapangan (Tablet Operator)
             </h2>
-            <p style={{ margin: 0, fontSize: 13, color: '#94a3b8' }}>
+            <p style={{ margin: 0, fontSize: 13, color: 'var(--text-muted)' }}>
               Pencatatan data langsung di sumber kerja tanpa formulir kertas
             </p>
           </div>
@@ -267,8 +267,9 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
               alignItems: 'center',
               gap: 6,
               padding: '6px 12px',
-              backgroundColor: '#064e3b',
-              color: '#34d399',
+              backgroundColor: 'var(--status-safe-bg)',
+              color: 'var(--status-safe-text)',
+              border: '1px solid var(--status-safe-border)',
               borderRadius: 20,
               fontSize: 12,
               fontWeight: 700
@@ -281,8 +282,9 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
               alignItems: 'center',
               gap: 6,
               padding: '6px 12px',
-              backgroundColor: '#7f1d1d',
-              color: '#f87171',
+              backgroundColor: 'var(--status-alert-bg)',
+              color: 'var(--status-alert-text)',
+              border: '1px solid var(--status-alert-border)',
               borderRadius: 20,
               fontSize: 12,
               fontWeight: 700
@@ -319,30 +321,30 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
       {/* Success Screen */}
       {submissionSuccess ? (
         <div style={{
-          backgroundColor: '#0f172a',
-          border: '2px solid #10b981',
+          backgroundColor: 'var(--bg-surface)',
+          border: '2px solid var(--accent-emerald)',
           borderRadius: 16,
           padding: 32,
           textAlign: 'center',
-          boxShadow: '0 10px 25px -5px rgba(16, 185, 129, 0.2)'
+          boxShadow: 'var(--shadow-md)'
         }}>
           <div style={{
             width: 72,
             height: 72,
             borderRadius: '50%',
-            backgroundColor: '#064e3b',
+            backgroundColor: 'var(--status-safe-bg)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 16px'
           }}>
-            <CheckCircle2 size={42} color="#34d399" />
+            <CheckCircle2 size={42} color="var(--status-safe-text)" />
           </div>
 
-          <h3 style={{ fontSize: 24, fontWeight: 800, color: '#f8fafc', margin: '0 0 8px' }}>
+          <h3 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text-main)', margin: '0 0 8px' }}>
             Data Pemeliharaan Berhasil Disimpan!
           </h3>
-          <p style={{ fontSize: 15, color: '#94a3b8', maxWidth: 500, margin: '0 auto 24px' }}>
+          <p style={{ fontSize: 15, color: 'var(--text-muted)', maxWidth: 500, margin: '0 auto 24px' }}>
             {submissionSuccess.offline 
               ? submissionSuccess.message 
               : 'Informasi telah langsung tercatat ke database pusat dan dasbor manajemen tanpa jeda kertas 7 hari.'}
@@ -356,20 +358,20 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
             margin: '0 auto 32px',
             textAlign: 'left'
           }}>
-            <div style={{ backgroundColor: '#1e293b', padding: 14, borderRadius: 10 }}>
-              <span style={{ fontSize: 12, color: '#94a3b8' }}>Mesin / Asset</span>
-              <div style={{ fontSize: 16, fontWeight: 700, color: '#f8fafc' }}>{submissionSuccess.asset_name}</div>
+            <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 14, borderRadius: 10, border: '1px solid var(--border-subtle)' }}>
+              <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Mesin / Asset</span>
+              <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-main)' }}>{submissionSuccess.asset_name}</div>
             </div>
-            <div style={{ backgroundColor: '#1e293b', padding: 14, borderRadius: 10 }}>
-              <span style={{ fontSize: 12, color: '#94a3b8' }}>Information Lead Time</span>
-              <div style={{ fontSize: 16, fontWeight: 800, color: '#10b981' }}>
+            <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 14, borderRadius: 10, border: '1px solid var(--border-subtle)' }}>
+              <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Information Lead Time</span>
+              <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--accent-emerald)' }}>
                 {submissionSuccess.lead_time_formatted}
               </div>
             </div>
             {submissionSuccess.record_number && (
-              <div style={{ backgroundColor: '#1e293b', padding: 14, borderRadius: 10 }}>
-                <span style={{ fontSize: 12, color: '#94a3b8' }}>Nomor Bukti Digital</span>
-                <div style={{ fontSize: 15, fontWeight: 700, color: '#38bdf8' }}>{submissionSuccess.record_number}</div>
+              <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 14, borderRadius: 10, border: '1px solid var(--border-subtle)' }}>
+                <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Nomor Bukti Digital</span>
+                <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--accent-cyan)' }}>{submissionSuccess.record_number}</div>
               </div>
             )}
           </div>
@@ -408,10 +410,10 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                 marginBottom: 16
               }}>
                 <div>
-                  <h3 style={{ margin: 0, fontSize: 18, color: '#f8fafc', fontWeight: 800 }}>
+                  <h3 style={{ margin: 0, fontSize: 18, color: 'var(--text-main)', fontWeight: 800 }}>
                     Langkah 1: Pilih Mesin yang Diperiksa
                   </h3>
-                  <span style={{ fontSize: 13, color: '#94a3b8' }}>
+                  <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>
                     Ketuk nama mesin di bawah atau gunakan tombol Scan QR
                   </span>
                 </div>
@@ -452,16 +454,17 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                       key={asset.id}
                       onClick={() => handleSelectAsset(asset)}
                       style={{
-                        backgroundColor: '#1e293b',
+                        backgroundColor: 'var(--bg-surface)',
                         borderRadius: 14,
                         padding: 18,
-                        border: isProblem ? '2px solid #ef4444' : isWarning ? '2px solid #f59e0b' : '1px solid #334155',
+                        border: isProblem ? '2px solid var(--accent-rose)' : isWarning ? '2px solid var(--accent-amber)' : '1px solid var(--border-subtle)',
                         cursor: 'pointer',
                         transition: 'transform 0.15s ease, border-color 0.15s ease',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        minHeight: 140
+                        minHeight: 140,
+                        boxShadow: 'var(--shadow-sm)'
                       }}
                       onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
                       onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0px)'}
@@ -470,8 +473,8 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
                           <span style={{
                             padding: '4px 10px',
-                            backgroundColor: '#0f172a',
-                            color: '#38bdf8',
+                            backgroundColor: 'var(--bg-subtle)',
+                            color: 'var(--accent-cyan)',
                             borderRadius: 6,
                             fontSize: 13,
                             fontWeight: 800,
@@ -484,16 +487,17 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                             borderRadius: 12,
                             fontSize: 11,
                             fontWeight: 700,
-                            backgroundColor: isProblem ? '#7f1d1d' : isWarning ? '#78350f' : '#064e3b',
-                            color: isProblem ? '#fca5a5' : isWarning ? '#fcd34d' : '#86efac'
+                            backgroundColor: isProblem ? 'var(--status-alert-bg)' : isWarning ? 'var(--status-warn-bg)' : 'var(--status-safe-bg)',
+                            color: isProblem ? 'var(--status-alert-text)' : isWarning ? 'var(--status-warn-text)' : 'var(--status-safe-text)',
+                            border: `1px solid ${isProblem ? 'var(--status-alert-border)' : isWarning ? 'var(--status-warn-border)' : 'var(--status-safe-border)'}`
                           }}>
                             {asset.status}
                           </span>
                         </div>
-                        <h4 style={{ margin: '0 0 6px', fontSize: 16, fontWeight: 700, color: '#f8fafc' }}>
+                        <h4 style={{ margin: '0 0 6px', fontSize: 16, fontWeight: 700, color: 'var(--text-main)' }}>
                           {asset.asset_name}
                         </h4>
-                        <div style={{ fontSize: 12, color: '#94a3b8' }}>
+                        <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
                           📍 {asset.location} ({asset.production_area})
                         </div>
                       </div>
@@ -501,15 +505,15 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                       <div style={{
                         marginTop: 14,
                         paddingTop: 10,
-                        borderTop: '1px solid #334155',
+                        borderTop: '1px solid var(--border-subtle)',
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center'
                       }}>
-                        <span style={{ fontSize: 11, color: '#64748b' }}>
+                        <span style={{ fontSize: 11, color: 'var(--text-dim)' }}>
                           Kondisi: {asset.current_condition || 'Normal'}
                         </span>
-                        <span style={{ fontSize: 13, color: '#38bdf8', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <span style={{ fontSize: 13, color: 'var(--accent-cyan)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
                           Pilih <ArrowRight size={14} />
                         </span>
                       </div>
@@ -525,7 +529,7 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
             <div>
               {/* Asset Bar */}
               <div style={{
-                backgroundColor: '#1e293b',
+                backgroundColor: 'var(--bg-surface)',
                 padding: '16px 20px',
                 borderRadius: 12,
                 marginBottom: 20,
@@ -534,16 +538,17 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 gap: 12,
-                border: '1px solid #334155'
+                border: '1px solid var(--border-subtle)',
+                boxShadow: 'var(--shadow-sm)'
               }}>
                 <div>
-                  <span style={{ fontSize: 12, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  <span style={{ fontSize: 12, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                     Mesin Terpilih
                   </span>
-                  <h3 style={{ margin: '4px 0 0', fontSize: 20, color: '#f8fafc', fontWeight: 800 }}>
+                  <h3 style={{ margin: '4px 0 0', fontSize: 20, color: 'var(--text-main)', fontWeight: 800 }}>
                     {selectedAsset.asset_code} — {selectedAsset.asset_name}
                   </h3>
-                  <span style={{ fontSize: 13, color: '#38bdf8' }}>
+                  <span style={{ fontSize: 13, color: 'var(--accent-cyan)' }}>
                     📍 {selectedAsset.location} | {selectedAsset.machine_type}
                   </span>
                 </div>
@@ -555,9 +560,9 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                     onChange={e => setMaintenanceType(e.target.value)}
                     style={{
                       padding: '10px 14px',
-                      backgroundColor: '#0f172a',
-                      color: '#f8fafc',
-                      border: '1px solid #475569',
+                      backgroundColor: 'var(--bg-card-inner)',
+                      color: 'var(--text-main)',
+                      border: '1px solid var(--border-strong)',
                       borderRadius: 8,
                       fontSize: 14,
                       fontWeight: 600,
@@ -576,9 +581,9 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                     onClick={() => setStep(1)}
                     style={{
                       padding: '10px 16px',
-                      backgroundColor: '#334155',
-                      color: '#f8fafc',
-                      border: 'none',
+                      backgroundColor: 'var(--bg-subtle)',
+                      color: 'var(--text-main)',
+                      border: '1px solid var(--border-subtle)',
                       borderRadius: 8,
                       fontSize: 14,
                       fontWeight: 600,
@@ -593,10 +598,10 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
 
               {/* Checklist Items Title */}
               <div style={{ marginBottom: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h4 style={{ margin: 0, fontSize: 16, color: '#f8fafc', fontWeight: 700 }}>
+                <h4 style={{ margin: 0, fontSize: 16, color: 'var(--text-main)', fontWeight: 700 }}>
                   Item Pemeriksaan Lapangan ({activeChecklist ? activeChecklist.title : 'Checklist Standar'})
                 </h4>
-                <span style={{ fontSize: 13, color: '#94a3b8' }}>
+                <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>
                   Ketuk tombol status untuk setiap poin
                 </span>
               </div>
@@ -610,19 +615,20 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                       <div
                         key={item.id}
                         style={{
-                          backgroundColor: '#1e293b',
+                          backgroundColor: 'var(--bg-surface)',
                           padding: 16,
                           borderRadius: 12,
                           border: currentItemStatus === 'FAIL' 
-                            ? '2px solid #ef4444' 
+                            ? '2px solid var(--accent-rose)' 
                             : currentItemStatus === 'WARNING' 
-                            ? '2px solid #f59e0b' 
-                            : '1px solid #334155',
+                            ? '2px solid var(--accent-amber)' 
+                            : '1px solid var(--border-subtle)',
                           display: 'flex',
                           flexWrap: 'wrap',
                           justifyContent: 'space-between',
                           alignItems: 'center',
-                          gap: 14
+                          gap: 14,
+                          boxShadow: 'var(--shadow-sm)'
                         }}
                       >
                         <div style={{ flex: 1, minWidth: 260 }}>
@@ -631,8 +637,8 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                               width: 24,
                               height: 24,
                               borderRadius: '50%',
-                              backgroundColor: '#0f172a',
-                              color: '#94a3b8',
+                              backgroundColor: 'var(--bg-subtle)',
+                              color: 'var(--text-muted)',
                               fontSize: 12,
                               fontWeight: 700,
                               display: 'flex',
@@ -641,12 +647,12 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                             }}>
                               {idx + 1}
                             </span>
-                            <span style={{ fontSize: 16, fontWeight: 700, color: '#f8fafc' }}>
+                            <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-main)' }}>
                               {item.item_label}
                             </span>
                           </div>
                           {item.standard_description && (
-                            <p style={{ margin: 0, fontSize: 13, color: '#94a3b8', paddingLeft: 32 }}>
+                            <p style={{ margin: 0, fontSize: 13, color: 'var(--text-muted)', paddingLeft: 32 }}>
                               Standar: {item.standard_description}
                             </p>
                           )}
@@ -665,8 +671,8 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                               fontWeight: 800,
                               fontSize: 14,
                               minHeight: 48,
-                              backgroundColor: currentItemStatus === 'PASS' ? '#10b981' : '#334155',
-                              color: currentItemStatus === 'PASS' ? '#ffffff' : '#94a3b8',
+                              backgroundColor: currentItemStatus === 'PASS' ? 'var(--accent-emerald)' : 'var(--bg-subtle)',
+                              color: currentItemStatus === 'PASS' ? '#ffffff' : 'var(--text-muted)',
                               display: 'flex',
                               alignItems: 'center',
                               gap: 6
@@ -686,8 +692,8 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                               fontWeight: 800,
                               fontSize: 14,
                               minHeight: 48,
-                              backgroundColor: currentItemStatus === 'WARNING' ? '#f59e0b' : '#334155',
-                              color: currentItemStatus === 'WARNING' ? '#000000' : '#94a3b8',
+                              backgroundColor: currentItemStatus === 'WARNING' ? 'var(--accent-amber)' : 'var(--bg-subtle)',
+                              color: currentItemStatus === 'WARNING' ? '#000000' : 'var(--text-muted)',
                               display: 'flex',
                               alignItems: 'center',
                               gap: 6
@@ -707,8 +713,8 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                               fontWeight: 800,
                               fontSize: 14,
                               minHeight: 48,
-                              backgroundColor: currentItemStatus === 'FAIL' ? '#ef4444' : '#334155',
-                              color: currentItemStatus === 'FAIL' ? '#ffffff' : '#94a3b8',
+                              backgroundColor: currentItemStatus === 'FAIL' ? 'var(--accent-rose)' : 'var(--bg-subtle)',
+                              color: currentItemStatus === 'FAIL' ? '#ffffff' : 'var(--text-muted)',
                               display: 'flex',
                               alignItems: 'center',
                               gap: 6
@@ -721,7 +727,7 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                     );
                   })
                 ) : (
-                  <div style={{ padding: 24, textAlign: 'center', color: '#94a3b8' }}>
+                  <div style={{ padding: 24, textAlign: 'center', color: 'var(--text-muted)' }}>
                     Memuat daftar checklist mesin...
                   </div>
                 )}
@@ -730,15 +736,15 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
               {/* Dynamic Warning / Failure Detail Section */}
               {(overallCondition === 'CRITICAL' || overallCondition === 'WARNING') && (
                 <div style={{
-                  backgroundColor: overallCondition === 'CRITICAL' ? '#450a0a' : '#451a03',
-                  border: overallCondition === 'CRITICAL' ? '2px solid #ef4444' : '2px solid #f59e0b',
+                  backgroundColor: overallCondition === 'CRITICAL' ? 'var(--status-alert-bg)' : 'var(--status-warn-bg)',
+                  border: overallCondition === 'CRITICAL' ? '2px solid var(--status-alert-border)' : '2px solid var(--status-warn-border)',
                   borderRadius: 14,
                   padding: 20,
                   marginBottom: 24
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-                    <AlertTriangle size={24} color={overallCondition === 'CRITICAL' ? '#ef4444' : '#f59e0b'} />
-                    <h4 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: '#f8fafc' }}>
+                    <AlertTriangle size={24} color={overallCondition === 'CRITICAL' ? 'var(--status-alert-text)' : 'var(--status-warn-text)'} />
+                    <h4 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: 'var(--text-main)' }}>
                       {overallCondition === 'CRITICAL' 
                         ? 'Pemeriksaan Mengindikasikan Kerusakan (FAIL) — Wajib Dilengkapi'
                         : 'Pemeriksaan Mengindikasikan Peringatan (WARNING) — Catat Temuan'}
@@ -747,7 +753,7 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#e2e8f0', marginBottom: 6 }}>
+                      <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6 }}>
                         Deskripsi Temuan Kerusakan / Masalah *
                       </label>
                       <textarea
@@ -758,10 +764,10 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                         style={{
                           width: '100%',
                           padding: 12,
-                          backgroundColor: '#1e293b',
-                          border: '1px solid #64748b',
+                          backgroundColor: 'var(--bg-card-inner)',
+                          border: '1px solid var(--border-strong)',
                           borderRadius: 8,
-                          color: '#ffffff',
+                          color: 'var(--text-main)',
                           fontSize: 14,
                           boxSizing: 'border-box'
                         }}
@@ -769,7 +775,7 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#e2e8f0', marginBottom: 6 }}>
+                      <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6 }}>
                         Tindakan Perbaikan yang Dilakukan *
                       </label>
                       <textarea
@@ -780,10 +786,10 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                         style={{
                           width: '100%',
                           padding: 12,
-                          backgroundColor: '#1e293b',
-                          border: '1px solid #64748b',
+                          backgroundColor: 'var(--bg-card-inner)',
+                          border: '1px solid var(--border-strong)',
                           borderRadius: 8,
-                          color: '#ffffff',
+                          color: 'var(--text-main)',
                           fontSize: 14,
                           boxSizing: 'border-box'
                         }}
@@ -794,7 +800,7 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                   {/* Suku Cadang & Foto Bukti */}
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16, marginTop: 14 }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#e2e8f0', marginBottom: 6 }}>
+                      <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6 }}>
                         Suku Cadang yang Digunakan (Opsional)
                       </label>
                       <input
@@ -805,10 +811,10 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                         style={{
                           width: '100%',
                           padding: 12,
-                          backgroundColor: '#1e293b',
-                          border: '1px solid #64748b',
+                          backgroundColor: 'var(--bg-card-inner)',
+                          border: '1px solid var(--border-strong)',
                           borderRadius: 8,
-                          color: '#ffffff',
+                          color: 'var(--text-main)',
                           fontSize: 14,
                           boxSizing: 'border-box'
                         }}
@@ -816,7 +822,7 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#e2e8f0', marginBottom: 6 }}>
+                      <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6 }}>
                         Foto Bukti Visual (Opsional / Kamera Tablet)
                       </label>
                       <label style={{
@@ -825,11 +831,11 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                         justifyContent: 'center',
                         gap: 8,
                         padding: '10px 16px',
-                        backgroundColor: '#1e293b',
-                        border: '1px dashed #64748b',
+                        backgroundColor: 'var(--bg-card-inner)',
+                        border: '1px dashed var(--border-strong)',
                         borderRadius: 8,
                         cursor: 'pointer',
-                        color: '#38bdf8',
+                        color: 'var(--accent-cyan)',
                         fontSize: 14,
                         fontWeight: 600,
                         minHeight: 44
@@ -841,7 +847,7 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                       {photoPreview && (
                         <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
                           <img src={photoPreview} alt="Preview" style={{ width: 44, height: 44, objectFit: 'cover', borderRadius: 6 }} />
-                          <span style={{ fontSize: 12, color: '#10b981' }}>Foto bukti tersimpan</span>
+                          <span style={{ fontSize: 12, color: 'var(--accent-emerald)' }}>Foto bukti tersimpan</span>
                         </div>
                       )}
                     </div>
@@ -851,7 +857,7 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
 
               {/* Catatan Tambahan Umum */}
               <div style={{ marginBottom: 24 }}>
-                <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#94a3b8', marginBottom: 6 }}>
+                <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 6 }}>
                   Catatan Tambahan Operator (Opsional)
                 </label>
                 <input
@@ -862,10 +868,10 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                   style={{
                     width: '100%',
                     padding: 12,
-                    backgroundColor: '#1e293b',
-                    border: '1px solid #334155',
+                    backgroundColor: 'var(--bg-card-inner)',
+                    border: '1px solid var(--border-subtle)',
                     borderRadius: 8,
-                    color: '#ffffff',
+                    color: 'var(--text-main)',
                     fontSize: 14,
                     boxSizing: 'border-box'
                   }}
@@ -879,20 +885,21 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 gap: 12,
-                backgroundColor: '#1e293b',
+                backgroundColor: 'var(--bg-surface)',
                 padding: 18,
                 borderRadius: 14,
-                border: '1px solid #334155'
+                border: '1px solid var(--border-subtle)',
+                boxShadow: 'var(--shadow-sm)'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <Clock size={20} color="#38bdf8" />
+                  <Clock size={20} color="var(--accent-cyan)" />
                   <div>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: '#f8fafc' }}>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-main)' }}>
                       Perekaman Waktu Digital: {new Date().toLocaleTimeString('id-ID')} WIB
                     </div>
-                    <div style={{ fontSize: 12, color: '#94a3b8' }}>
+                    <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
                       Status Hasil: <b style={{
-                        color: overallCondition === 'CRITICAL' ? '#ef4444' : overallCondition === 'WARNING' ? '#f59e0b' : '#10b981'
+                        color: overallCondition === 'CRITICAL' ? 'var(--accent-rose)' : overallCondition === 'WARNING' ? 'var(--accent-amber)' : 'var(--accent-emerald)'
                       }}>{overallCondition === 'CRITICAL' ? 'FAIL / PERLU PERBAIKAN' : overallCondition === 'WARNING' ? 'WARNING' : 'PASS / BAIK'}</b>
                     </div>
                   </div>
@@ -903,9 +910,9 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                     onClick={() => setStep(1)}
                     style={{
                       padding: '14px 22px',
-                      backgroundColor: '#334155',
-                      color: '#ffffff',
-                      border: 'none',
+                      backgroundColor: 'var(--bg-subtle)',
+                      color: 'var(--text-main)',
+                      border: '1px solid var(--border-subtle)',
                       borderRadius: 10,
                       fontSize: 15,
                       fontWeight: 700,

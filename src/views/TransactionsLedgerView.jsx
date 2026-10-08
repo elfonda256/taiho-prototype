@@ -150,7 +150,7 @@ export default function TransactionsLedgerView({ onSelectMaterial }) {
                     </td>
                     <td>
                       <div
-                        style={{ fontWeight: 800, cursor: 'pointer', color: 'var(--primary-900)' }}
+                        style={{ fontWeight: 800, cursor: 'pointer', color: '#38bdf8' }}
                         onClick={() => onSelectMaterial(t.material_code)}
                       >
                         {t.material_name}

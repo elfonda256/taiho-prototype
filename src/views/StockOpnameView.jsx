@@ -175,8 +175,8 @@ export default function StockOpnameView({ onOpenScanner, currentUser }) {
       {activeOpname && (
         <div
           style={{
-            backgroundColor: '#ffffff',
-            border: '1.5px solid var(--border-strong)',
+            backgroundColor: 'var(--bg-surface)',
+            border: '1px solid var(--border-subtle)',
             borderRadius: 'var(--radius-md)',
             padding: 20,
             marginBottom: 20
@@ -233,7 +233,7 @@ export default function StockOpnameView({ onOpenScanner, currentUser }) {
       <div className="card" style={{ marginBottom: 24 }}>
         <div className="card-header">
           <div>
-            <span style={{ fontSize: 12, fontWeight: 800, color: '#0284c7', textTransform: 'uppercase' }}>
+            <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--brand-primary)', textTransform: 'uppercase' }}>
               ALUR PENGHITUNGAN CEPAT
             </span>
             <h4 className="card-title" style={{ fontSize: 18 }}>Input Hitung Fisik Lapangan</h4>
@@ -266,8 +266,8 @@ export default function StockOpnameView({ onOpenScanner, currentUser }) {
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
               gap: 16,
-              backgroundColor: '#f8fafc',
-              border: '1.5px solid var(--border-strong)',
+              backgroundColor: 'var(--bg-card-inner)',
+              border: '1.5px solid var(--border-subtle)',
               borderRadius: 'var(--radius-md)',
               padding: 20,
               marginBottom: 20
@@ -286,7 +286,7 @@ export default function StockOpnameView({ onOpenScanner, currentUser }) {
 
             {/* 2. PHYSICAL INPUT */}
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: '#0284c7', letterSpacing: 1 }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--brand-primary)', letterSpacing: 1 }}>
                 HITUNG FISIK (PHYSICAL)
               </div>
               <input
@@ -298,7 +298,7 @@ export default function StockOpnameView({ onOpenScanner, currentUser }) {
                   textAlign: 'center',
                   height: 56,
                   marginTop: 4,
-                  borderColor: '#0284c7'
+                  borderColor: 'var(--brand-primary)'
                 }}
                 placeholder="0"
                 value={physicalCount}
@@ -357,8 +357,8 @@ export default function StockOpnameView({ onOpenScanner, currentUser }) {
         {countFeedback && (
           <div
             style={{
-              backgroundColor: countFeedback.discrepancy_qty === 0 ? '#f0fdf4' : '#fffbeb',
-              border: `1.5px solid ${countFeedback.discrepancy_qty === 0 ? '#86efac' : '#fde047'}`,
+              backgroundColor: countFeedback.discrepancy_qty === 0 ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.12)',
+              border: `1px solid ${countFeedback.discrepancy_qty === 0 ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)'}`,
               borderRadius: 'var(--radius-sm)',
               padding: 14,
               marginTop: 18,
@@ -368,9 +368,9 @@ export default function StockOpnameView({ onOpenScanner, currentUser }) {
             }}
           >
             {countFeedback.discrepancy_qty === 0 ? (
-              <CheckCircle2 color="#16a34a" size={24} />
+              <CheckCircle2 color="#34d399" size={24} />
             ) : (
-              <AlertTriangle color="#d97706" size={24} />
+              <AlertTriangle color="#fbbf24" size={24} />
             )}
             <div>
               <div style={{ fontWeight: 800, fontSize: 14 }}>

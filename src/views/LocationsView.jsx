@@ -68,19 +68,20 @@ export default function LocationsView({ onSelectMaterial }) {
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
-                          padding: '10px 12px',
+                          padding: '10px 14px',
                           borderRadius: 'var(--radius-sm)',
-                          backgroundColor: isSelected ? 'var(--primary-900)' : '#f8fafc',
-                          color: isSelected ? '#ffffff' : 'var(--text-main)',
+                          backgroundColor: isSelected ? 'rgba(2, 132, 199, 0.15)' : 'var(--bg-card-inner)',
+                          border: isSelected ? '1px solid var(--brand-primary)' : '1px solid var(--border-subtle)',
+                          color: isSelected ? 'var(--brand-primary)' : 'var(--text-main)',
                           cursor: 'pointer',
                           transition: 'all 120ms ease'
                         }}
                       >
                         <div>
-                          <div style={{ fontWeight: 700, fontSize: 14 }}>
+                          <div style={{ fontWeight: 700, fontSize: 13.5 }}>
                             {loc.rack} — {loc.shelf}
                           </div>
-                          <div style={{ fontSize: 11, color: isSelected ? '#cbd5e1' : 'var(--text-muted)' }}>
+                          <div style={{ fontSize: 11, color: isSelected ? 'var(--brand-primary)' : 'var(--text-muted)' }}>
                             {loc.code} • {loc.area}
                           </div>
                         </div>
@@ -91,7 +92,7 @@ export default function LocationsView({ onSelectMaterial }) {
                             style={{
                               fontSize: 12,
                               fontWeight: 700,
-                              color: isSelected ? '#ffffff' : '#059669'
+                              color: isSelected ? 'var(--brand-primary)' : 'var(--status-safe)'
                             }}
                           >
                             {loc.total_material_types} jenis
@@ -110,7 +111,7 @@ export default function LocationsView({ onSelectMaterial }) {
         <div className="card" style={{ padding: 16 }}>
           <div className="card-header">
             <div>
-              <span style={{ fontSize: 11, fontWeight: 800, color: '#0284c7', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: 11, fontWeight: 800, color: 'var(--brand-primary)', textTransform: 'uppercase' }}>
                 LOKASI AKTIF
               </span>
               <h4 className="card-title" style={{ fontSize: 18 }}>
@@ -135,17 +136,18 @@ export default function LocationsView({ onSelectMaterial }) {
                     onClick={() => onSelectMaterial(item.material_code)}
                     style={{
                       padding: 14,
-                      backgroundColor: '#f8fafc',
+                      backgroundColor: 'var(--bg-card-inner)',
                       border: '1px solid var(--border-subtle)',
                       borderRadius: 'var(--radius-sm)',
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      transition: 'border-color 120ms ease'
                     }}
                   >
                     <div>
-                      <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--primary-900)' }}>
+                      <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--text-main)' }}>
                         {item.material_name}
                       </div>
                       <div className="font-mono" style={{ fontSize: 11, color: 'var(--text-muted)' }}>
@@ -154,7 +156,7 @@ export default function LocationsView({ onSelectMaterial }) {
                     </div>
 
                     <div style={{ textAlign: 'right' }}>
-                      <div className="font-mono" style={{ fontSize: 16, fontWeight: 800, color: '#059669' }}>
+                      <div className="font-mono" style={{ fontSize: 16, fontWeight: 800, color: '#10b981' }}>
                         {Number(item.current_stock).toLocaleString('id-ID')} {item.unit_code}
                       </div>
                       <div className="font-mono" style={{ fontSize: 11, color: 'var(--text-muted)' }}>

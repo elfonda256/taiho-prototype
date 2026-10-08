@@ -148,8 +148,8 @@ export default function MaterialKeluarView({
       {lastReceipt && (
         <div
           style={{
-            backgroundColor: '#f0fdf4',
-            border: '2px solid #16a34a',
+            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+            border: '1px solid rgba(16, 185, 129, 0.4)',
             borderRadius: 'var(--radius-md)',
             padding: 20,
             marginBottom: 24,
@@ -163,7 +163,7 @@ export default function MaterialKeluarView({
               width: 44,
               height: 44,
               borderRadius: '50%',
-              backgroundColor: '#16a34a',
+              backgroundColor: '#10b981',
               color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
@@ -176,17 +176,17 @@ export default function MaterialKeluarView({
 
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h4 style={{ fontSize: 18, fontWeight: 800, color: '#166534' }}>
+              <h4 style={{ fontSize: 18, fontWeight: 800, color: '#34d399' }}>
                 Pengeluaran Material Berhasil Dicatat!
               </h4>
               <span className="font-mono badge badge-tersedia">{lastReceipt.transaction_number}</span>
             </div>
 
-            <p style={{ fontSize: 14, color: '#14532d', marginTop: 4 }}>
+            <p style={{ fontSize: 14, color: '#e2e8f0', marginTop: 4 }}>
               <strong>{lastReceipt.quantity.toLocaleString('id-ID')} unit</strong> {lastReceipt.material_name} telah dikeluarkan ke <strong>{lastReceipt.destination}</strong>.
             </p>
 
-            <div style={{ display: 'flex', gap: 20, marginTop: 10, fontSize: 13, color: '#15803d' }}>
+            <div style={{ display: 'flex', gap: 20, marginTop: 10, fontSize: 13, color: '#34d399' }}>
               <div>Stok Sebelumnya: <strong>{lastReceipt.previous_stock.toLocaleString('id-ID')}</strong></div>
               <div>Stok Terkini: <strong>{lastReceipt.new_stock.toLocaleString('id-ID')}</strong></div>
               <div>Nilai Transaksi: <strong>Rp {Math.abs(lastReceipt.financial_impact).toLocaleString('id-ID')}</strong></div>
@@ -207,8 +207,8 @@ export default function MaterialKeluarView({
       {errorMsg && (
         <div
           style={{
-            backgroundColor: '#fee2e2',
-            border: '1.5px solid #ef4444',
+            backgroundColor: 'rgba(239, 68, 68, 0.12)',
+            border: '1px solid rgba(239, 68, 68, 0.4)',
             borderRadius: 'var(--radius-md)',
             padding: 14,
             marginBottom: 20,
@@ -217,8 +217,8 @@ export default function MaterialKeluarView({
             gap: 12
           }}
         >
-          <AlertTriangle color="#dc2626" size={24} />
-          <div style={{ color: '#991b1b', fontWeight: 600, fontSize: 14 }}>{errorMsg}</div>
+          <AlertTriangle color="#f87171" size={24} />
+          <div style={{ color: '#f87171', fontWeight: 600, fontSize: 14 }}>{errorMsg}</div>
         </div>
       )}
 
@@ -245,10 +245,10 @@ export default function MaterialKeluarView({
         {selectedMaterial ? (
           <div
             style={{
-              border: '2px solid var(--primary-900)',
+              border: '1px solid rgba(56, 189, 248, 0.4)',
               borderRadius: 'var(--radius-md)',
               padding: 20,
-              backgroundColor: '#f8fafc',
+              backgroundColor: 'var(--bg-card-inner)',
               marginBottom: 16
             }}
           >
@@ -259,7 +259,7 @@ export default function MaterialKeluarView({
                   {selectedMaterial.name}
                 </h4>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 4 }}>
-                  <span className="font-mono" style={{ fontWeight: 700, fontSize: 14, color: 'var(--primary-900)' }}>
+                  <span className="font-mono" style={{ fontWeight: 700, fontSize: 14, color: '#38bdf8' }}>
                     Kode: {selectedMaterial.code}
                   </span>
                   <span>•</span>
@@ -271,7 +271,7 @@ export default function MaterialKeluarView({
 
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)' }}>SISA STOK TERSEDIA</div>
-                <div className="font-mono" style={{ fontSize: 28, fontWeight: 800, color: '#059669', lineHeight: 1.1 }}>
+                <div className="font-mono" style={{ fontSize: 28, fontWeight: 800, color: '#10b981', lineHeight: 1.1 }}>
                   {Number(selectedMaterial.total_current_stock).toLocaleString('id-ID')} {selectedMaterial.unit_code}
                 </div>
                 <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>
@@ -307,7 +307,7 @@ export default function MaterialKeluarView({
               border: '1px solid var(--border-strong)',
               borderRadius: 'var(--radius-sm)',
               marginTop: 6,
-              backgroundColor: '#ffffff'
+              backgroundColor: 'var(--bg-card-inner)'
             }}
           >
             {filteredMaterials.slice(0, 8).map(m => (
@@ -384,8 +384,8 @@ export default function MaterialKeluarView({
         {quantity && Number(quantity) > 0 && selectedMaterial && (
           <div
             style={{
-              backgroundColor: '#f1f5f9',
-              border: '1px solid var(--border-strong)',
+              backgroundColor: 'var(--bg-card-inner)',
+              border: '1px solid var(--border-subtle)',
               borderRadius: 'var(--radius-sm)',
               padding: '12px 16px',
               marginBottom: 18,
@@ -400,7 +400,7 @@ export default function MaterialKeluarView({
                 {quantity} {selectedMaterial.unit_code} × Rp {selectedMaterial.unit_cost.toLocaleString('id-ID')}
               </div>
             </div>
-            <div className="font-mono" style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-main)' }}>
+            <div className="font-mono" style={{ fontSize: 20, fontWeight: 800, color: '#38bdf8' }}>
               Rp {financialImpact.toLocaleString('id-ID')}
             </div>
           </div>
@@ -410,22 +410,22 @@ export default function MaterialKeluarView({
         {financialImpact >= 10000000 && (
           <div
             style={{
-              backgroundColor: '#fffbeb',
-              border: '2px solid #d97706',
+              backgroundColor: 'rgba(245, 158, 11, 0.12)',
+              border: '1px solid rgba(245, 158, 11, 0.4)',
               borderRadius: 'var(--radius-md)',
               padding: '14px 16px',
               marginBottom: 18
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#b45309', fontWeight: 800, fontSize: 14 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#fbbf24', fontWeight: 800, fontSize: 14 }}>
               <AlertTriangle size={20} />
               <span>PERINGATAN: TRANSAKSI NILAI TINGGI (DI ATAS RP 10 JUTA)</span>
             </div>
-            <p style={{ margin: '6px 0 10px', fontSize: 13, color: '#78350f', lineHeight: 1.4 }}>
+            <p style={{ margin: '6px 0 10px', fontSize: 13, color: '#fde68a', lineHeight: 1.4 }}>
               Material yang dikeluarkan bernilai <strong>Rp {financialImpact.toLocaleString('id-ID')}</strong>. 
               Mohon pastikan Anda tidak salah mengetik kuantitas (misal: 1000 alih-alih 100).
             </p>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', fontSize: 13, fontWeight: 700, color: '#92400e' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', fontSize: 13, fontWeight: 700, color: '#fbbf24' }}>
               <input
                 type="checkbox"
                 checked={highValueConfirmed}

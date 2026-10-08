@@ -92,7 +92,7 @@ export default function ConfirmModal({
             </div>
 
             {destination && (
-              <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid #cbd5e1' }}>
+              <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid var(--border-subtle)' }}>
                 <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Tujuan Pengeluaran: </span>
                 <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-main)' }}>{destination}</span>
               </div>

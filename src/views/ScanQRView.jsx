@@ -157,8 +157,8 @@ export default function ScanQRView({
       {actionSuccess && (
         <div
           style={{
-            backgroundColor: '#f0fdf4',
-            border: '1.5px solid #16a34a',
+            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+            border: '1px solid rgba(16, 185, 129, 0.4)',
             borderRadius: 'var(--radius-md)',
             padding: 14,
             marginBottom: 20,
@@ -167,16 +167,16 @@ export default function ScanQRView({
             gap: 12
           }}
         >
-          <CheckCircle2 color="#16a34a" size={24} />
-          <div style={{ color: '#14532d', fontWeight: 700 }}>{actionSuccess}</div>
+          <CheckCircle2 color="#34d399" size={24} />
+          <div style={{ color: '#34d399', fontWeight: 700 }}>{actionSuccess}</div>
         </div>
       )}
 
       {errorMsg && (
         <div
           style={{
-            backgroundColor: '#fee2e2',
-            border: '1.5px solid #ef4444',
+            backgroundColor: 'rgba(239, 68, 68, 0.12)',
+            border: '1px solid rgba(239, 68, 68, 0.4)',
             borderRadius: 'var(--radius-md)',
             padding: 14,
             marginBottom: 20,
@@ -185,20 +185,20 @@ export default function ScanQRView({
             gap: 12
           }}
         >
-          <AlertTriangle color="#dc2626" size={24} />
-          <div style={{ color: '#991b1b', fontWeight: 600 }}>{errorMsg}</div>
+          <AlertTriangle color="#f87171" size={24} />
+          <div style={{ color: '#f87171', fontWeight: 600 }}>{errorMsg}</div>
         </div>
       )}
 
       {/* HASIL SCAN MATERIAL (SECTION 7 FORMAT PERSIS) */}
       {materialData && (
-        <div className="card" style={{ border: '2px solid var(--primary-900)', marginBottom: 24 }}>
+        <div className="card" style={{ border: '1px solid var(--border-subtle)', marginBottom: 24 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, marginBottom: 20 }}>
             <div>
-              <span style={{ fontSize: 12, fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+              <span style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'var(--brand-primary)', letterSpacing: '0.5px' }}>
                 INFORMASI MATERIAL TERDETEKSI
               </span>
-              <h3 style={{ fontSize: 26, fontWeight: 800, color: 'var(--text-main)', marginTop: 2 }}>
+              <h3 style={{ fontSize: 24, fontWeight: 900, color: 'var(--text-main)', marginTop: 4 }}>
                 {materialData.name}
               </h3>
               <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
@@ -223,7 +223,7 @@ export default function ScanQRView({
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
               gap: 14,
-              backgroundColor: '#f8fafc',
+              backgroundColor: 'var(--bg-card-inner)',
               border: '1px solid var(--border-subtle)',
               borderRadius: 'var(--radius-md)',
               padding: 18,
@@ -231,15 +231,15 @@ export default function ScanQRView({
             }}
           >
             <div>
-              <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Kode Material:</div>
-              <div className="font-mono" style={{ fontSize: 18, fontWeight: 800, color: 'var(--primary-900)' }}>
+              <div style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>Kode Material:</div>
+              <div className="font-mono" style={{ fontSize: 18, fontWeight: 800, color: 'var(--brand-primary)', marginTop: 2 }}>
                 {materialData.code}
               </div>
             </div>
 
             <div>
-              <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Lokasi Penyimpanan:</div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-main)' }}>
+              <div style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>Lokasi Penyimpanan:</div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-main)', marginTop: 2 }}>
                 {materialData.location_code || 'Gudang B - Rak B01'}
               </div>
               <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
@@ -248,8 +248,8 @@ export default function ScanQRView({
             </div>
 
             <div>
-              <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Stok Fisik Tersedia:</div>
-              <div className="font-mono" style={{ fontSize: 24, fontWeight: 800, color: '#059669' }}>
+              <div style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>Stok Fisik Tersedia:</div>
+              <div className="font-mono" style={{ fontSize: 24, fontWeight: 900, color: 'var(--status-safe)', marginTop: 2 }}>
                 {Number(materialData.total_current_stock).toLocaleString('id-ID')} {materialData.unit_code}
               </div>
             </div>

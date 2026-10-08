@@ -64,12 +64,15 @@ if (fs.existsSync(distPath)) {
 // User-friendly error handler
 app.use(require('./middleware/errorHandler'));
 
-app.listen(PORT, () => {
-  console.log(`================================================================`);
-  console.log(` SISTEM PENCEGAHAN KEHILANGAN MATERIAL (VERSI PRODUKSI) `);
-  console.log(` Server berjalan di port http://localhost:${PORT}`);
-  console.log(` Database: SQLite WAL Mode (ACID Transactional Ledger Aktif)`);
-  console.log(`================================================================`);
-});
+// Start server only when run directly or in standalone mode (not when required by Vercel serverless)
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`================================================================`);
+    console.log(` SISTEM PENCEGAHAN KEHILANGAN MATERIAL (VERSI PRODUKSI) `);
+    console.log(` Server berjalan di port http://localhost:${PORT}`);
+    console.log(` Database: SQLite WAL Mode (ACID Transactional Ledger Aktif)`);
+    console.log(`================================================================`);
+  });
+}
 
 module.exports = app;

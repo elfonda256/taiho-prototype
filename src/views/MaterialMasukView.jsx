@@ -77,8 +77,8 @@ export default function MaterialMasukView({ onOpenScanner, onSuccessTransaction 
       {message && (
         <div
           style={{
-            backgroundColor: message.type === 'success' ? '#f0fdf4' : '#fee2e2',
-            border: `1.5px solid ${message.type === 'success' ? '#16a34a' : '#ef4444'}`,
+            backgroundColor: message.type === 'success' ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+            border: `1px solid ${message.type === 'success' ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)'}`,
             borderRadius: 'var(--radius-md)',
             padding: 16,
             marginBottom: 20,
@@ -88,11 +88,11 @@ export default function MaterialMasukView({ onOpenScanner, onSuccessTransaction 
           }}
         >
           {message.type === 'success' ? (
-            <CheckCircle2 color="#16a34a" size={24} />
+            <CheckCircle2 color="#34d399" size={24} />
           ) : (
-            <AlertTriangle color="#dc2626" size={24} />
+            <AlertTriangle color="#f87171" size={24} />
           )}
-          <div style={{ color: message.type === 'success' ? '#14532d' : '#991b1b', fontWeight: 700 }}>
+          <div style={{ color: message.type === 'success' ? '#34d399' : '#f87171', fontWeight: 700 }}>
             {message.text}
           </div>
         </div>

@@ -116,7 +116,7 @@ export default function MaterialsCatalogView({ onSelectMaterial, onIssueMaterial
               {materials.length > 0 ? (
                 materials.map(m => (
                   <tr key={m.id}>
-                    <td className="font-mono" style={{ fontWeight: 800, color: 'var(--primary-900)' }}>
+                    <td className="font-mono" style={{ fontWeight: 800, color: '#38bdf8' }}>
                       {m.code}
                     </td>
                     <td>

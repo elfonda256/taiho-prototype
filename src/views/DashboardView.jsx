@@ -16,7 +16,8 @@ import {
   Wifi,
   Server,
   Zap,
-  RefreshCw
+  RefreshCw,
+  Gauge
 } from 'lucide-react';
 
 export default function DashboardView({
@@ -28,9 +29,12 @@ export default function DashboardView({
 }) {
   const [digitalFactoryData, setDigitalFactoryData] = useState(null);
   const [isLoadingDF, setIsLoadingDF] = useState(true);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     fetchDigitalFactoryData();
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
   }, []);
 
   const fetchDigitalFactoryData = async () => {
@@ -47,8 +51,9 @@ export default function DashboardView({
 
   if (isLoading || !data) {
     return (
-      <div className="content-body" style={{ textAlign: 'center', padding: '60px 20px' }}>
-        <p style={{ fontSize: 16, color: 'var(--text-muted)' }}>Memuat Digital Factory Overview...</p>
+      <div className="content-body" style={{ textAlign: 'center', padding: '80px 20px' }}>
+        <RefreshCw size={28} className="spin" color="#38bdf8" style={{ margin: '0 auto 16px' }} />
+        <p style={{ fontSize: 16, color: 'var(--text-muted)', fontWeight: 600 }}>Memuat Data Ikhtisar Pabrik...</p>
       </div>
     );
   }
@@ -78,85 +83,113 @@ export default function DashboardView({
 
   return (
     <div className="content-body">
-      {/* TOP HEADER: DIGITAL FACTORY OVERVIEW BANNER */}
+      {/* ======================================================== */}
+      {/* TOP BANNER: EXECUTIVE DIGITAL OVERVIEW                   */}
+      {/* ======================================================== */}
       <div style={{
-        backgroundColor: '#0f172a',
-        border: '1px solid #1e293b',
-        borderRadius: 14,
-        padding: '18px 24px',
-        marginBottom: 20,
+        background: 'var(--banner-gradient)',
+        border: '1px solid var(--border-subtle)',
+        borderRadius: 'var(--radius-lg)',
+        padding: '22px 26px',
+        marginBottom: 24,
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
         alignItems: 'center',
-        gap: 16
+        gap: 18,
+        boxShadow: 'var(--shadow-md)',
+        position: 'relative',
+        overflow: 'hidden'
       }}>
+        {/* Subtle accent line */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 3,
+          background: 'linear-gradient(90deg, #0284c7 0%, #38bdf8 50%, #10b981 100%)'
+        }} />
+
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
             <span style={{
-              width: 10,
-              height: 10,
+              width: 9,
+              height: 9,
               borderRadius: '50%',
               backgroundColor: '#10b981',
               boxShadow: '0 0 8px #10b981',
               display: 'inline-block'
             }} />
-            <span style={{ fontSize: 12, fontWeight: 800, color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-              TAIHO DIGITAL OPERATIONAL DATA PLATFORM
+            <span style={{ fontSize: 11.5, fontWeight: 800, color: 'var(--brand-primary)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+              PLATFORM OPERASIONAL DATA LAPANGAN • TAIHO
             </span>
           </div>
-          <h2 style={{ margin: '4px 0', fontSize: 22, fontWeight: 900, color: '#f8fafc' }}>
+          <h2 style={{ margin: '2px 0 6px', fontSize: 22, fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
             Ikhtisar Pabrik Digital (Digital Factory Overview)
           </h2>
-          <p style={{ margin: 0, fontSize: 13, color: '#94a3b8' }}>
-            Status operasional komprehensif: Waktu Aliran Data, Mesin, Material, dan Sistem
+          <p style={{ margin: 0, fontSize: 13.5, color: 'var(--text-muted)' }}>
+            Transparansi operasional seketika: Kecepatan Aliran Data, Kondisi Mesin, dan Pengendalian Material
           </p>
         </div>
 
-        {/* Live Timestamp Widget */}
+        {/* Live Timestamp & Sync Status */}
         <div style={{
-          backgroundColor: '#1e293b',
-          border: '1px solid #334155',
-          borderRadius: 10,
-          padding: '10px 16px',
-          textAlign: 'right'
+          backgroundColor: 'var(--bg-card-inner)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: 'var(--radius-md)',
+          padding: '12px 18px',
+          textAlign: 'right',
+          backdropFilter: 'blur(8px)'
         }}>
-          <div style={{ fontSize: 11, color: '#94a3b8', fontWeight: 700 }}>WAKTU SISTEM TERKINI</div>
-          <div style={{ fontSize: 15, fontWeight: 800, color: '#f8fafc', marginTop: 2 }}>
-            ⏱️ {new Date().toLocaleTimeString('id-ID')} WIB
+          <div style={{ fontSize: 10.5, color: 'var(--text-muted)', fontWeight: 800, letterSpacing: '0.5px' }}>WAKTU SISTEM TERKINI</div>
+          <div style={{ fontSize: 17, fontWeight: 800, color: 'var(--text-main)', marginTop: 2, fontFamily: 'var(--font-mono)' }}>
+            ⏱️ {currentTime.toLocaleTimeString('id-ID')} WIB
           </div>
-          <span style={{ fontSize: 11, color: '#10b981', fontWeight: 600 }}>
-            ● Data Tersinkronisasi Langsung
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6, marginTop: 4 }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#10b981' }} />
+            <span style={{ fontSize: 11, color: 'var(--status-safe)', fontWeight: 700 }}>
+              Database SQLite WAL Sinkron
+            </span>
+          </div>
         </div>
       </div>
 
       {/* ======================================================== */}
-      {/* SEKSI 1: INFORMASI & KECEPATAN DATA (LEAD TIME & AVAILABILITY) */}
+      {/* SEKSI 1: INFORMATION LEAD TIME & DATA AVAILABILITY       */}
       {/* ======================================================== */}
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Clock size={20} color="#0284c7" />
-            <h3 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: '#f8fafc' }}>
-              1. Kecepatan Aliran Informasi (Information Flow & Availability)
-            </h3>
-          </div>
-          <button
-            onClick={() => setView('lead_time_kpi')}
-            style={{
-              background: 'none',
-              border: 'none',
+      <div className="card" style={{ marginBottom: 24 }}>
+        <div className="card-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 34,
+              height: 34,
+              borderRadius: 'var(--radius-sm)',
+              backgroundColor: 'rgba(2, 132, 199, 0.15)',
               color: '#38bdf8',
-              fontSize: 13,
-              fontWeight: 700,
-              cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: 4
-            }}
+              justifyContent: 'center'
+            }}>
+              <Clock size={19} />
+            </div>
+            <div>
+              <h3 className="card-title" style={{ fontSize: 16 }}>
+                1. Kecepatan Aliran Informasi (Information Flow & Availability)
+              </h3>
+              <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0 }}>
+                Perbandingan jeda laporan kertas fisik (baseline 7 hari) vs digital (seketika)
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setView('lead_time_kpi')}
+            className="btn btn-outline"
+            style={{ minHeight: 34, padding: '0 12px', fontSize: 12.5, gap: 6, color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }}
           >
-            Analisis Detail Lead Time <ArrowRight size={14} />
+            <span>Analisis Detail Lead Time</span>
+            <ArrowRight size={14} />
           </button>
         </div>
 
@@ -166,109 +199,128 @@ export default function DashboardView({
           gap: 14
         }}>
           {/* Card: Lead Time Comparison */}
-          <div style={{ backgroundColor: '#1e293b', borderRadius: 12, padding: 18, border: '1px solid #0284c7' }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#38bdf8', textTransform: 'uppercase' }}>
+          <div style={{
+            backgroundColor: 'var(--bg-card-inner)',
+            borderRadius: 'var(--radius-md)',
+            padding: '16px 18px',
+            border: '1px solid rgba(2, 132, 199, 0.35)',
+            position: 'relative'
+          }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--accent-cyan)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
               INFORMATION LEAD TIME
             </div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, margin: '6px 0' }}>
-              <span style={{ fontSize: 28, fontWeight: 900, color: '#10b981' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, margin: '8px 0 6px' }}>
+              <span style={{ fontSize: 28, fontWeight: 900, color: 'var(--accent-emerald)', fontFamily: 'var(--font-mono)' }}>
                 {info.actual_avg_lead_time_minutes} Menit
               </span>
-              <span style={{ fontSize: 13, color: '#ef4444', textDecoration: 'line-through' }}>
+              <span style={{ fontSize: 13, color: 'var(--accent-rose)', textDecoration: 'line-through', fontWeight: 600 }}>
                 ~{info.baseline_lead_time_days} Hari
               </span>
             </div>
-            <div style={{ fontSize: 12, color: '#94a3b8' }}>
-              Reduksi lead time: <b style={{ color: '#10b981' }}>&gt;99%</b> (Dari pekerjaan fisik hingga dasbor)
+            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+              Reduksi jeda waktu: <strong style={{ color: 'var(--accent-emerald)' }}>&gt;99%</strong> dari fisik ke dasbor
             </div>
           </div>
 
           {/* Card: Data Availability */}
-          <div style={{ backgroundColor: '#1e293b', borderRadius: 12, padding: 18, border: '1px solid #10b981' }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#34d399', textTransform: 'uppercase' }}>
+          <div style={{
+            backgroundColor: 'var(--bg-card-inner)',
+            borderRadius: 'var(--radius-md)',
+            padding: '16px 18px',
+            border: '1px solid rgba(16, 185, 129, 0.35)'
+          }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--status-safe-text)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
               DATA AVAILABILITY HARI INI
             </div>
-            <div style={{ fontSize: 28, fontWeight: 900, color: '#10b981', margin: '6px 0' }}>
+            <div style={{ fontSize: 28, fontWeight: 900, color: 'var(--accent-emerald)', margin: '8px 0 6px', fontFamily: 'var(--font-mono)' }}>
               {info.data_availability_percent}%
             </div>
-            <div style={{ fontSize: 12, color: '#94a3b8' }}>
-              <b>{info.submitted_today}</b> dari <b>{info.planned_today}</b> aktivitas mesin terkirim
+            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+              <strong style={{ color: 'var(--text-main)' }}>{info.submitted_today}</strong> dari <strong style={{ color: 'var(--text-main)' }}>{info.planned_today}</strong> aktivitas mesin terkirim
             </div>
           </div>
 
           {/* Card: Pending Activities */}
-          <div style={{ backgroundColor: '#1e293b', borderRadius: 12, padding: 18, border: '1px solid #d97706' }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#fbbf24', textTransform: 'uppercase' }}>
-              AKTIVITAS BELUM TERKIRIM (PENDING)
+          <div style={{
+            backgroundColor: 'var(--bg-card-inner)',
+            borderRadius: 'var(--radius-md)',
+            padding: '16px 18px',
+            border: '1px solid rgba(245, 158, 11, 0.35)'
+          }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--status-warn-text)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              AKTIVITAS BELUM TERKIRIM
             </div>
-            <div style={{ fontSize: 28, fontWeight: 900, color: '#f59e0b', margin: '6px 0' }}>
+            <div style={{ fontSize: 28, fontWeight: 900, color: 'var(--accent-amber)', margin: '8px 0 6px', fontFamily: 'var(--font-mono)' }}>
               {info.pending_today} Mesin
             </div>
-            <div style={{ fontSize: 12, color: '#94a3b8' }}>
+            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
               Menunggu input tablet operator shift ini
             </div>
           </div>
 
           {/* Card: Manual Hours Avoided */}
-          <div style={{ backgroundColor: '#1e293b', borderRadius: 12, padding: 18, border: '1px solid #334155' }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#cbd5e1', textTransform: 'uppercase' }}>
+          <div style={{
+            backgroundColor: 'var(--bg-card-inner)',
+            borderRadius: 'var(--radius-md)',
+            padding: '16px 18px',
+            border: '1px solid rgba(56, 189, 248, 0.3)'
+          }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
               REKAP MANUAL TERELIMINASI
             </div>
-            <div style={{ fontSize: 28, fontWeight: 900, color: '#38bdf8', margin: '6px 0' }}>
+            <div style={{ fontSize: 28, fontWeight: 900, color: 'var(--accent-cyan)', margin: '8px 0 6px', fontFamily: 'var(--font-mono)' }}>
               100%
             </div>
-            <div style={{ fontSize: 12, color: '#94a3b8' }}>
-              Tanpa pengumpulan formulir kertas fisik
+            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+              Tanpa pengumpulan dan pengetikan ulang formulir kertas
             </div>
           </div>
         </div>
       </div>
 
       {/* ======================================================== */}
-      {/* SEKSI 2: KONDISI MESIN & PEMELIHARAAN (MAINTENANCE) */}
+      {/* SEKSI 2: KONDISI MESIN & PEMELIHARAAN (MAINTENANCE)      */}
       {/* ======================================================== */}
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Wrench size={20} color="#f59e0b" />
-            <h3 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: '#f8fafc' }}>
-              2. Status Pemeliharaan & Mesin (Maintenance Field Data)
-            </h3>
+      <div className="card" style={{ marginBottom: 24 }}>
+        <div className="card-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 34,
+              height: 34,
+              borderRadius: 'var(--radius-sm)',
+              backgroundColor: 'rgba(245, 158, 11, 0.15)',
+              color: '#fbbf24',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <Wrench size={19} />
+            </div>
+            <div>
+              <h3 className="card-title" style={{ fontSize: 16 }}>
+                2. Status Pemeliharaan & Mesin (Maintenance Field Data)
+              </h3>
+              <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0 }}>
+                Kondisi 8 unit mesin utama di lini Stamping, CNC, dan Perakitan
+              </p>
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: 10 }}>
+
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <button
               onClick={() => setView('maintenance_operator')}
-              style={{
-                backgroundColor: '#0284c7',
-                color: '#ffffff',
-                border: 'none',
-                padding: '6px 14px',
-                borderRadius: 8,
-                fontSize: 13,
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6
-              }}
+              className="btn btn-primary"
+              style={{ minHeight: 34, padding: '0 12px', fontSize: 12.5, gap: 6 }}
             >
-              📱 Tablet Operator
+              <span>📱 Tablet Operator</span>
             </button>
             <button
               onClick={() => setView('maintenance_dashboard')}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#38bdf8',
-                fontSize: 13,
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 4
-              }}
+              className="btn btn-outline"
+              style={{ minHeight: 34, padding: '0 12px', fontSize: 12.5, gap: 6, color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }}
             >
-              Dasbor Mesin <ArrowRight size={14} />
+              <span>Dasbor Mesin</span>
+              <ArrowRight size={14} />
             </button>
           </div>
         </div>
@@ -276,57 +328,58 @@ export default function DashboardView({
         {/* Machine Status Tally Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-          gap: 12,
-          marginBottom: 12
+          gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
+          gap: 14
         }}>
-          <div style={{ backgroundColor: '#1e293b', padding: 16, borderRadius: 10, border: '1px solid #059669' }}>
-            <div style={{ fontSize: 12, color: '#34d399', fontWeight: 700 }}>🟢 Normal Siap Kerja</div>
-            <div style={{ fontSize: 26, fontWeight: 900, color: '#10b981', margin: '4px 0' }}>
+          <div style={{ backgroundColor: 'var(--bg-card-inner)', padding: 16, borderRadius: 'var(--radius-md)', border: '1px solid var(--status-safe-border)' }}>
+            <div style={{ fontSize: 12, color: 'var(--status-safe-text)', fontWeight: 800 }}>🟢 Normal Siap Kerja</div>
+            <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--accent-emerald)', margin: '6px 0 4px', fontFamily: 'var(--font-mono)' }}>
               {mnt.normal_count} Mesin
             </div>
-            <span style={{ fontSize: 11, color: '#64748b' }}>Parameter inspeksi baik</span>
+            <span style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>Parameter inspeksi baik</span>
           </div>
 
-          <div style={{ backgroundColor: '#1e293b', padding: 16, borderRadius: 10, border: '1px solid #d97706' }}>
-            <div style={{ fontSize: 12, color: '#fbbf24', fontWeight: 700 }}>🟡 Warning (Pantau)</div>
-            <div style={{ fontSize: 26, fontWeight: 900, color: '#f59e0b', margin: '4px 0' }}>
+          <div style={{ backgroundColor: 'var(--bg-card-inner)', padding: 16, borderRadius: 'var(--radius-md)', border: '1px solid var(--status-warn-border)' }}>
+            <div style={{ fontSize: 12, color: 'var(--status-warn-text)', fontWeight: 800 }}>🟡 Warning (Pantau)</div>
+            <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--accent-amber)', margin: '6px 0 4px', fontFamily: 'var(--font-mono)' }}>
               {mnt.warning_count} Mesin
             </div>
-            <span style={{ fontSize: 11, color: '#64748b' }}>Perlu top-up oli/pantau</span>
+            <span style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>Perlu top-up oli / monitoring</span>
           </div>
 
-          <div style={{ backgroundColor: '#1e293b', padding: 16, borderRadius: 10, border: '1px solid #dc2626' }}>
-            <div style={{ fontSize: 12, color: '#f87171', fontWeight: 700 }}>🔴 Problem (Bermasalah)</div>
-            <div style={{ fontSize: 26, fontWeight: 900, color: '#ef4444', margin: '4px 0' }}>
+          <div style={{ backgroundColor: 'var(--bg-card-inner)', padding: 16, borderRadius: 'var(--radius-md)', border: '1px solid var(--status-alert-border)' }}>
+            <div style={{ fontSize: 12, color: 'var(--status-alert-text)', fontWeight: 800 }}>🔴 Problem (Bermasalah)</div>
+            <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--accent-rose)', margin: '6px 0 4px', fontFamily: 'var(--font-mono)' }}>
               {mnt.problem_count} Mesin
             </div>
-            <span style={{ fontSize: 11, color: '#64748b' }}>Menunggu tindakan perbaikan</span>
+            <span style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>Menunggu tindakan perbaikan</span>
           </div>
 
           {/* Highlighted Last Updated Machine Card */}
           <div style={{
-            backgroundColor: '#0f172a',
+            backgroundColor: 'var(--bg-card-inner)',
             padding: 16,
-            borderRadius: 10,
-            border: '1px solid #38bdf8',
-            gridColumn: 'span 2'
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid var(--status-reserved-border)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center'
           }}>
-            <div style={{ fontSize: 11, color: '#38bdf8', fontWeight: 800, textTransform: 'uppercase' }}>
-              UPDATE LAPANGAN TERBARU (LIVE VISIBILITY)
+            <div style={{ fontSize: 11, color: 'var(--brand-primary)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              UPDATE LAPANGAN TERBARU (LIVE)
             </div>
             {mnt.latest_update ? (
-              <div style={{ marginTop: 4 }}>
-                <div style={{ fontSize: 15, fontWeight: 800, color: '#f8fafc' }}>
+              <div style={{ marginTop: 6 }}>
+                <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text-main)' }}>
                   {mnt.latest_update.asset_code} — {mnt.latest_update.asset_name}
                 </div>
-                <div style={{ fontSize: 12, color: '#94a3b8', marginTop: 2 }}>
-                  Operator: <b>{mnt.latest_update.operator_name || 'Teknisi'}</b> | Waktu: <b>{mnt.latest_update.submitted_at ? new Date(mnt.latest_update.submitted_at).toLocaleTimeString('id-ID') : '-'} WIB</b> | Lead Time: <b style={{ color: '#10b981' }}>{mnt.latest_update.lead_time_seconds || 0} detik</b>
+                <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>
+                  Teknisi: <strong style={{ color: 'var(--text-main)' }}>{mnt.latest_update.operator_name || 'Teknisi'}</strong> • Jam <strong style={{ color: 'var(--text-main)' }}>{mnt.latest_update.submitted_at ? new Date(mnt.latest_update.submitted_at).toLocaleTimeString('id-ID') : '-'} WIB</strong>
                 </div>
               </div>
             ) : (
-              <div style={{ fontSize: 13, color: '#94a3b8', marginTop: 4 }}>
-                Belum ada catatan pemeliharaan terdaftar hari ini
+              <div style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 6 }}>
+                Belum ada catatan inspeksi baru shift ini
               </div>
             )}
           </div>
@@ -334,63 +387,73 @@ export default function DashboardView({
       </div>
 
       {/* ======================================================== */}
-      {/* SEKSI 3: INVENTARIS & MATERIAL (MATERIAL LOSS PREVENTION) */}
+      {/* SEKSI 3: INVENTARIS & MATERIAL (MATERIAL CONTROL)        */}
       {/* ======================================================== */}
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Boxes size={20} color="#10b981" />
-            <h3 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: '#f8fafc' }}>
-              3. Inventaris & Pengendalian Material (Material Control)
-            </h3>
-          </div>
-          <button
-            onClick={() => setView('materials')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#38bdf8',
-              fontSize: 13,
-              fontWeight: 700,
-              cursor: 'pointer',
+      <div className="card" style={{ marginBottom: 24 }}>
+        <div className="card-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 34,
+              height: 34,
+              borderRadius: 'var(--radius-sm)',
+              backgroundColor: 'rgba(16, 185, 129, 0.15)',
+              color: '#34d399',
               display: 'flex',
               alignItems: 'center',
-              gap: 4
-            }}
+              justifyContent: 'center'
+            }}>
+              <Boxes size={19} />
+            </div>
+            <div>
+              <h3 className="card-title" style={{ fontSize: 16 }}>
+                3. Inventaris & Pengendalian Material (Material Control)
+              </h3>
+              <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0 }}>
+                Pengawasan buku besar mutasi dan pencegahan kehilangan material
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setView('materials')}
+            className="btn btn-outline"
+            style={{ minHeight: 34, padding: '0 12px', fontSize: 12.5, gap: 6, color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }}
           >
-            Katalog Material <ArrowRight size={14} />
+            <span>Katalog Master Material</span>
+            <ArrowRight size={14} />
           </button>
         </div>
 
-        <div className="kpi-grid" style={{ marginBottom: 16 }}>
+        {/* 4 KPI Numbers */}
+        <div className="kpi-grid" style={{ marginBottom: 18 }}>
           <div className="kpi-card">
             <div className="kpi-label">TOTAL JENIS MATERIAL</div>
-            <div className="kpi-value">{kpi.totalMaterials} <span style={{ fontSize: 16, fontWeight: 600 }}>jenis</span></div>
-            <div className="kpi-subtext">Tersebar di 4 area gudang pabrik</div>
+            <div className="kpi-value">{kpi.totalMaterials} <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--text-muted)' }}>jenis</span></div>
+            <div className="kpi-subtext">Tersebar di 4 zona gudang pabrik</div>
           </div>
 
           <div className="kpi-card">
             <div className="kpi-label">TOTAL NILAI STOK FISIK</div>
-            <div className="kpi-value" style={{ color: '#0f172a' }}>
-              Rp {(kpi.totalStockValue / 1000000000).toFixed(2)} <span style={{ fontSize: 16, fontWeight: 600 }}>M</span>
+            <div className="kpi-value">
+              Rp {(kpi.totalStockValue / 1000000000).toFixed(2)} <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--text-muted)' }}>M</span>
             </div>
-            <div className="kpi-subtext">Rp {kpi.totalStockValue.toLocaleString('id-ID')}</div>
+            <div className="kpi-subtext font-mono">Rp {kpi.totalStockValue.toLocaleString('id-ID')}</div>
           </div>
 
           <div className="kpi-card alert-card">
-            <div className="kpi-label" style={{ color: '#dc2626' }}>MATERIAL SELISIH</div>
+            <div className="kpi-label" style={{ color: 'var(--status-danger)' }}>MATERIAL SELISIH</div>
             <div className="kpi-value">
-              {kpi.discrepant_itemsCount} <span style={{ fontSize: 16, fontWeight: 600 }}>item</span>
+              {kpi.discrepant_itemsCount} <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--status-danger)' }}>item</span>
             </div>
-            <div className="kpi-subtext" style={{ color: '#991b1b' }}>Diperlukan pemeriksaan fisik</div>
+            <div className="kpi-subtext" style={{ color: 'var(--status-danger)' }}>Perlu pemeriksaan fisik & opname</div>
           </div>
 
           <div className="kpi-card alert-card">
-            <div className="kpi-label" style={{ color: '#dc2626' }}>NILAI SELISIH AKTIF</div>
+            <div className="kpi-label" style={{ color: 'var(--status-danger)' }}>NILAI SELISIH AKTIF</div>
             <div className="kpi-value">
-              Rp {(kpi.totalDiscrepancyValue / 1000000).toFixed(1)} <span style={{ fontSize: 16, fontWeight: 600 }}>Juta</span>
+              Rp {(kpi.totalDiscrepancyValue / 1000000).toFixed(1)} <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--status-danger)' }}>Juta</span>
             </div>
-            <div className="kpi-subtext" style={{ color: '#991b1b' }}>
+            <div className="kpi-subtext font-mono" style={{ color: 'var(--status-danger)' }}>
               Rp {kpi.totalDiscrepancyValue.toLocaleString('id-ID')}
             </div>
           </div>
@@ -401,103 +464,109 @@ export default function DashboardView({
           <button
             className="btn btn-success btn-lg"
             onClick={() => setView('material_keluar')}
-            style={{ justifyContent: 'space-between', padding: '0 20px', minHeight: 52 }}
+            style={{ justifyContent: 'space-between', padding: '0 18px', minHeight: 48 }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <ArrowUpRight size={22} />
-              <span style={{ fontSize: 15, fontWeight: 800 }}>PENGELUARAN MATERIAL</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <ArrowUpRight size={20} />
+              <span style={{ fontSize: 14, fontWeight: 800 }}>PENGELUARAN MATERIAL</span>
             </div>
-            <span style={{ fontSize: 12, opacity: 0.9 }}>Alur 3 Langkah →</span>
+            <span style={{ fontSize: 11.5, opacity: 0.9 }}>Alur Cepat →</span>
           </button>
 
           <button
             className="btn btn-primary btn-lg"
             onClick={onOpenScanner}
-            style={{ justifyContent: 'space-between', padding: '0 20px', minHeight: 52 }}
+            style={{ justifyContent: 'space-between', padding: '0 18px', minHeight: 48 }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <QrCode size={22} />
-              <span style={{ fontSize: 15, fontWeight: 800 }}>SCAN QR CEPAT</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <QrCode size={20} />
+              <span style={{ fontSize: 14, fontWeight: 800 }}>SCAN QR CEPAT</span>
             </div>
-            <span style={{ fontSize: 12, opacity: 0.9 }}>Mesin / Material →</span>
+            <span style={{ fontSize: 11.5, opacity: 0.9 }}>Mesin / Material →</span>
           </button>
 
           <button
             className="btn btn-outline btn-lg"
             onClick={() => setView('stock_opname')}
-            style={{ justifyContent: 'space-between', padding: '0 20px', minHeight: 52 }}
+            style={{ justifyContent: 'space-between', padding: '0 18px', minHeight: 48 }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <ClipboardList size={22} color="#0284c7" />
-              <span style={{ fontSize: 15, fontWeight: 800 }}>STOCK OPNAME</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <ClipboardList size={20} color="#38bdf8" />
+              <span style={{ fontSize: 14, fontWeight: 800 }}>STOCK OPNAME</span>
             </div>
-            <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Audit Fisik →</span>
+            <span style={{ fontSize: 11.5, color: '#94a3b8' }}>Audit Fisik →</span>
           </button>
         </div>
       </div>
 
       {/* ======================================================== */}
-      {/* SEKSI 4: SISTEM & KESIAPAN INFRASTRUKTUR */}
+      {/* SEKSI 4: SISTEM & KESIAPAN INFRASTRUKTUR                 */}
       {/* ======================================================== */}
-      <div style={{
-        backgroundColor: '#1e293b',
-        borderRadius: 14,
-        padding: 20,
-        border: '1px solid #334155'
-      }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Server size={18} color="#38bdf8" />
-            <h4 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: '#f8fafc' }}>
-              4. Status Infrastruktur & Kesiapan Sistem Pabrik
-            </h4>
+      <div className="card">
+        <div className="card-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 34,
+              height: 34,
+              borderRadius: 'var(--radius-sm)',
+              backgroundColor: 'rgba(56, 189, 248, 0.15)',
+              color: '#38bdf8',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <Server size={19} />
+            </div>
+            <div>
+              <h3 className="card-title" style={{ fontSize: 16 }}>
+                4. Status Infrastruktur & Kesiapan Sistem Pabrik
+              </h3>
+              <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0 }}>
+                Arsitektur non-AI deterministik, kesiapan offline, dan integritas buku besar audit
+              </p>
+            </div>
           </div>
+
           <button
             onClick={() => setView('sensor_integration')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#38bdf8',
-              fontSize: 12,
-              fontWeight: 700,
-              cursor: 'pointer'
-            }}
+            className="btn btn-outline"
+            style={{ minHeight: 34, padding: '0 12px', fontSize: 12.5, gap: 6, color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }}
           >
-            Spesifikasi Arsitektur IoT →
+            <span>Arsitektur IoT / Sensor</span>
+            <ArrowRight size={14} />
           </button>
         </div>
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: 12,
-          fontSize: 13
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          gap: 12
         }}>
-          <div style={{ backgroundColor: '#0f172a', padding: 12, borderRadius: 8 }}>
-            <span style={{ color: '#94a3b8', fontSize: 11 }}>Database Engine:</span>
-            <div style={{ color: '#f8fafc', fontWeight: 700, marginTop: 2 }}>
-              SQLite WAL Mode (Migrasi PostgreSQL Siap)
+          <div style={{ backgroundColor: 'var(--bg-card-inner)', padding: 14, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+            <span style={{ color: 'var(--text-muted)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>Database Engine</span>
+            <div style={{ color: 'var(--text-main)', fontWeight: 800, marginTop: 4, fontSize: 13.5 }}>
+              SQLite WAL Mode (ACID Compliant)
             </div>
           </div>
 
-          <div style={{ backgroundColor: '#0f172a', padding: 12, borderRadius: 8 }}>
-            <span style={{ color: '#94a3b8', fontSize: 11 }}>Sinkronisasi Tablet Lapangan:</span>
-            <div style={{ color: '#10b981', fontWeight: 700, marginTop: 2 }}>
-              Online (Dukungan Offline Queue PWA Aktif)
+          <div style={{ backgroundColor: 'var(--bg-card-inner)', padding: 14, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+            <span style={{ color: 'var(--text-muted)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>Sinkronisasi Tablet Lapangan</span>
+            <div style={{ color: 'var(--accent-emerald)', fontWeight: 800, marginTop: 4, fontSize: 13.5 }}>
+              Online (Offline Queue PWA Siap)
             </div>
           </div>
 
-          <div style={{ backgroundColor: '#0f172a', padding: 12, borderRadius: 8 }}>
-            <span style={{ color: '#94a3b8', fontSize: 11 }}>Sensor Telemetry Gateway:</span>
-            <div style={{ color: '#38bdf8', fontWeight: 700, marginTop: 2 }}>
-              READY LISTENING (Modbus / MQTT / REST)
+          <div style={{ backgroundColor: 'var(--bg-card-inner)', padding: 14, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+            <span style={{ color: 'var(--text-muted)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>Sensor Telemetry Gateway</span>
+            <div style={{ color: 'var(--accent-cyan)', fontWeight: 800, marginTop: 4, fontSize: 13.5 }}>
+              READY LISTENING (Modbus / MQTT)
             </div>
           </div>
 
-          <div style={{ backgroundColor: '#0f172a', padding: 12, borderRadius: 8 }}>
-            <span style={{ color: '#94a3b8', fontSize: 11 }}>Kepatuhan Audit:</span>
-            <div style={{ color: '#10b981', fontWeight: 700, marginTop: 2 }}>
-              Immutable Transaction Ledger & Audit Logs Aktif
+          <div style={{ backgroundColor: 'var(--bg-card-inner)', padding: 14, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+            <span style={{ color: 'var(--text-muted)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>Integritas Audit Trail</span>
+            <div style={{ color: 'var(--accent-emerald)', fontWeight: 800, marginTop: 4, fontSize: 13.5 }}>
+              Immutable Ledger Terproteksi
             </div>
           </div>
         </div>

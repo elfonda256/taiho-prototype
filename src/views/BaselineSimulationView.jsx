@@ -96,11 +96,11 @@ export default function BaselineSimulationView({ currentUser }) {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: 1200, margin: '0 auto', fontFamily: 'system-ui, sans-serif' }}>
+    <div className="content-body" style={{ maxWidth: 1200 }}>
       {/* Mandatory Disclaimer Watermark Banner */}
       <div style={{
-        backgroundColor: '#451a03',
-        border: '1px solid #f59e0b',
+        backgroundColor: 'var(--status-warn-bg)',
+        border: '1px solid var(--status-warn-border)',
         borderRadius: 12,
         padding: '14px 20px',
         marginBottom: 20,
@@ -108,12 +108,12 @@ export default function BaselineSimulationView({ currentUser }) {
         alignItems: 'center',
         gap: 12
       }}>
-        <AlertTriangle size={24} color="#f59e0b" style={{ flexShrink: 0 }} />
+        <AlertTriangle size={24} color="var(--status-warn-text)" style={{ flexShrink: 0 }} />
         <div>
-          <div style={{ fontSize: 14, fontWeight: 800, color: '#fef3c7' }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--status-warn-text)' }}>
             PRINSIP TRANSPARANSI BISNIS: MODEL SIMULASI BERDASARKAN BASELINE INPUT
           </div>
-          <div style={{ fontSize: 12, color: '#fde68a' }}>
+          <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
             Angka perhitungan di bawah merupakan <b>Estimasi / Simulasi</b> matematis berdasarkan data dasar yang Anda masukkan. Sistem <b>tidak pernah memalsukan</b> klaim penghematan atau mengasumsikan data fiktif sebagai fakta perusahaan.
           </div>
         </div>
@@ -127,28 +127,29 @@ export default function BaselineSimulationView({ currentUser }) {
       }}>
         {/* Left Column: Configurable Baseline Inputs */}
         <div style={{
-          backgroundColor: '#1e293b',
+          backgroundColor: 'var(--bg-surface)',
           borderRadius: 14,
           padding: 24,
-          border: '1px solid #334155'
+          border: '1px solid var(--border-subtle)',
+          boxShadow: 'var(--shadow-sm)'
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
             <div>
-              <h3 style={{ margin: 0, fontSize: 18, color: '#f8fafc', fontWeight: 800 }}>
+              <h3 style={{ margin: 0, fontSize: 18, color: 'var(--text-main)', fontWeight: 800 }}>
                 Input Baseline Operasional Pabrik
               </h3>
-              <span style={{ fontSize: 12, color: '#94a3b8' }}>
+              <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
                 Sesuaikan dengan parameter riil departemen Anda
               </span>
             </div>
-            <Calculator size={20} color="#38bdf8" />
+            <Calculator size={20} color="var(--accent-cyan)" />
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {/* Jumlah Operator & Formulir */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div>
-                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#cbd5e1', marginBottom: 4 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 4 }}>
                   Jumlah Operator Lapangan
                 </label>
                 <input
@@ -158,17 +159,17 @@ export default function BaselineSimulationView({ currentUser }) {
                   style={{
                     width: '100%',
                     padding: 10,
-                    backgroundColor: '#0f172a',
-                    border: '1px solid #475569',
+                    backgroundColor: 'var(--bg-card-inner)',
+                    border: '1px solid var(--border-strong)',
                     borderRadius: 8,
-                    color: '#ffffff',
+                    color: 'var(--text-main)',
                     fontSize: 14
                   }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#cbd5e1', marginBottom: 4 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 4 }}>
                   Total Formulir Kertas / Hari
                 </label>
                 <input
@@ -178,10 +179,10 @@ export default function BaselineSimulationView({ currentUser }) {
                   style={{
                     width: '100%',
                     padding: 10,
-                    backgroundColor: '#0f172a',
-                    border: '1px solid #475569',
+                    backgroundColor: 'var(--bg-card-inner)',
+                    border: '1px solid var(--border-strong)',
                     borderRadius: 8,
-                    color: '#ffffff',
+                    color: 'var(--text-main)',
                     fontSize: 14
                   }}
                 />
@@ -191,7 +192,7 @@ export default function BaselineSimulationView({ currentUser }) {
             {/* Menit per Form & Jam Rekap */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div>
-                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#cbd5e1', marginBottom: 4 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 4 }}>
                   Menit Mengisi per Formulir
                 </label>
                 <input
@@ -201,17 +202,17 @@ export default function BaselineSimulationView({ currentUser }) {
                   style={{
                     width: '100%',
                     padding: 10,
-                    backgroundColor: '#0f172a',
-                    border: '1px solid #475569',
+                    backgroundColor: 'var(--bg-card-inner)',
+                    border: '1px solid var(--border-strong)',
                     borderRadius: 8,
-                    color: '#ffffff',
+                    color: 'var(--text-main)',
                     fontSize: 14
                   }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#cbd5e1', marginBottom: 4 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 4 }}>
                   Staf Terlibat Rekap Lembar
                 </label>
                 <input
@@ -221,10 +222,10 @@ export default function BaselineSimulationView({ currentUser }) {
                   style={{
                     width: '100%',
                     padding: 10,
-                    backgroundColor: '#0f172a',
-                    border: '1px solid #475569',
+                    backgroundColor: 'var(--bg-card-inner)',
+                    border: '1px solid var(--border-strong)',
                     borderRadius: 8,
-                    color: '#ffffff',
+                    color: 'var(--text-main)',
                     fontSize: 14
                   }}
                 />
@@ -233,7 +234,7 @@ export default function BaselineSimulationView({ currentUser }) {
 
             {/* Jam Input Manual / Bulan */}
             <div>
-              <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#cbd5e1', marginBottom: 4 }}>
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 4 }}>
                 Jam Lembur / Bulan untuk Input Ulang Manual ke Komputer
               </label>
               <input
@@ -243,10 +244,10 @@ export default function BaselineSimulationView({ currentUser }) {
                 style={{
                   width: '100%',
                   padding: 10,
-                  backgroundColor: '#0f172a',
-                  border: '1px solid #475569',
+                  backgroundColor: 'var(--bg-card-inner)',
+                  border: '1px solid var(--border-strong)',
                   borderRadius: 8,
-                  color: '#ffffff',
+                  color: 'var(--text-main)',
                   fontSize: 14
                 }}
               />
@@ -255,7 +256,7 @@ export default function BaselineSimulationView({ currentUser }) {
             {/* Lead Time Pelaporan */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div>
-                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#cbd5e1', marginBottom: 4 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 4 }}>
                   Lead Time Laporan Saat Ini (Hari)
                 </label>
                 <input
@@ -265,17 +266,17 @@ export default function BaselineSimulationView({ currentUser }) {
                   style={{
                     width: '100%',
                     padding: 10,
-                    backgroundColor: '#0f172a',
-                    border: '1px solid #475569',
+                    backgroundColor: 'var(--bg-card-inner)',
+                    border: '1px solid var(--border-strong)',
                     borderRadius: 8,
-                    color: '#ffffff',
+                    color: 'var(--text-main)',
                     fontSize: 14
                   }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#cbd5e1', marginBottom: 4 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 4 }}>
                   Target Lead Time Digital (Hari)
                 </label>
                 <input
@@ -286,10 +287,10 @@ export default function BaselineSimulationView({ currentUser }) {
                   style={{
                     width: '100%',
                     padding: 10,
-                    backgroundColor: '#0f172a',
-                    border: '1px solid #475569',
+                    backgroundColor: 'var(--bg-card-inner)',
+                    border: '1px solid var(--border-strong)',
                     borderRadius: 8,
-                    color: '#ffffff',
+                    color: 'var(--text-main)',
                     fontSize: 14
                   }}
                 />
@@ -299,7 +300,7 @@ export default function BaselineSimulationView({ currentUser }) {
             {/* Finansial: Baseline Selisih & Biaya Jam Kerja */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div>
-                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#cbd5e1', marginBottom: 4 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 4 }}>
                   Baseline Selisih Material (Rp/Bulan)
                 </label>
                 <input
@@ -309,17 +310,17 @@ export default function BaselineSimulationView({ currentUser }) {
                   style={{
                     width: '100%',
                     padding: 10,
-                    backgroundColor: '#0f172a',
-                    border: '1px solid #475569',
+                    backgroundColor: 'var(--bg-card-inner)',
+                    border: '1px solid var(--border-strong)',
                     borderRadius: 8,
-                    color: '#ffffff',
+                    color: 'var(--text-main)',
                     fontSize: 14
                   }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#cbd5e1', marginBottom: 4 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 4 }}>
                   Biaya Tenaga Kerja (Rp/Jam)
                 </label>
                 <input
@@ -329,10 +330,10 @@ export default function BaselineSimulationView({ currentUser }) {
                   style={{
                     width: '100%',
                     padding: 10,
-                    backgroundColor: '#0f172a',
-                    border: '1px solid #475569',
+                    backgroundColor: 'var(--bg-card-inner)',
+                    border: '1px solid var(--border-strong)',
                     borderRadius: 8,
-                    color: '#ffffff',
+                    color: 'var(--text-main)',
                     fontSize: 14
                   }}
                 />
@@ -340,7 +341,7 @@ export default function BaselineSimulationView({ currentUser }) {
             </div>
 
             {saveMessage && (
-              <div style={{ padding: 10, backgroundColor: '#064e3b', color: '#34d399', borderRadius: 8, fontSize: 13, fontWeight: 700 }}>
+              <div style={{ padding: 10, backgroundColor: 'var(--status-safe-bg)', color: 'var(--status-safe-text)', border: '1px solid var(--status-safe-border)', borderRadius: 8, fontSize: 13, fontWeight: 700 }}>
                 {saveMessage}
               </div>
             )}
@@ -351,7 +352,7 @@ export default function BaselineSimulationView({ currentUser }) {
               style={{
                 marginTop: 10,
                 padding: '12px 20px',
-                backgroundColor: '#0284c7',
+                backgroundColor: 'var(--accent-blue)',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: 8,
@@ -374,21 +375,22 @@ export default function BaselineSimulationView({ currentUser }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           {/* Card 1: Efisiensi Jam Kerja */}
           <div style={{
-            backgroundColor: '#1e293b',
+            backgroundColor: 'var(--bg-surface)',
             borderRadius: 14,
             padding: 24,
-            border: '1px solid #334155'
+            border: '1px solid var(--border-subtle)',
+            boxShadow: 'var(--shadow-sm)'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
               <div>
-                <span style={{ fontSize: 11, color: '#38bdf8', fontWeight: 700, textTransform: 'uppercase' }}>
+                <span style={{ fontSize: 11, color: 'var(--accent-cyan)', fontWeight: 700, textTransform: 'uppercase' }}>
                   HASIL SIMULASI #1 — PENGURANGAN KERJA MANUAL
                 </span>
-                <h4 style={{ margin: '2px 0 0', fontSize: 18, fontWeight: 800, color: '#f8fafc' }}>
+                <h4 style={{ margin: '2px 0 0', fontSize: 18, fontWeight: 800, color: 'var(--text-main)' }}>
                   Estimasi Jam Kerja Terhemat
                 </h4>
               </div>
-              <Clock size={22} color="#10b981" />
+              <Clock size={22} color="var(--accent-emerald)" />
             </div>
 
             <div style={{
@@ -397,27 +399,27 @@ export default function BaselineSimulationView({ currentUser }) {
               gap: 12,
               margin: '16px 0',
               paddingBottom: 16,
-              borderBottom: '1px solid #334155'
+              borderBottom: '1px solid var(--border-subtle)'
             }}>
-              <div style={{ fontSize: 40, fontWeight: 900, color: '#10b981' }}>
+              <div style={{ fontSize: 40, fontWeight: 900, color: 'var(--accent-emerald)' }}>
                 {simulationResults?.hours_saved_month ?? 0}
               </div>
-              <div style={{ fontSize: 14, color: '#94a3b8' }}>
+              <div style={{ fontSize: 14, color: 'var(--text-muted)' }}>
                 Jam Terhemat per Bulan (<b>{simulationResults?.hours_saved_percent ?? 0}%</b> Efisiensi)
               </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, fontSize: 13 }}>
-              <div style={{ backgroundColor: '#0f172a', padding: 12, borderRadius: 8 }}>
-                <span style={{ color: '#94a3b8', fontSize: 11 }}>Total Jam Manual Lama:</span>
-                <div style={{ color: '#ef4444', fontWeight: 800, fontSize: 16 }}>
+              <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 12, borderRadius: 8, border: '1px solid var(--border-subtle)' }}>
+                <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>Total Jam Manual Lama:</span>
+                <div style={{ color: 'var(--accent-rose)', fontWeight: 800, fontSize: 16 }}>
                   {simulationResults?.current_manual_hours_month ?? 0} Jam/Bulan
                 </div>
               </div>
 
-              <div style={{ backgroundColor: '#0f172a', padding: 12, borderRadius: 8 }}>
-                <span style={{ color: '#94a3b8', fontSize: 11 }}>Total Jam Tablet Digital:</span>
-                <div style={{ color: '#10b981', fontWeight: 800, fontSize: 16 }}>
+              <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 12, borderRadius: 8, border: '1px solid var(--border-subtle)' }}>
+                <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>Total Jam Tablet Digital:</span>
+                <div style={{ color: 'var(--accent-emerald)', fontWeight: 800, fontSize: 16 }}>
                   {simulationResults?.digital_hours_month ?? 0} Jam/Bulan
                 </div>
               </div>
@@ -426,46 +428,48 @@ export default function BaselineSimulationView({ currentUser }) {
 
           {/* Card 2: Proyeksi Nilai Ekonomi (Estimasi) */}
           <div style={{
-            backgroundColor: '#1e293b',
+            backgroundColor: 'var(--bg-surface)',
             borderRadius: 14,
             padding: 24,
-            border: '1px solid #334155'
+            border: '1px solid var(--border-subtle)',
+            boxShadow: 'var(--shadow-sm)'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
               <div>
-                <span style={{ fontSize: 11, color: '#fbbf24', fontWeight: 700, textTransform: 'uppercase' }}>
+                <span style={{ fontSize: 11, color: 'var(--accent-amber)', fontWeight: 700, textTransform: 'uppercase' }}>
                   HASIL SIMULASI #2 — VALUASI FINANSIAL
                 </span>
-                <h4 style={{ margin: '2px 0 0', fontSize: 18, fontWeight: 800, color: '#f8fafc' }}>
+                <h4 style={{ margin: '2px 0 0', fontSize: 18, fontWeight: 800, color: 'var(--text-main)' }}>
                   Estimasi Penghematan Biaya Tenaga Kerja
                 </h4>
               </div>
-              <DollarSign size={22} color="#fbbf24" />
+              <DollarSign size={22} color="var(--accent-amber)" />
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 16 }}>
-              <div style={{ backgroundColor: '#0f172a', padding: 16, borderRadius: 10 }}>
-                <span style={{ color: '#94a3b8', fontSize: 12 }}>Estimasi Per Bulan:</span>
-                <div style={{ color: '#34d399', fontWeight: 900, fontSize: 20, marginTop: 4 }}>
+              <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 16, borderRadius: 10, border: '1px solid var(--border-subtle)' }}>
+                <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>Estimasi Per Bulan:</span>
+                <div style={{ color: 'var(--status-safe-text)', fontWeight: 900, fontSize: 20, marginTop: 4 }}>
                   Rp {(simulationResults?.estimated_monthly_labor_savings ?? 0).toLocaleString('id-ID')}
                 </div>
               </div>
 
-              <div style={{ backgroundColor: '#0f172a', padding: 16, borderRadius: 10 }}>
-                <span style={{ color: '#94a3b8', fontSize: 12 }}>Estimasi Per Tahun:</span>
-                <div style={{ color: '#10b981', fontWeight: 900, fontSize: 20, marginTop: 4 }}>
+              <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 16, borderRadius: 10, border: '1px solid var(--border-subtle)' }}>
+                <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>Estimasi Per Tahun:</span>
+                <div style={{ color: 'var(--accent-emerald)', fontWeight: 900, fontSize: 20, marginTop: 4 }}>
                   Rp {(simulationResults?.estimated_annual_labor_savings ?? 0).toLocaleString('id-ID')}
                 </div>
               </div>
             </div>
 
             <div style={{
-              backgroundColor: '#0f172a',
+              backgroundColor: 'var(--bg-subtle)',
               padding: 14,
               borderRadius: 10,
               fontSize: 12,
-              color: '#94a3b8',
-              lineHeight: 1.5
+              color: 'var(--text-muted)',
+              lineHeight: 1.5,
+              border: '1px solid var(--border-subtle)'
             }}>
               💡 <b>Catatan Rekayasa Industri:</b> Penghematan ini berasal dari eliminasi pekerjaan non-value-added (mengetik ulang kertas, mencari arsip lembar, koreksi salah baca tulisan tangan).
             </div>

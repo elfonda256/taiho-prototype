@@ -79,7 +79,7 @@ export default function MaterialDetailView({
               }}
             >
               <img src={data.qrDataUrl} alt={data.code} style={{ width: 140, height: 140, display: 'block' }} />
-              <span className="font-mono" style={{ fontSize: 12, fontWeight: 800, marginTop: 4, display: 'block' }}>
+              <span className="font-mono" style={{ fontSize: 12, fontWeight: 800, marginTop: 4, display: 'block', color: '#0f172a' }}>
                 {data.code}
               </span>
             </div>
@@ -190,15 +190,15 @@ export default function MaterialDetailView({
                       width: 16,
                       height: 16,
                       borderRadius: '50%',
-                      backgroundColor: isReceive ? '#16a34a' : isIssue ? '#0284c7' : isScrap ? '#dc2626' : '#d97706',
-                      border: '3px solid #ffffff',
-                      boxShadow: '0 0 0 1px #cbd5e1'
+                      backgroundColor: isReceive ? '#10b981' : isIssue ? '#0284c7' : isScrap ? '#ef4444' : '#f59e0b',
+                      border: '3px solid var(--bg-surface)',
+                      boxShadow: 'var(--shadow-sm)'
                     }}
                   />
 
                   <div
                     style={{
-                      backgroundColor: '#f8fafc',
+                      backgroundColor: 'var(--bg-card-inner)',
                       border: '1px solid var(--border-subtle)',
                       borderRadius: 'var(--radius-sm)',
                       padding: '14px 16px'
