@@ -301,20 +301,19 @@ export default function MobileDrawer({
               className="btn btn-outline"
               style={{
                 width: '100%',
-                minHeight: 36,
+                minHeight: 34,
                 padding: '0 12px',
                 fontSize: 12,
                 justifyContent: 'space-between',
-                fontWeight: 700,
-                borderColor: 'rgba(56, 189, 248, 0.28)'
+                fontWeight: 700
               }}
             >
               <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Globe size={15} color="var(--brand-primary)" />
-                {lang === 'en' ? '🇬🇧 English (Shachō Mode)' : '🇮🇩 Bahasa Indonesia'}
+                <Globe size={14} color="var(--brand-primary)" />
+                {lang === 'en' ? 'English (Shachō Mode)' : 'Bahasa Indonesia'}
               </span>
-              <span style={{ fontSize: 10, color: 'var(--brand-primary)', fontWeight: 800, padding: '1px 6px', borderRadius: 4, background: 'rgba(2, 132, 199, 0.12)' }}>
-                {lang === 'en' ? 'Change ⇄' : 'Ubah ⇄'}
+              <span style={{ fontSize: 10, color: 'var(--brand-primary)', fontWeight: 800, padding: '1px 6px', borderRadius: 'var(--radius-xs)', background: 'var(--brand-primary-light)' }}>
+                {lang === 'en' ? 'Change' : 'Ubah'}
               </span>
             </button>
           )}
@@ -325,7 +324,7 @@ export default function MobileDrawer({
             className="btn btn-outline"
             style={{
               width: '100%',
-              minHeight: 36,
+              minHeight: 34,
               padding: '0 12px',
               fontSize: 12,
               justifyContent: 'space-between',
@@ -333,11 +332,11 @@ export default function MobileDrawer({
             }}
           >
             <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              {theme === 'dark' ? <Sun size={15} color="#fbbf24" /> : <Moon size={15} color="#0284c7" />}
+              {theme === 'dark' ? <Sun size={14} color="#fbbf24" /> : <Moon size={14} color="#0284c7" />}
               {theme === 'dark' ? (lang === 'en' ? 'Switch to Light Mode' : 'Beralih ke Mode Terang') : (lang === 'en' ? 'Switch to Dark Mode' : 'Beralih ke Mode Gelap')}
             </span>
             <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>
-              {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+              {theme === 'dark' ? 'Light' : 'Dark'}
             </span>
           </button>
         </div>

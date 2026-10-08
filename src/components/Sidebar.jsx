@@ -217,34 +217,32 @@ export default function Sidebar({
       </nav>
 
       {/* Sidebar Footer: Language Toggle & Quick Scan */}
-      <div className="sidebar-bottom-action" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div className="sidebar-bottom-action" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
         {onToggleLang && (
           <button
             className="btn btn-outline"
             style={{
               width: '100%',
-              minHeight: 36,
+              minHeight: 34,
               fontSize: 11.5,
-              fontWeight: 800,
+              fontWeight: 750,
               gap: 6,
-              justifyContent: 'center',
-              borderColor: 'var(--border-subtle)',
-              backgroundColor: 'var(--bg-surface)'
+              justifyContent: 'center'
             }}
             onClick={onToggleLang}
             title={lang === 'en' ? 'Beralih ke Bahasa Indonesia' : 'Switch to English (Shachō Mode)'}
           >
-            <Globe size={14} color="var(--brand-primary)" />
-            <span>{lang === 'en' ? '🇬🇧 English (Shachō View)' : '🇮🇩 Bahasa Indonesia'}</span>
+            <Globe size={13} color="var(--brand-primary)" />
+            <span>{lang === 'en' ? 'English (Shachō Mode)' : 'Bahasa Indonesia'}</span>
           </button>
         )}
 
         <button
           className="btn btn-primary"
-          style={{ width: '100%', minHeight: 44, fontSize: 13, gap: 8 }}
+          style={{ width: '100%', minHeight: 38, fontSize: 12.5, gap: 6 }}
           onClick={onOpenScanner}
         >
-          <QrCode size={16} /> {getTranslation('btn_scan_qr_quick', lang)}
+          <QrCode size={15} /> {getTranslation('btn_scan_qr_quick', lang)}
         </button>
       </div>
     </aside>

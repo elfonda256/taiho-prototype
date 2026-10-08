@@ -319,15 +319,17 @@ export default function StockOpnameView({ onOpenScanner, currentUser }) {
                 style={{
                   fontSize: 32,
                   fontWeight: 800,
-                  color: difference === null ? 'var(--text-muted)' : difference === 0 ? '#16a34a' : '#dc2626',
+                  color: difference === null ? 'var(--text-muted)' : difference === 0 ? 'var(--accent-emerald)' : 'var(--accent-rose)',
                   marginTop: 4
                 }}
               >
                 {difference !== null ? (difference > 0 ? `+${difference}` : difference) : '-'}
               </div>
               {difference !== null && difference !== 0 && (
-                <div style={{ fontSize: 12, color: '#991b1b', fontWeight: 700, marginTop: 2 }}>
-                  ⚠️ Diperlukan pemeriksaan
+                <div style={{ marginTop: 4 }}>
+                  <span className="badge badge-critical" style={{ fontSize: 11 }}>
+                    Diperlukan Pemeriksaan
+                  </span>
                 </div>
               )}
             </div>
@@ -346,10 +348,11 @@ export default function StockOpnameView({ onOpenScanner, currentUser }) {
 
           <button
             type="submit"
-            className="btn btn-primary btn-xl"
+            className="btn btn-primary"
+            style={{ minHeight: 48, fontSize: 15, width: '100%' }}
             disabled={isSubmitting || physicalCount === ''}
           >
-            <Check size={22} /> [ SIMPAN HASIL OPNAME ]
+            <Check size={18} /> Simpan Hasil Opname Fisik
           </button>
         </form>
 
@@ -357,8 +360,8 @@ export default function StockOpnameView({ onOpenScanner, currentUser }) {
         {countFeedback && (
           <div
             style={{
-              backgroundColor: countFeedback.discrepancy_qty === 0 ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.12)',
-              border: `1px solid ${countFeedback.discrepancy_qty === 0 ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)'}`,
+              backgroundColor: countFeedback.discrepancy_qty === 0 ? 'var(--status-safe-bg)' : 'var(--status-warn-bg)',
+              border: `1px solid ${countFeedback.discrepancy_qty === 0 ? 'var(--status-safe-border)' : 'var(--status-warn-border)'}`,
               borderRadius: 'var(--radius-sm)',
               padding: 14,
               marginTop: 18,
@@ -368,12 +371,12 @@ export default function StockOpnameView({ onOpenScanner, currentUser }) {
             }}
           >
             {countFeedback.discrepancy_qty === 0 ? (
-              <CheckCircle2 color="#34d399" size={24} />
+              <CheckCircle2 color="var(--status-safe-text)" size={22} />
             ) : (
-              <AlertTriangle color="#fbbf24" size={24} />
+              <AlertTriangle color="var(--status-warn-text)" size={22} />
             )}
             <div>
-              <div style={{ fontWeight: 800, fontSize: 14 }}>
+              <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--text-main)' }}>
                 {countFeedback.discrepancy_qty === 0
                   ? `Stok ${countFeedback.material_name} Sesuai! (100% Cocok)`
                   : `Tercatat Selisih ${countFeedback.discrepancy_qty} Unit pada ${countFeedback.material_name}`}
@@ -394,7 +397,7 @@ export default function StockOpnameView({ onOpenScanner, currentUser }) {
         </div>
 
         <div className="table-responsive">
-          <table className="table">
+          <table className="table table-dense">
             <thead>
               <tr>
                 <th>MATERIAL</th>
@@ -429,7 +432,11 @@ export default function StockOpnameView({ onOpenScanner, currentUser }) {
                         color: item.discrepancy_qty === 0 ? '#16a34a' : '#dc2626'
                       }}
                     >
-                      {item.discrepancy_qty === 0 ? '✓ Cocok' : `${item.discrepancy_qty} ${item.unit_code}`}
+                      {item.discrepancy_qty === 0 ? (
+                        <span className="badge badge-normal">Cocok</span>
+                      ) : (
+                        <span className="badge badge-critical">{item.discrepancy_qty} {item.unit_code}</span>
+                      )}
                     </td>
                     <td className="font-mono">
                       {item.discrepancy_value > 0

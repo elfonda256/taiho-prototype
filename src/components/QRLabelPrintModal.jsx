@@ -17,7 +17,7 @@ export default function QRLabelPrintModal({ isOpen, onClose, material }) {
             <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>Format thermal label standar rak gudang (75 x 50 mm)</p>
           </div>
           <button className="btn btn-outline" style={{ minHeight: 32, padding: '0 8px' }} onClick={onClose}>
-            ✕
+            <X size={16} />
           </button>
         </div>
 

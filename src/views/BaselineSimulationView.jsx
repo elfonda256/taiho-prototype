@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Calculator, Settings, Save, AlertTriangle, TrendingUp, 
-  Clock, DollarSign, Users, FileSpreadsheet, CheckCircle2, RotateCcw
+  Clock, DollarSign, Users, FileSpreadsheet, CheckCircle2, RotateCcw, Info
 } from 'lucide-react';
 
 export default function BaselineSimulationView({ currentUser }) {
@@ -98,23 +98,26 @@ export default function BaselineSimulationView({ currentUser }) {
   return (
     <div className="content-body" style={{ maxWidth: 1200 }}>
       {/* Mandatory Disclaimer Watermark Banner */}
-      <div style={{
-        backgroundColor: 'var(--status-warn-bg)',
-        border: '1px solid var(--status-warn-border)',
-        borderRadius: 12,
+      <div className="card" style={{
         padding: '14px 20px',
         marginBottom: 20,
         display: 'flex',
         alignItems: 'center',
-        gap: 12
+        gap: 14,
+        borderLeft: '4px solid var(--accent-amber)'
       }}>
-        <AlertTriangle size={24} color="var(--status-warn-text)" style={{ flexShrink: 0 }} />
+        <AlertTriangle size={22} color="var(--accent-amber)" style={{ flexShrink: 0 }} />
         <div>
-          <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--status-warn-text)' }}>
-            PRINSIP TRANSPARANSI BISNIS: MODEL SIMULASI BERDASARKAN BASELINE INPUT
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span className="tag-provenance tag-provenance-sim">
+              MODEL SIMULASI PARAMETRIK
+            </span>
+            <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+              TRANSPARANSI DATA PERUSAHAAN
+            </span>
           </div>
-          <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-            Angka perhitungan di bawah merupakan <b>Estimasi / Simulasi</b> matematis berdasarkan data dasar yang Anda masukkan. Sistem <b>tidak pernah memalsukan</b> klaim penghematan atau mengasumsikan data fiktif sebagai fakta perusahaan.
+          <div style={{ fontSize: 12.5, color: 'var(--text-secondary)', marginTop: 4 }}>
+            Angka perhitungan di bawah merupakan <b>Estimasi / Simulasi</b> matematis berdasarkan data dasar yang Anda tentukan. Sistem membedakan secara tegas antara catatan transaksi riil dan proyeksi matematis.
           </div>
         </div>
       </div>
@@ -465,13 +468,19 @@ export default function BaselineSimulationView({ currentUser }) {
             <div style={{
               backgroundColor: 'var(--bg-subtle)',
               padding: 14,
-              borderRadius: 10,
+              borderRadius: 'var(--radius-sm)',
               fontSize: 12,
               color: 'var(--text-muted)',
               lineHeight: 1.5,
-              border: '1px solid var(--border-subtle)'
+              border: '1px solid var(--border-subtle)',
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: 8
             }}>
-              💡 <b>Catatan Rekayasa Industri:</b> Penghematan ini berasal dari eliminasi pekerjaan non-value-added (mengetik ulang kertas, mencari arsip lembar, koreksi salah baca tulisan tangan).
+              <Info size={16} color="var(--accent-cyan)" style={{ flexShrink: 0, marginTop: 2 }} />
+              <div>
+                <b>Catatan Rekayasa Industri:</b> Penghematan ini berasal dari eliminasi pekerjaan non-value-added (mengetik ulang kertas, mencari arsip lembar, koreksi salah baca tulisan tangan).
+              </div>
             </div>
           </div>
         </div>

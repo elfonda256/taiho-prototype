@@ -7,7 +7,8 @@ import {
   CheckCircle2,
   Sun,
   Moon,
-  Globe
+  Globe,
+  SlidersHorizontal
 } from 'lucide-react';
 import TaihoLogo from './TaihoLogo';
 import { getTranslation } from '../utils/i18n';
@@ -28,13 +29,13 @@ export default function Header({
 }) {
   const getRoleBadgeColor = (role) => {
     switch (role) {
-      case 'ADMIN': return { bg: 'rgba(56, 189, 248, 0.16)', text: '#0284c7', border: 'rgba(56, 189, 248, 0.4)' };
-      case 'MANAGEMENT': return { bg: 'rgba(168, 85, 247, 0.16)', text: '#9333ea', border: 'rgba(168, 85, 247, 0.4)' };
-      case 'SUPERVISOR': return { bg: 'rgba(245, 158, 11, 0.16)', text: '#d97706', border: 'rgba(245, 158, 11, 0.4)' };
-      case 'PRODUCTION': return { bg: 'rgba(2, 132, 199, 0.16)', text: '#0284c7', border: 'rgba(2, 132, 199, 0.4)' };
+      case 'ADMIN': return { bg: 'rgba(2, 132, 199, 0.12)', text: '#38bdf8', border: '#0284c7' };
+      case 'MANAGEMENT': return { bg: 'rgba(147, 51, 234, 0.12)', text: '#c084fc', border: '#9333ea' };
+      case 'SUPERVISOR': return { bg: 'rgba(245, 158, 11, 0.12)', text: '#fbbf24', border: '#d97706' };
+      case 'PRODUCTION': return { bg: 'rgba(2, 132, 199, 0.12)', text: '#38bdf8', border: '#0284c7' };
       case 'WAREHOUSE':
       default:
-        return { bg: 'rgba(16, 185, 129, 0.16)', text: '#059669', border: 'rgba(16, 185, 129, 0.4)' };
+        return { bg: 'rgba(16, 185, 129, 0.12)', text: '#34d399', border: '#059669' };
     }
   };
 
@@ -48,27 +49,25 @@ export default function Header({
       {/* ========================================================= */}
       <div className="mobile-header-container">
         <div className="mobile-header-top-row">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <button
               onClick={onOpenMobileDrawer}
               className="btn btn-outline"
               style={{
-                width: 38,
-                height: 38,
+                width: 36,
+                height: 36,
                 padding: 0,
-                borderRadius: 8,
+                borderRadius: 'var(--radius-md)',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                border: '1px solid var(--border-subtle)',
-                backgroundColor: 'var(--bg-surface)'
+                justifyContent: 'center'
               }}
               aria-label="Open Menu"
             >
-              <Menu size={20} />
+              <Menu size={18} />
             </button>
 
-            <TaihoLogo height={28} />
+            <TaihoLogo height={24} />
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -77,19 +76,18 @@ export default function Header({
               onClick={onToggleLang}
               className="btn btn-outline"
               style={{
-                height: 34,
+                height: 32,
                 padding: '0 8px',
-                borderRadius: 8,
+                borderRadius: 'var(--radius-sm)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 4,
-                border: '1px solid var(--border-subtle)',
-                fontSize: 11.5,
-                fontWeight: 800
+                fontSize: 11,
+                fontWeight: 750
               }}
               title={lang === 'en' ? 'Beralih ke Bahasa Indonesia' : 'Switch to English (Shachō Mode)'}
             >
-              <span>{lang === 'en' ? '🇬🇧' : '🇮🇩'}</span>
+              <Globe size={13} color="var(--brand-primary)" />
               <span>{lang === 'en' ? 'EN' : 'ID'}</span>
             </button>
 
@@ -98,8 +96,7 @@ export default function Header({
                 className="badge badge-selisih"
                 style={{
                   cursor: 'pointer',
-                  border: '1px solid var(--status-alert-border)',
-                  padding: '4px 8px',
+                  padding: '3px 7px',
                   fontSize: 11
                 }}
                 onClick={() => setView('discrepancies')}
@@ -114,43 +111,43 @@ export default function Header({
             <button
               className="btn btn-outline"
               style={{
-                width: 34,
-                height: 34,
+                width: 32,
+                height: 32,
                 padding: 0,
-                borderRadius: 8,
+                borderRadius: 'var(--radius-sm)',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                border: '1px solid var(--border-subtle)'
+                justifyContent: 'center'
               }}
               onClick={onToggleTheme}
               title={theme === 'dark' ? getTranslation('btn_theme_light', lang) : getTranslation('btn_theme_dark', lang)}
               aria-label="Toggle Theme"
             >
-              {theme === 'dark' ? <Sun size={15} color="#fbbf24" /> : <Moon size={15} color="#0284c7" />}
+              {theme === 'dark' ? <Sun size={14} color="#fbbf24" /> : <Moon size={14} color="#0284c7" />}
             </button>
 
             {/* Compact Role Switcher Avatar */}
             <button
               onClick={onOpenRoleSwitcher}
               style={{
-                width: 34,
-                height: 34,
-                borderRadius: '50%',
+                height: 32,
+                padding: '0 8px',
+                borderRadius: 'var(--radius-sm)',
                 backgroundColor: roleColor.bg,
                 color: roleColor.text,
-                border: `1.5px solid ${roleColor.border}`,
+                border: `1px solid ${roleColor.border}`,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 800,
-                fontSize: 12.5,
+                gap: 4,
+                fontWeight: 750,
+                fontSize: 11,
                 cursor: 'pointer'
               }}
               title={`User: ${currentUser?.full_name} (${currentUser?.role_display})`}
               aria-label="Switch Role"
             >
-              {currentUser?.full_name ? currentUser.full_name.charAt(0) : 'U'}
+              <span>{currentUser?.role || 'OPERATOR'}</span>
+              <SlidersHorizontal size={11} />
             </button>
           </div>
         </div>
@@ -158,14 +155,14 @@ export default function Header({
         {/* View Title Bar on Mobile */}
         <div className="mobile-header-title-bar">
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#10b981', display: 'inline-block', flexShrink: 0 }} />
-            <h1 style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-main)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <span style={{ width: 6, height: 6, borderRadius: 'var(--radius-xs)', backgroundColor: 'var(--accent-emerald)', display: 'inline-block', flexShrink: 0 }} />
+            <h1 style={{ fontSize: 13, fontWeight: 750, color: 'var(--text-main)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {currentTitle}
             </h1>
           </div>
           {lang === 'en' && (
-            <span style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--brand-primary)', padding: '1px 5px', borderRadius: 4, background: 'rgba(2, 132, 199, 0.12)', flexShrink: 0 }}>
-              社長 Shachō View
+            <span className="tag-provenance tag-provenance-arch" style={{ flexShrink: 0 }}>
+              Shachō View
             </span>
           )}
         </div>
@@ -177,16 +174,15 @@ export default function Header({
       <div className="desktop-header-container">
         <div className="header-title-area">
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
               <span style={{
-                width: 7,
-                height: 7,
-                borderRadius: '50%',
-                backgroundColor: '#10b981',
-                boxShadow: '0 0 6px #10b981',
+                width: 6,
+                height: 6,
+                borderRadius: 'var(--radius-xs)',
+                backgroundColor: 'var(--accent-emerald)',
                 display: 'inline-block'
               }} />
-              <span style={{ fontSize: 10, fontWeight: 800, color: 'var(--accent-cyan)', letterSpacing: '0.8px', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: 10, fontWeight: 750, color: 'var(--text-muted)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
                 {getTranslation('brandName', lang)} • {getTranslation('platformTitle', lang)}
               </span>
             </div>
@@ -196,56 +192,49 @@ export default function Header({
           {discrepanciesCount > 0 ? (
             <button
               className="badge badge-selisih"
-              style={{ cursor: 'pointer', border: '1px solid var(--status-alert-border)' }}
+              style={{ cursor: 'pointer' }}
               onClick={() => setView('discrepancies')}
               title="Click to inspect variance cases"
             >
-              <ShieldAlert size={13} color="var(--status-alert-text)" />
+              <ShieldAlert size={12} color="var(--status-alert-text)" />
               <span>{discrepanciesCount} {getTranslation('varianceReview', lang)}</span>
             </button>
           ) : (
             <span className="badge badge-tersedia">
-              <CheckCircle2 size={13} color="var(--status-safe-text)" />
+              <CheckCircle2 size={12} color="var(--status-safe-text)" />
               <span>{getTranslation('controlledStock', lang)}</span>
             </span>
           )}
         </div>
 
         <div className="header-actions">
-          {/* Language Switcher Button (English for Japanese Management / Indonesian) */}
+          {/* Language Switcher Button */}
           <button
             className="btn btn-outline"
-            style={{
-              minHeight: 38,
-              padding: '0 12px',
-              fontSize: 12.5,
-              gap: 6,
-              fontWeight: 800,
-              borderColor: 'rgba(56, 189, 248, 0.3)'
-            }}
+            style={{ minHeight: 34, padding: '0 10px', fontSize: 12, gap: 5 }}
             onClick={onToggleLang}
             title={lang === 'en' ? 'Beralih ke Bahasa Indonesia' : 'Switch to English (President Director Review)'}
           >
-            <Globe size={15} color="var(--brand-primary)" />
-            <span>{lang === 'en' ? '🇬🇧 English' : '🇮🇩 Bahasa ID'}</span>
+            <Globe size={14} color="var(--brand-primary)" />
+            <span>{lang === 'en' ? 'English (EN)' : 'Bahasa (ID)'}</span>
           </button>
 
           {/* Theme Toggle Button */}
           <button
             className="btn btn-outline"
-            style={{ minHeight: 38, padding: '0 12px', fontSize: 12.5, gap: 6 }}
+            style={{ minHeight: 34, padding: '0 10px', fontSize: 12, gap: 5 }}
             onClick={onToggleTheme}
             title={theme === 'dark' ? getTranslation('btn_theme_light', lang) : getTranslation('btn_theme_dark', lang)}
           >
             {theme === 'dark' ? (
               <>
-                <Sun size={15} color="#fbbf24" />
-                <span style={{ fontSize: 12, fontWeight: 700 }}>{getTranslation('btn_theme_light', lang)}</span>
+                <Sun size={14} color="#fbbf24" />
+                <span>{getTranslation('btn_theme_light', lang)}</span>
               </>
             ) : (
               <>
-                <Moon size={15} color="#0284c7" />
-                <span style={{ fontSize: 12, fontWeight: 700 }}>{getTranslation('btn_theme_dark', lang)}</span>
+                <Moon size={14} color="#0284c7" />
+                <span>{getTranslation('btn_theme_dark', lang)}</span>
               </>
             )}
           </button>
@@ -254,68 +243,58 @@ export default function Header({
           <button
             className="btn btn-outline"
             style={{
-              minHeight: 38,
-              padding: '0 12px',
-              fontSize: 12.5,
-              gap: 6,
-              borderColor: 'rgba(245, 158, 11, 0.4)',
-              background: 'var(--status-warn-bg)'
+              minHeight: 34,
+              padding: '0 10px',
+              fontSize: 12,
+              gap: 5,
+              borderColor: 'var(--status-warn-border)',
+              backgroundColor: 'var(--status-warn-bg)',
+              color: 'var(--status-warn-text)'
             }}
             onClick={() => setView('demo_mode')}
             title="Open 3-minute executive guided walkthrough"
           >
-            <PlayCircle size={15} color="var(--status-warn-text)" />
-            <span style={{ color: 'var(--status-warn-text)', fontWeight: 700 }}>{getTranslation('btn_demo_mode', lang)}</span>
+            <PlayCircle size={14} color="var(--status-warn-text)" />
+            <span>{getTranslation('btn_demo_mode', lang)}</span>
           </button>
 
           {/* Reset Demo Data Button */}
           <button
             className="btn btn-outline"
-            style={{ minHeight: 38, padding: '0 10px', fontSize: 13 }}
+            style={{ minHeight: 34, padding: '0 8px' }}
             onClick={onResetDemo}
             title="Reset database to factory demo baseline"
           >
-            <RefreshCw size={14} color="var(--text-muted)" />
+            <RefreshCw size={13} color="var(--text-muted)" />
           </button>
 
-          {/* User & Role Switcher */}
+          {/* User Account & Role Switcher */}
           <button
+            onClick={onOpenRoleSwitcher}
             className="btn btn-outline"
             style={{
-              minHeight: 38,
-              padding: '4px 12px',
-              gap: 10,
-              border: `1px solid ${roleColor.border}`,
-              background: 'var(--bg-surface)'
+              minHeight: 34,
+              padding: '0 10px',
+              gap: 6,
+              fontSize: 12,
+              borderColor: roleColor.border,
+              backgroundColor: roleColor.bg
             }}
-            onClick={onOpenRoleSwitcher}
-            title="Click to switch user account / role"
+            title="Switch User Account & Role"
           >
-            <div
-              style={{
-                width: 26,
-                height: 26,
-                borderRadius: '50%',
-                backgroundColor: roleColor.bg,
-                color: roleColor.text,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 800,
-                fontSize: 12
-              }}
-            >
-              {currentUser?.full_name ? currentUser.full_name.charAt(0) : 'U'}
-            </div>
-
-            <div style={{ textAlign: 'left', lineHeight: 1.2 }}>
-              <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text-main)' }}>
-                {currentUser?.full_name?.split(' ')[0] || 'User'}
-              </div>
-              <div style={{ fontSize: 10, color: roleColor.text, fontWeight: 700 }}>
-                {currentUser?.role_display || currentUser?.role || 'Operator'}
-              </div>
-            </div>
+            <span style={{ color: roleColor.text, fontWeight: 750 }}>
+              {currentUser?.full_name || 'Operator'}
+            </span>
+            <span style={{
+              fontSize: 9.5,
+              fontWeight: 800,
+              padding: '1px 5px',
+              borderRadius: 'var(--radius-xs)',
+              backgroundColor: 'rgba(0, 0, 0, 0.2)',
+              color: roleColor.text
+            }}>
+              {currentUser?.role || 'OPERATOR'}
+            </span>
           </button>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserCheck, Shield, Warehouse, HardHat, BarChart3, Settings } from 'lucide-react';
+import { UserCheck, Shield, Warehouse, HardHat, BarChart3, Settings, X, Check } from 'lucide-react';
 
 export default function RoleSwitcherModal({ isOpen, onClose, currentUser, onSelectUser }) {
   if (!isOpen) return null;
@@ -68,7 +68,7 @@ export default function RoleSwitcherModal({ isOpen, onClose, currentUser, onSele
             </p>
           </div>
           <button className="btn btn-outline" style={{ minHeight: 34, padding: '0 12px', fontSize: 12 }} onClick={onClose}>
-            ✕ Tutup
+            <X size={14} style={{ marginRight: 4 }} /> Tutup
           </button>
         </div>
 
@@ -139,8 +139,8 @@ export default function RoleSwitcherModal({ isOpen, onClose, currentUser, onSele
                   </div>
 
                   {isCurrent && (
-                    <span style={{ color: u.color, fontWeight: 800, fontSize: 12.5, flexShrink: 0 }}>
-                      ✓ Aktif
+                    <span style={{ color: u.color, fontWeight: 800, fontSize: 12.5, flexShrink: 0, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <Check size={14} /> Aktif
                     </span>
                   )}
                 </div>

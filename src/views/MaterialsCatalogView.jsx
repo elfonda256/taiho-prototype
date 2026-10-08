@@ -74,13 +74,13 @@ export default function MaterialsCatalogView({ onSelectMaterial, onIssueMaterial
             onChange={e => setSelectedStatus(e.target.value)}
           >
             <option value="">Semua Status</option>
-            <option value="TERSEDIA">🟢 Tersedia</option>
-            <option value="DIALOKASIKAN">🔵 Dialokasikan</option>
-            <option value="DI_PRODUKSI">🟡 Di Produksi</option>
-            <option value="SELISIH">🔴 Selisih</option>
+            <option value="TERSEDIA">Tersedia (Ready)</option>
+            <option value="DIALOKASIKAN">Dialokasikan</option>
+            <option value="DI_PRODUKSI">Di Produksi</option>
+            <option value="SELISIH">Selisih Stok</option>
           </select>
 
-          <button type="submit" className="btn btn-primary" style={{ minHeight: 48, padding: '0 20px' }}>
+          <button type="submit" className="btn btn-primary" style={{ minHeight: 44, padding: '0 20px' }}>
             Cari
           </button>
         </form>
@@ -98,7 +98,7 @@ export default function MaterialsCatalogView({ onSelectMaterial, onIssueMaterial
         </div>
 
         <div className="table-responsive">
-          <table className="table">
+          <table className="table table-dense">
             <thead>
               <tr>
                 <th>KODE</th>

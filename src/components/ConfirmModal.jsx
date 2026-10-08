@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, X } from 'lucide-react';
 
 export default function ConfirmModal({
   isOpen,
@@ -43,7 +43,7 @@ export default function ConfirmModal({
             </h3>
           </div>
           <button className="btn btn-outline" style={{ minHeight: 32, padding: '0 8px' }} onClick={onClose}>
-            ✕
+            <X size={16} />
           </button>
         </div>
 

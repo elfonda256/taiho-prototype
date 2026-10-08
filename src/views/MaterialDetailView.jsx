@@ -250,7 +250,7 @@ export default function MaterialDetailView({
                       </div>
                     </div>
 
-                    <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 6, borderTop: '1px solid #e2e8f0', paddingTop: 6 }}>
+                    <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 6, borderTop: '1px solid var(--border-subtle)', paddingTop: 6 }}>
                       Ref: <strong>{ev.reference_type} #{ev.reference_number}</strong> • Catatan: {ev.notes || '-'}
                     </div>
                   </div>

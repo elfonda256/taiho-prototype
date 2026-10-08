@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Cpu, Activity, Radio, ArrowRight, ShieldCheck, 
-  Send, RefreshCw, AlertTriangle, CheckCircle2, Code, Server
+  Send, RefreshCw, AlertTriangle, CheckCircle2, XCircle, Code, Server,
+  Gauge, Monitor, Layers, Sliders
 } from 'lucide-react';
 
 export default function SensorIntegrationView() {
@@ -76,36 +77,25 @@ export default function SensorIntegrationView() {
   return (
     <div className="content-body" style={{ maxWidth: 1200 }}>
       {/* Top Banner */}
-      <div style={{
-        backgroundColor: 'var(--bg-surface)',
-        borderRadius: 14,
-        padding: '20px 24px',
-        marginBottom: 24,
-        border: '1px solid var(--border-subtle)',
+      <div className="card" style={{
+        padding: '18px 24px',
+        marginBottom: 20,
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
         alignItems: 'center',
-        gap: 16,
-        boxShadow: 'var(--shadow-sm)'
+        gap: 16
       }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-            <span style={{
-              padding: '4px 10px',
-              backgroundColor: 'var(--accent-blue)',
-              color: '#ffffff',
-              borderRadius: 20,
-              fontSize: 12,
-              fontWeight: 800
-            }}>
-              SENSOR & PLC INTEGRATION LAYER
+            <span className="tag-provenance tag-provenance-live">
+              SPESIFIKASI EDGE GATEWAY
             </span>
-            <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-              Arsitektur Terbuka (Open Industrial Standards)
+            <span style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>
+              STANDAR MES & PLC INDUSTRI
             </span>
           </div>
-          <h2 style={{ margin: '4px 0', fontSize: 22, fontWeight: 800, color: 'var(--text-main)' }}>
+          <h2 style={{ margin: '4px 0 2px', fontSize: 20, fontWeight: 800, color: 'var(--text-main)' }}>
             Kesiapan Integrasi Sensor, PLC, dan IoT Edge Gateway
           </h2>
           <p style={{ margin: 0, fontSize: 13, color: 'var(--text-muted)' }}>
@@ -115,74 +105,70 @@ export default function SensorIntegrationView() {
 
         <button
           onClick={fetchData}
-          style={{
-            padding: '8px 16px',
-            backgroundColor: 'var(--bg-subtle)',
-            color: 'var(--text-main)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: 8,
-            fontSize: 13,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6
-          }}
+          className="btn btn-outline"
+          style={{ minHeight: 34, padding: '0 12px', fontSize: 12 }}
         >
-          <RefreshCw size={14} /> Refresh Telemetri
+          <RefreshCw size={13} /> Refresh Telemetri
         </button>
       </div>
 
       {/* ARSITEKTUR KONSEPTUAL 5 TINGKAT */}
-      <div style={{
-        backgroundColor: 'var(--bg-surface)',
-        borderRadius: 14,
-        padding: 24,
-        marginBottom: 28,
-        border: '1px solid var(--border-subtle)',
-        boxShadow: 'var(--shadow-sm)'
+      <div className="card" style={{
+        padding: 20,
+        marginBottom: 24
       }}>
-        <h3 style={{ margin: '0 0 16px', fontSize: 18, fontWeight: 800, color: 'var(--text-main)' }}>
+        <h3 style={{ margin: '0 0 14px', fontSize: 16, fontWeight: 800, color: 'var(--text-main)' }}>
           Alur Integrasi Telemetri Otomatis (Industrial Pipeline)
         </h3>
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-          gap: 12,
+          gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+          gap: 10,
           textAlign: 'center'
         }}>
           {/* 1. Sensor Fisik */}
-          <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 16, borderRadius: 10, border: '1px solid var(--border-subtle)' }}>
-            <div style={{ fontSize: 24, marginBottom: 6 }}>🎛️</div>
-            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-main)' }}>1. Sensor Fisik</div>
+          <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 14, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8, color: 'var(--brand-primary)' }}>
+              <Gauge size={24} />
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-main)' }}>1. Sensor Fisik</div>
             <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Suhu, Vibrasi, Tekanan, RPM</span>
           </div>
 
           {/* 2. PLC / Controller */}
-          <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 16, borderRadius: 10, border: '1px solid var(--border-subtle)' }}>
-            <div style={{ fontSize: 24, marginBottom: 6 }}>🖲️</div>
-            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-main)' }}>2. PLC / Controller</div>
+          <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 14, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8, color: 'var(--accent-cyan)' }}>
+              <Cpu size={24} />
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-main)' }}>2. PLC / Controller</div>
             <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Siemens, Mitsubishi, Omron</span>
           </div>
 
           {/* 3. Edge Gateway */}
-          <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 16, borderRadius: 10, border: '1px solid var(--status-reserved-border)' }}>
-            <div style={{ fontSize: 24, marginBottom: 6 }}>📡</div>
-            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--accent-cyan)' }}>3. IoT Edge Gateway</div>
+          <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 14, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8, color: 'var(--accent-cyan)' }}>
+              <Radio size={24} />
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--accent-cyan)' }}>3. IoT Edge Gateway</div>
             <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Advantech, Moxa, Modbus TCP</span>
           </div>
 
           {/* 4. Ingestion Service */}
-          <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 16, borderRadius: 10, border: '1px solid var(--status-safe-border)' }}>
-            <div style={{ fontSize: 24, marginBottom: 6 }}>⚙️</div>
-            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--accent-emerald)' }}>4. Ingestion Service</div>
+          <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 14, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8, color: 'var(--accent-emerald)' }}>
+              <Server size={24} />
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--accent-emerald)' }}>4. Ingestion Service</div>
             <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>REST / MQTT REST Bridge</span>
           </div>
 
           {/* 5. Central Database */}
-          <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 16, borderRadius: 10, border: '1px solid var(--border-subtle)' }}>
-            <div style={{ fontSize: 24, marginBottom: 6 }}>🖥️</div>
-            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-main)' }}>5. Dasbor Manajemen</div>
+          <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 14, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8, color: 'var(--brand-primary)' }}>
+              <Monitor size={24} />
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-main)' }}>5. Dasbor Manajemen</div>
             <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Visualisasi Kondisi Real-Time</span>
           </div>
         </div>
@@ -332,36 +318,27 @@ export default function SensorIntegrationView() {
             {simResponse && (
               <div style={{
                 padding: 12,
-                borderRadius: 8,
+                borderRadius: 'var(--radius-sm)',
                 backgroundColor: simResponse.success ? 'var(--status-safe-bg)' : 'var(--status-alert-bg)',
                 color: simResponse.success ? 'var(--status-safe-text)' : 'var(--status-alert-text)',
                 border: `1px solid ${simResponse.success ? 'var(--status-safe-border)' : 'var(--status-alert-border)'}`,
-                fontSize: 13
+                fontSize: 12.5,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8
               }}>
-                <b>{simResponse.success ? '✅ Berhasil:' : '❌ Gagal:'}</b> {simResponse.message}
+                {simResponse.success ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                <span><b>{simResponse.success ? 'Berhasil:' : 'Gagal:'}</b> {simResponse.message}</span>
               </div>
             )}
 
             <button
               onClick={handleSendSimulatedSensor}
               disabled={isSimulating}
-              style={{
-                marginTop: 6,
-                padding: '12px 20px',
-                backgroundColor: 'var(--accent-blue)',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: 8,
-                fontSize: 14,
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 8
-              }}
+              className="btn btn-primary"
+              style={{ marginTop: 6, minHeight: 44, fontSize: 13 }}
             >
-              <Send size={16} />
+              <Send size={15} />
               {isSimulating ? 'Mengirim Telemetri...' : 'Kirim Sinyal Telemetri ke Gateway'}
             </button>
           </div>

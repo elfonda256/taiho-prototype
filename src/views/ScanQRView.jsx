@@ -9,7 +9,8 @@ import {
   Search,
   CheckCircle2,
   AlertTriangle,
-  Boxes
+  Boxes,
+  X
 } from 'lucide-react';
 import QRLabelPrintModal from '../components/QRLabelPrintModal';
 
@@ -267,11 +268,11 @@ export default function ScanQRView({
                   }`}
                   style={{ fontSize: 13, padding: '6px 12px' }}
                 >
-                  {materialData.status === 'TERSEDIA' && '🟢 TERSEDIA'}
-                  {materialData.status === 'DIALOKASIKAN' && '🔵 DIALOKASIKAN'}
-                  {materialData.status === 'DI_PRODUKSI' && '🟡 DI PRODUKSI'}
-                  {materialData.status === 'DIKEMBALIKAN' && '🟠 DIKEMBALIKAN'}
-                  {materialData.status === 'SELISIH' && '🔴 SELISIH'}
+                  {materialData.status === 'TERSEDIA' && 'TERSEDIA'}
+                  {materialData.status === 'DIALOKASIKAN' && 'DIALOKASIKAN'}
+                  {materialData.status === 'DI_PRODUKSI' && 'DI PRODUKSI'}
+                  {materialData.status === 'DIKEMBALIKAN' && 'DIKEMBALIKAN'}
+                  {materialData.status === 'SELISIH' && 'SELISIH'}
                 </span>
               </div>
             </div>
@@ -327,7 +328,7 @@ export default function ScanQRView({
                 {showActionModal === 'TRANSFER' ? 'Pindah Lokasi Rak' : 'Terima Pengembalian Material'}
               </h3>
               <button className="btn btn-outline" style={{ minHeight: 30, padding: '0 8px' }} onClick={() => setShowActionModal(null)}>
-                ✕
+                <X size={15} />
               </button>
             </div>
 

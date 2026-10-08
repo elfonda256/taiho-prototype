@@ -13,7 +13,7 @@ export const translations = {
     controlledStock: 'Stock Controlled',
     varianceReview: 'Variances Need Review',
     langName: 'English',
-    langFlag: '🇬🇧',
+    langFlag: 'EN',
 
     // Nav Categories
     catDigitalFactory: 'DIGITAL FACTORY',
@@ -60,9 +60,9 @@ export const translations = {
     sec_top_discrepancies: 'Highest Value Discrepancies Requiring Audit',
 
     // Machine Status
-    machine_normal: '🟢 Normal & Ready',
-    machine_warning: '🟡 Warning (Monitor)',
-    machine_problem: '🔴 Problem (Action Needed)',
+    machine_normal: 'Normal & Ready',
+    machine_warning: 'Warning (Monitor)',
+    machine_problem: 'Problem (Action Needed)',
     latest_field_update: 'LATEST FIELD UPDATE (LIVE)',
     technician: 'Technician',
     at_time: 'at',
@@ -112,7 +112,7 @@ export const translations = {
     btn_confirm: 'Confirm',
     btn_cancel: 'Cancel',
     btn_detail_lead_time: 'Detailed Lead Time Analysis',
-    btn_operator_tablet: '📱 Operator Tablet',
+    btn_operator_tablet: 'Operator Tablet',
     btn_machine_dashboard: 'Machine Dashboard',
     btn_master_catalog: 'Master Material Catalog',
     btn_view_all_transactions: 'View All Transactions',
@@ -171,7 +171,7 @@ export const translations = {
     controlledStock: 'Stok Terkendali',
     varianceReview: 'Selisih Perlu Review',
     langName: 'Bahasa Indonesia',
-    langFlag: '🇮🇩',
+    langFlag: 'ID',
 
     // Nav Categories
     catDigitalFactory: 'PABRIK DIGITAL',
@@ -218,9 +218,9 @@ export const translations = {
     sec_top_discrepancies: 'Prioritas Pemeriksaan Kasus Selisih Terbesar',
 
     // Machine Status
-    machine_normal: '🟢 Normal Siap Kerja',
-    machine_warning: '🟡 Warning (Pantau)',
-    machine_problem: '🔴 Problem (Bermasalah)',
+    machine_normal: 'Normal Siap Kerja',
+    machine_warning: 'Warning (Pantau)',
+    machine_problem: 'Problem (Bermasalah)',
     latest_field_update: 'UPDATE LAPANGAN TERBARU (LIVE)',
     technician: 'Teknisi',
     at_time: 'Jam',
@@ -270,7 +270,7 @@ export const translations = {
     btn_confirm: 'Konfirmasi',
     btn_cancel: 'Batal',
     btn_detail_lead_time: 'Analisis Detail Lead Time',
-    btn_operator_tablet: '📱 Tablet Operator',
+    btn_operator_tablet: 'Tablet Operator',
     btn_machine_dashboard: 'Dasbor Mesin',
     btn_master_catalog: 'Katalog Master Material',
     btn_view_all_transactions: 'Lihat Semua Transaksi',

@@ -6,7 +6,8 @@ import {
   Clock,
   ShieldCheck,
   FileText,
-  UserCheck
+  UserCheck,
+  X
 } from 'lucide-react';
 
 export default function DiscrepancyView({ currentUser, onViewChainOfCustody }) {
@@ -151,7 +152,7 @@ export default function DiscrepancyView({ currentUser, onViewChainOfCustody }) {
         </div>
 
         <div className="table-responsive">
-          <table className="table">
+          <table className="table table-dense">
             <thead>
               <tr>
                 <th>NO. KASUS</th>
@@ -245,7 +246,7 @@ export default function DiscrepancyView({ currentUser, onViewChainOfCustody }) {
                 </p>
               </div>
               <button className="btn btn-outline" style={{ minHeight: 32, padding: '0 8px' }} onClick={() => setSelectedCase(null)}>
-                ✕
+                <X size={16} />
               </button>
             </div>
 

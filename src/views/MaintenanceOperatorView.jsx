@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Wrench, CheckCircle2, AlertTriangle, XCircle, QrCode, 
   Camera, ArrowRight, ArrowLeft, RefreshCw, Clock, Check, 
-  Wifi, WifiOff, ShieldCheck, HardHat, FileText, Upload
+  Wifi, WifiOff, ShieldCheck, HardHat, FileText, Upload, MapPin
 } from 'lucide-react';
 import { queueRecord, getQueuedRecords, syncQueuedRecords } from '../utils/offlineQueue';
 
@@ -228,67 +228,53 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
   return (
     <div className="content-body" style={{ maxWidth: 1100 }}>
       {/* Tablet Status Header */}
-      <div style={{
+      <div className="card" style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '12px 18px',
-        backgroundColor: 'var(--bg-surface)',
-        borderRadius: 12,
+        padding: '14px 18px',
         marginBottom: 20,
-        border: '1px solid var(--border-subtle)'
+        flexWrap: 'wrap',
+        gap: 12
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{
             width: 44,
             height: 44,
-            borderRadius: 10,
-            backgroundColor: 'var(--accent-blue)',
+            borderRadius: 'var(--radius-sm)',
+            backgroundColor: 'var(--brand-primary)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            color: '#ffffff'
           }}>
-            <Wrench size={26} color="#ffffff" />
+            <Wrench size={22} />
           </div>
           <div>
-            <h2 style={{ fontSize: 18, fontWeight: 800, margin: 0, color: 'var(--text-main)' }}>
-              Mode Pemeliharaan Lapangan (Tablet Operator)
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span className="tag-provenance tag-provenance-live">
+                OPERATOR TABLET
+              </span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                STANDAR MES LAPANGAN
+              </span>
+            </div>
+            <h2 style={{ fontSize: 18, fontWeight: 800, margin: '2px 0 0', color: 'var(--text-main)' }}>
+              Mode Pemeliharaan Lapangan (Android Tablet)
             </h2>
-            <p style={{ margin: 0, fontSize: 13, color: 'var(--text-muted)' }}>
-              Pencatatan data langsung di sumber kerja tanpa formulir kertas
+            <p style={{ margin: 0, fontSize: 12, color: 'var(--text-muted)' }}>
+              Pencatatan data langsung di sumber kerja mesin tanpa formulir kertas
             </p>
           </div>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           {isOnline ? (
-            <span style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              padding: '6px 12px',
-              backgroundColor: 'var(--status-safe-bg)',
-              color: 'var(--status-safe-text)',
-              border: '1px solid var(--status-safe-border)',
-              borderRadius: 20,
-              fontSize: 12,
-              fontWeight: 700
-            }}>
+            <span className="badge badge-normal" style={{ padding: '6px 12px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
               <Wifi size={14} /> Terhubung (Online)
             </span>
           ) : (
-            <span style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              padding: '6px 12px',
-              backgroundColor: 'var(--status-alert-bg)',
-              color: 'var(--status-alert-text)',
-              border: '1px solid var(--status-alert-border)',
-              borderRadius: 20,
-              fontSize: 12,
-              fontWeight: 700
-            }}>
+            <span className="badge badge-critical" style={{ padding: '6px 12px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
               <WifiOff size={14} /> Mode Offline (Wi-Fi Pabrik Terputus)
             </span>
           )}
@@ -297,19 +283,8 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
             <button
               onClick={handleAutoSync}
               disabled={syncingOffline || !isOnline}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '6px 14px',
-                backgroundColor: '#d97706',
-                color: '#ffffff',
-                borderRadius: 20,
-                border: 'none',
-                fontSize: 12,
-                fontWeight: 700,
-                cursor: 'pointer'
-              }}
+              className="btn btn-warning"
+              style={{ minHeight: 38, padding: '0 14px', fontSize: 12 }}
             >
               <RefreshCw size={14} className={syncingOffline ? 'spin' : ''} />
               {queuedCount} Data Belum Tersinkron
@@ -471,40 +446,32 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                     >
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
-                          <span style={{
-                            padding: '4px 10px',
+                          <span className="font-mono" style={{
+                            padding: '3px 8px',
                             backgroundColor: 'var(--bg-subtle)',
                             color: 'var(--accent-cyan)',
-                            borderRadius: 6,
-                            fontSize: 13,
-                            fontWeight: 800,
-                            letterSpacing: '0.5px'
+                            borderRadius: 'var(--radius-sm)',
+                            fontSize: 12,
+                            fontWeight: 700
                           }}>
                             {asset.asset_code}
                           </span>
-                          <span style={{
-                            padding: '3px 8px',
-                            borderRadius: 12,
-                            fontSize: 11,
-                            fontWeight: 700,
-                            backgroundColor: isProblem ? 'var(--status-alert-bg)' : isWarning ? 'var(--status-warn-bg)' : 'var(--status-safe-bg)',
-                            color: isProblem ? 'var(--status-alert-text)' : isWarning ? 'var(--status-warn-text)' : 'var(--status-safe-text)',
-                            border: `1px solid ${isProblem ? 'var(--status-alert-border)' : isWarning ? 'var(--status-warn-border)' : 'var(--status-safe-border)'}`
-                          }}>
+                          <span className={`badge ${isProblem ? 'badge-critical' : isWarning ? 'badge-warning' : 'badge-normal'}`}>
                             {asset.status}
                           </span>
                         </div>
-                        <h4 style={{ margin: '0 0 6px', fontSize: 16, fontWeight: 700, color: 'var(--text-main)' }}>
+                        <h4 style={{ margin: '0 0 6px', fontSize: 15, fontWeight: 700, color: 'var(--text-main)' }}>
                           {asset.asset_name}
                         </h4>
-                        <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-                          📍 {asset.location} ({asset.production_area})
+                        <div style={{ fontSize: 12, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                          <MapPin size={11} />
+                          <span>{asset.location} ({asset.production_area})</span>
                         </div>
                       </div>
 
                       <div style={{
-                        marginTop: 14,
-                        paddingTop: 10,
+                        marginTop: 12,
+                        paddingTop: 8,
                         borderTop: '1px solid var(--border-subtle)',
                         display: 'flex',
                         justifyContent: 'space-between',
@@ -513,8 +480,8 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                         <span style={{ fontSize: 11, color: 'var(--text-dim)' }}>
                           Kondisi: {asset.current_condition || 'Normal'}
                         </span>
-                        <span style={{ fontSize: 13, color: 'var(--accent-cyan)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
-                          Pilih <ArrowRight size={14} />
+                        <span style={{ fontSize: 12, color: 'var(--accent-cyan)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                          Pilih <ArrowRight size={13} />
                         </span>
                       </div>
                     </div>
@@ -528,45 +495,38 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
           {step === 2 && selectedAsset && (
             <div>
               {/* Asset Bar */}
-              <div style={{
-                backgroundColor: 'var(--bg-surface)',
+              <div className="card" style={{
                 padding: '16px 20px',
-                borderRadius: 12,
                 marginBottom: 20,
                 display: 'flex',
                 flexWrap: 'wrap',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                gap: 12,
-                border: '1px solid var(--border-subtle)',
-                boxShadow: 'var(--shadow-sm)'
+                gap: 12
               }}>
                 <div>
-                  <span style={{ fontSize: 12, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    Mesin Terpilih
+                  <span style={{ fontSize: 11, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>
+                    ASET MESIN TERPILIH
                   </span>
-                  <h3 style={{ margin: '4px 0 0', fontSize: 20, color: 'var(--text-main)', fontWeight: 800 }}>
+                  <h3 style={{ margin: '2px 0 0', fontSize: 18, color: 'var(--text-main)', fontWeight: 800 }}>
                     {selectedAsset.asset_code} — {selectedAsset.asset_name}
                   </h3>
-                  <span style={{ fontSize: 13, color: 'var(--accent-cyan)' }}>
-                    📍 {selectedAsset.location} | {selectedAsset.machine_type}
-                  </span>
+                  <div style={{ fontSize: 12, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: 4, marginTop: 2 }}>
+                    <MapPin size={12} />
+                    <span>{selectedAsset.location} | {selectedAsset.machine_type}</span>
+                  </div>
                 </div>
 
                 <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                   {/* Select Maintenance Type */}
                   <select
+                    className="form-select"
                     value={maintenanceType}
                     onChange={e => setMaintenanceType(e.target.value)}
                     style={{
-                      padding: '10px 14px',
-                      backgroundColor: 'var(--bg-card-inner)',
-                      color: 'var(--text-main)',
-                      border: '1px solid var(--border-strong)',
-                      borderRadius: 8,
-                      fontSize: 14,
-                      fontWeight: 600,
-                      minHeight: 44
+                      minHeight: 46,
+                      fontSize: 13,
+                      fontWeight: 600
                     }}
                   >
                     <option value="Daily Inspection">Pemeriksaan Harian (Daily Inspection)</option>
@@ -578,18 +538,10 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
                   </select>
 
                   <button
+                    type="button"
                     onClick={() => setStep(1)}
-                    style={{
-                      padding: '10px 16px',
-                      backgroundColor: 'var(--bg-subtle)',
-                      color: 'var(--text-main)',
-                      border: '1px solid var(--border-subtle)',
-                      borderRadius: 8,
-                      fontSize: 14,
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      minHeight: 44
-                    }}
+                    className="btn btn-secondary"
+                    style={{ minHeight: 46, padding: '0 16px', fontSize: 13 }}
                   >
                     Ganti Mesin
                   </button>
@@ -879,22 +831,18 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
               </div>
 
               {/* ACTION BAR: SUBMIT DATA LANGSUNG KE PUSAT */}
-              <div style={{
+              <div className="card" style={{
                 display: 'flex',
                 flexWrap: 'wrap',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 gap: 12,
-                backgroundColor: 'var(--bg-surface)',
-                padding: 18,
-                borderRadius: 14,
-                border: '1px solid var(--border-subtle)',
-                boxShadow: 'var(--shadow-sm)'
+                padding: 16
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <Clock size={20} color="var(--accent-cyan)" />
+                  <Clock size={18} color="var(--accent-cyan)" />
                   <div>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-main)' }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-main)' }}>
                       Perekaman Waktu Digital: {new Date().toLocaleTimeString('id-ID')} WIB
                     </div>
                     <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
@@ -907,49 +855,29 @@ export default function MaintenanceOperatorView({ onOpenScanner, currentUser, pr
 
                 <div style={{ display: 'flex', gap: 10 }}>
                   <button
+                    type="button"
                     onClick={() => setStep(1)}
-                    style={{
-                      padding: '14px 22px',
-                      backgroundColor: 'var(--bg-subtle)',
-                      color: 'var(--text-main)',
-                      border: '1px solid var(--border-subtle)',
-                      borderRadius: 10,
-                      fontSize: 15,
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      minHeight: 52
-                    }}
+                    className="btn btn-secondary"
+                    style={{ minHeight: 48, padding: '0 20px', fontSize: 14 }}
                   >
                     Batal
                   </button>
 
                   <button
+                    type="button"
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    style={{
-                      padding: '14px 32px',
-                      backgroundColor: '#10b981',
-                      color: '#ffffff',
-                      border: 'none',
-                      borderRadius: 10,
-                      fontSize: 16,
-                      fontWeight: 800,
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      minHeight: 52,
-                      boxShadow: '0 4px 14px rgba(16, 185, 129, 0.3)'
-                    }}
+                    className="btn btn-success"
+                    style={{ minHeight: 48, padding: '0 28px', fontSize: 15 }}
                   >
                     {isSubmitting ? (
                       <>
-                        <RefreshCw size={20} className="spin" />
+                        <RefreshCw size={18} className="spin" />
                         Mengirim Data...
                       </>
                     ) : (
                       <>
-                        <Check size={20} />
+                        <Check size={18} />
                         Simpan & Kirim Data Lapangan
                       </>
                     )}

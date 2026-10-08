@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { WifiOff } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import MobileNav from './components/MobileNav';
@@ -209,7 +210,8 @@ export default function App() {
               zIndex: 9999
             }}
           >
-            <span>{lang === 'en' ? '⚠️ OFFLINE: Factory Wi-Fi disconnected. Tablet entries are saved locally and will auto-sync once connected.' : '⚠️ KONEKSI TERPUTUS: Wi-Fi pabrik sedang offline. Data pemeliharaan yang diinput akan disimpan otomatis di tablet dan disinkronkan saat online kembali.'}</span>
+            <WifiOff size={16} style={{ flexShrink: 0 }} />
+            <span>{lang === 'en' ? 'OFFLINE: Factory Wi-Fi disconnected. Tablet entries are saved locally and will auto-sync once connected.' : 'KONEKSI TERPUTUS: Wi-Fi pabrik sedang offline. Data pemeliharaan yang diinput akan disimpan otomatis di tablet dan disinkronkan saat online kembali.'}</span>
           </div>
         )}
 

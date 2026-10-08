@@ -34,14 +34,14 @@ export default function MobileNav({
         className="mobile-nav-btn btn-scan-quick"
         onClick={onOpenScanner}
         style={{
-          transform: 'translateY(-10px)',
-          backgroundColor: '#0284c7',
+          transform: 'translateY(-8px)',
+          backgroundColor: 'var(--brand-primary)',
           color: '#ffffff',
           borderRadius: '50%',
-          width: 52,
-          height: 52,
+          width: 48,
+          height: 48,
           flex: 'none',
-          boxShadow: '0 4px 14px rgba(2, 132, 199, 0.45)',
+          boxShadow: 'var(--shadow-md)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -50,7 +50,7 @@ export default function MobileNav({
         }}
         aria-label="Scan QR Code"
       >
-        <QrCode size={22} color="#ffffff" />
+        <QrCode size={20} color="#ffffff" />
         <span style={{ fontSize: 8.5, marginTop: 1, color: '#ffffff', fontWeight: 800 }}>{getTranslation('nav_scan', lang)}</span>
       </button>
 

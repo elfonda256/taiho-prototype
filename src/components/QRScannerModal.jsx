@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Camera, Search, Barcode, CheckCircle2, AlertCircle, Wrench, Boxes } from 'lucide-react';
+import { Camera, Search, Barcode, CheckCircle2, AlertCircle, Wrench, Boxes, X, Tag, Info } from 'lucide-react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 
 export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
@@ -81,7 +81,7 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
             </p>
           </div>
           <button className="btn btn-outline" style={{ minHeight: 32, padding: '0 8px' }} onClick={onClose}>
-            ✕
+            <X size={16} />
           </button>
         </div>
 
@@ -93,15 +93,19 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
               flex: 1,
               padding: '10px 8px',
               border: 'none',
-              borderBottom: activeTab === 'camera' ? '2px solid var(--primary-900)' : 'none',
-              background: activeTab === 'camera' ? '#ffffff' : 'transparent',
+              borderBottom: activeTab === 'camera' ? '2px solid var(--brand-primary)' : 'none',
+              background: activeTab === 'camera' ? 'var(--bg-surface)' : 'transparent',
               fontWeight: 700,
-              fontSize: 13,
-              color: activeTab === 'camera' ? 'var(--primary-900)' : 'var(--text-muted)',
-              cursor: 'pointer'
+              fontSize: 12.5,
+              color: activeTab === 'camera' ? 'var(--text-main)' : 'var(--text-muted)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 6
             }}
           >
-            📷 Kamera Live
+            <Camera size={14} /> Kamera Live
           </button>
 
           <button
@@ -110,15 +114,19 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
               flex: 1,
               padding: '10px 8px',
               border: 'none',
-              borderBottom: activeTab === 'manual' ? '2px solid var(--primary-900)' : 'none',
-              background: activeTab === 'manual' ? '#ffffff' : 'transparent',
+              borderBottom: activeTab === 'manual' ? '2px solid var(--brand-primary)' : 'none',
+              background: activeTab === 'manual' ? 'var(--bg-surface)' : 'transparent',
               fontWeight: 700,
-              fontSize: 13,
-              color: activeTab === 'manual' ? 'var(--primary-900)' : 'var(--text-muted)',
-              cursor: 'pointer'
+              fontSize: 12.5,
+              color: activeTab === 'manual' ? 'var(--text-main)' : 'var(--text-muted)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 6
             }}
           >
-            ⌨️ Barcode Gun / Input
+            <Barcode size={14} /> Barcode Gun / Input
           </button>
 
           <button
@@ -127,15 +135,19 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
               flex: 1,
               padding: '10px 8px',
               border: 'none',
-              borderBottom: activeTab === 'sample' ? '2px solid var(--primary-900)' : 'none',
-              background: activeTab === 'sample' ? '#ffffff' : 'transparent',
+              borderBottom: activeTab === 'sample' ? '2px solid var(--brand-primary)' : 'none',
+              background: activeTab === 'sample' ? 'var(--bg-surface)' : 'transparent',
               fontWeight: 700,
-              fontSize: 13,
-              color: activeTab === 'sample' ? 'var(--primary-900)' : 'var(--text-muted)',
-              cursor: 'pointer'
+              fontSize: 12.5,
+              color: activeTab === 'sample' ? 'var(--text-main)' : 'var(--text-muted)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 6
             }}
           >
-            🏷️ Sampel Uji Cepat
+            <Tag size={14} /> Sampel Uji Cepat
           </button>
         </div>
 
@@ -171,8 +183,8 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
                   onChange={e => setManualCode(e.target.value)}
                   autoFocus
                 />
-                <span style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4, display: 'block' }}>
-                  💡 Mendukung pemindai fisik (USB/Bluetooth wireless gun) di lingkungan pabrik.
+                <span style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <Info size={13} /> Mendukung pemindai fisik (USB/Bluetooth wireless gun) di lingkungan pabrik.
                 </span>
               </div>
 

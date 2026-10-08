@@ -71,17 +71,17 @@ export default function TransactionsLedgerView({ onSelectMaterial }) {
             <option value="ADJUSTMENT">Penyesuaian (ADJUSTMENT)</option>
           </select>
 
-          <button type="submit" className="btn btn-primary" style={{ minHeight: 48, padding: '0 18px' }}>
+          <button type="submit" className="btn btn-primary" style={{ minHeight: 42, padding: '0 18px' }}>
             Filter
           </button>
 
           <a
             href="/api/reports/export-csv?report_type=ledger"
             className="btn btn-outline"
-            style={{ minHeight: 48, padding: '0 16px', textDecoration: 'none' }}
+            style={{ minHeight: 42, padding: '0 16px', textDecoration: 'none' }}
             download
           >
-            <Download size={16} /> Unduh CSV
+            <Download size={15} /> Unduh CSV
           </a>
         </form>
       </div>
@@ -95,13 +95,13 @@ export default function TransactionsLedgerView({ onSelectMaterial }) {
               Total {total} pergerakan material tercatat resmi dan tidak dapat dihapus
             </p>
           </div>
-          <button className="btn btn-outline" style={{ minHeight: 32, padding: '0 10px' }} onClick={loadTransactions}>
-            <RefreshCw size={14} /> Refresh
+          <button className="btn btn-outline" style={{ minHeight: 32, padding: '0 10px', fontSize: 12 }} onClick={loadTransactions}>
+            <RefreshCw size={13} /> Refresh
           </button>
         </div>
 
         <div className="table-responsive">
-          <table className="table">
+          <table className="table table-dense">
             <thead>
               <tr>
                 <th>WAKTU</th>
