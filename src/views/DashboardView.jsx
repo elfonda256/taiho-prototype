@@ -28,6 +28,7 @@ export default function DashboardView({
   const [digitalFactoryData, setDigitalFactoryData] = useState(null);
   const [isLoadingDF, setIsLoadingDF] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [inspectionTab, setInspectionTab] = useState('all');
 
   useEffect(() => {
     fetchDigitalFactoryData();
@@ -58,8 +59,64 @@ export default function DashboardView({
     );
   }
 
-  const { kpi, topDiscrepancies, recentTransactions } = data;
+  const { kpi, topDiscrepancies, recentTransactions, recentInspections = [], recentOpnames = [] } = data;
   const df = digitalFactoryData;
+
+  const formatInspectionTime = (timestamp) => {
+    if (!timestamp) return '-';
+    try {
+      const d = new Date(timestamp);
+      if (isNaN(d.getTime())) return timestamp;
+      return d.toLocaleDateString(lang === 'en' ? 'en-US' : 'id-ID', {
+        day: 'numeric',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (e) {
+      return timestamp;
+    }
+  };
+
+  const displayedInspections = React.useMemo(() => {
+    const list = [];
+    if (inspectionTab === 'all' || inspectionTab === 'machines') {
+      (recentInspections || []).forEach(item => {
+        list.push({
+          type: 'machine',
+          id: item.id,
+          code: item.record_number,
+          objectTitle: item.asset_code,
+          objectSub: item.asset_name,
+          category: item.maintenance_type || (lang === 'en' ? 'Daily Inspection' : 'Pemeriksaan Harian'),
+          operator: item.operator_name || (lang === 'en' ? 'Field Tech' : 'Teknisi Lapangan'),
+          condition: item.overall_condition,
+          status: item.status,
+          time: item.submitted_at || item.completion_time,
+          raw: item
+        });
+      });
+    }
+    if (inspectionTab === 'all' || inspectionTab === 'opnames') {
+      (recentOpnames || []).forEach(item => {
+        list.push({
+          type: 'opname',
+          id: item.id,
+          code: item.opname_number,
+          objectTitle: item.warehouse,
+          objectSub: item.title,
+          category: lang === 'en' ? 'Stock Opname' : 'Opname Fisik',
+          operator: item.started_by_name || (lang === 'en' ? 'Warehouse Op.' : 'Operator Gudang'),
+          condition: item.discrepant_items > 0 ? 'WARNING' : 'NORMAL',
+          status: item.status,
+          discrepancyCount: item.discrepant_items,
+          time: item.created_at,
+          raw: item
+        });
+      });
+    }
+    return list.slice(0, 5);
+  }, [recentInspections, recentOpnames, inspectionTab, lang]);
 
   const info = df?.information || {
     baseline_lead_time_days: 7,
@@ -406,6 +463,175 @@ export default function DashboardView({
               {getTranslation('kpi_manual_desc', lang)}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* ======================================================== */}
+      {/* 5. MINIMAL INSPECTION HISTORY WIDGET                     */}
+      {/* ======================================================== */}
+      <div className="card" style={{ marginTop: 12 }}>
+        <div className="card-header" style={{ paddingBottom: 10, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <CheckCircle2 size={16} color="var(--accent-emerald)" />
+            <div>
+              <h3 className="card-title" style={{ fontSize: 13.5, margin: 0 }}>
+                {lang === 'en' ? 'Recent Inspections & Checklists' : 'Riwayat Pemeriksaan Terkini'}
+              </h3>
+              <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: '2px 0 0' }}>
+                {lang === 'en'
+                  ? 'Compact log of synchronized machine checklists and physical audits'
+                  : 'Catatan ringkas pemeriksaan mesin harian/bulanan & opname fisik tersinkron ke database'}
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            {/* Filter Pills */}
+            <div style={{ display: 'flex', background: 'var(--bg-card-inner)', borderRadius: 'var(--radius-sm)', padding: 2, border: '1px solid var(--border-subtle)' }}>
+              <button
+                type="button"
+                onClick={() => setInspectionTab('all')}
+                style={{
+                  border: 'none',
+                  background: inspectionTab === 'all' ? 'var(--brand-primary)' : 'transparent',
+                  color: inspectionTab === 'all' ? '#fff' : 'var(--text-muted)',
+                  fontSize: 10.5,
+                  fontWeight: 700,
+                  padding: '3px 8px',
+                  borderRadius: 4,
+                  cursor: 'pointer',
+                  transition: 'background 120ms ease'
+                }}
+              >
+                {lang === 'en' ? 'All' : 'Semua'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setInspectionTab('machines')}
+                style={{
+                  border: 'none',
+                  background: inspectionTab === 'machines' ? 'var(--brand-primary)' : 'transparent',
+                  color: inspectionTab === 'machines' ? '#fff' : 'var(--text-muted)',
+                  fontSize: 10.5,
+                  fontWeight: 700,
+                  padding: '3px 8px',
+                  borderRadius: 4,
+                  cursor: 'pointer',
+                  transition: 'background 120ms ease'
+                }}
+              >
+                {lang === 'en' ? 'Machines' : 'Mesin'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setInspectionTab('opnames')}
+                style={{
+                  border: 'none',
+                  background: inspectionTab === 'opnames' ? 'var(--brand-primary)' : 'transparent',
+                  color: inspectionTab === 'opnames' ? '#fff' : 'var(--text-muted)',
+                  fontSize: 10.5,
+                  fontWeight: 700,
+                  padding: '3px 8px',
+                  borderRadius: 4,
+                  cursor: 'pointer',
+                  transition: 'background 120ms ease'
+                }}
+              >
+                {lang === 'en' ? 'Stock Opname' : 'Opname Stok'}
+              </button>
+            </div>
+
+            <button
+              onClick={() => setView('maintenance_dashboard')}
+              className="btn btn-outline"
+              style={{ minHeight: 26, padding: '0 8px', fontSize: 11 }}
+              title={lang === 'en' ? 'Open Full Machine Maintenance Log' : 'Buka log pemeliharaan lengkap'}
+            >
+              <span>{lang === 'en' ? 'Full Log' : 'Semua'}</span>
+              <ArrowRight size={11} />
+            </button>
+          </div>
+        </div>
+
+        <div className="table-responsive" style={{ margin: 0 }}>
+          <table className="table table-dense" style={{ fontSize: 11.5 }}>
+            <thead>
+              <tr>
+                <th>{lang === 'en' ? 'RECORD NO' : 'NO. PEMERIKSAAN'}</th>
+                <th>{lang === 'en' ? 'OBJECT & TYPE' : 'OBJEK & TIPE'}</th>
+                <th>{lang === 'en' ? 'INSPECTOR' : 'PEMERIKSA'}</th>
+                <th>{lang === 'en' ? 'CONDITION / RESULT' : 'HASIL / KONDISI'}</th>
+                <th>{lang === 'en' ? 'RECORDED AT' : 'WAKTU'}</th>
+                <th className="text-right">{lang === 'en' ? 'ACTION' : 'AKSI'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {displayedInspections.length > 0 ? (
+                displayedInspections.map((row) => (
+                  <tr key={row.id}>
+                    <td>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--brand-primary)', fontSize: 11 }}>
+                        {row.code}
+                      </span>
+                    </td>
+                    <td>
+                      <strong style={{ color: 'var(--text-main)', marginRight: 6 }}>{row.objectTitle}</strong>
+                      <span style={{ fontSize: 10.5, color: 'var(--text-muted)' }}>({row.category})</span>
+                      <div style={{ fontSize: 10.5, color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 220 }}>
+                        {row.objectSub}
+                      </div>
+                    </td>
+                    <td>
+                      <span style={{ color: 'var(--text-main)', fontSize: 11.5 }}>{row.operator}</span>
+                    </td>
+                    <td>
+                      {row.type === 'machine' ? (
+                        row.condition === 'NORMAL' ? (
+                          <span className="badge badge-normal" style={{ fontSize: 10 }}>NORMAL (PASS)</span>
+                        ) : row.condition === 'WARNING' ? (
+                          <span className="badge badge-warning" style={{ fontSize: 10 }}>WARNING</span>
+                        ) : (
+                          <span className="badge badge-critical" style={{ fontSize: 10 }}>PROBLEM</span>
+                        )
+                      ) : (
+                        row.discrepancyCount > 0 ? (
+                          <span className="badge badge-selisih" style={{ fontSize: 10 }}>{row.discrepancyCount} Selisih</span>
+                        ) : (
+                          <span className="badge badge-normal" style={{ fontSize: 10 }}>COCOK 100%</span>
+                        )
+                      )}
+                    </td>
+                    <td>
+                      <span style={{ fontSize: 11, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                        {formatInspectionTime(row.time)}
+                      </span>
+                    </td>
+                    <td className="text-right">
+                      <button
+                        onClick={() => {
+                          if (row.type === 'machine') {
+                            setView('maintenance_dashboard');
+                          } else {
+                            setView('stock_opname');
+                          }
+                        }}
+                        className="btn btn-outline"
+                        style={{ minHeight: 26, padding: '0 8px', fontSize: 10.5 }}
+                      >
+                        {lang === 'en' ? 'View' : 'Lihat'}
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" style={{ textAlign: 'center', padding: '16px', color: 'var(--text-muted)' }}>
+                    {lang === 'en' ? 'No recent inspection logs found.' : 'Belum ada riwayat pemeriksaan baru.'}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 

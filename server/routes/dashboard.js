@@ -116,6 +116,47 @@ router.get('/stats', authMiddleware, (req, res, next) => {
       LIMIT 6
     `).all();
 
+    // 10. RECENT INSPECTIONS (Pemeriksaan Mesin Digital Terkini)
+    const recentInspections = db.prepare(`
+      SELECT 
+        mr.id,
+        mr.record_number,
+        mr.maintenance_type,
+        mr.overall_condition,
+        mr.completion_time,
+        mr.submitted_at,
+        mr.lead_time_seconds,
+        mr.status,
+        a.asset_code,
+        a.asset_name,
+        a.location as asset_location,
+        u.full_name as operator_name
+      FROM maintenance_records mr
+      JOIN assets a ON mr.asset_id = a.id
+      LEFT JOIN users u ON mr.operator_id = u.id
+      ORDER BY mr.submitted_at DESC
+      LIMIT 5
+    `).all();
+
+    // 11. RECENT STOCK OPNAMES (Pemeriksaan Fisik Stok Terkini)
+    const recentOpnames = db.prepare(`
+      SELECT 
+        so.id,
+        so.opname_number,
+        so.title,
+        so.warehouse,
+        so.status,
+        so.total_items,
+        so.discrepant_items,
+        so.total_discrepancy_value,
+        so.created_at,
+        u.full_name as started_by_name
+      FROM stock_opnames so
+      LEFT JOIN users u ON so.started_by = u.id
+      ORDER BY so.created_at DESC
+      LIMIT 4
+    `).all();
+
     // Status keselamatan umum
     const statusKeamanan = discrepantItemsCount > 0 ? 'WASPADA' : 'AMAN';
 
@@ -135,7 +176,9 @@ router.get('/stats', authMiddleware, (req, res, next) => {
         topDiscrepancies,
         lowStockItems,
         movementToday,
-        recentTransactions
+        recentTransactions,
+        recentInspections,
+        recentOpnames
       }
     });
   } catch (err) {
