@@ -207,17 +207,31 @@ router.get('/digital-factory', authMiddleware, (req, res, next) => {
     baselineRows.forEach(r => { baselineMap[r.config_key] = Number(r.config_value); });
     const baselineLeadTimeDays = baselineMap.current_reporting_delay_days || 7;
 
+    // Determine active operating date
+    const activeDateRow = db.prepare(`
+      SELECT CASE 
+        WHEN (SELECT COUNT(*) FROM maintenance_records WHERE date(created_at) = date('now')) > 0 
+        THEN date('now')
+        ELSE (SELECT COALESCE(MAX(date(created_at)), date('now')) FROM maintenance_records)
+      END as target_date
+    `).get();
+    const targetDate = activeDateRow ? activeDateRow.target_date : new Date().toISOString().slice(0, 10);
+
     // Maintenance records stats today
     const maintenanceToday = db.prepare(`
       SELECT 
         COUNT(*) as total_submitted,
-        SUM(CASE WHEN verified_at IS NOT NULL THEN 1 ELSE 0 END) as total_verified,
+        (
+          SELECT COUNT(*) 
+          FROM maintenance_records 
+          WHERE (date(verified_at) = date('now') OR (date(created_at) = ? AND verified_at IS NOT NULL))
+        ) as total_verified,
         AVG(lead_time_seconds) as avg_lead_time_sec,
         MIN(lead_time_seconds) as min_lead_time_sec,
         MAX(lead_time_seconds) as max_lead_time_sec
       FROM maintenance_records
-      WHERE date(created_at) = date('now')
-    `).get();
+      WHERE date(created_at) = ? OR date(submitted_at) = ?
+    `).get(targetDate, targetDate, targetDate);
 
     // Active machines count (target planned daily checks)
     const machineStats = db.prepare(`

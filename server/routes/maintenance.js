@@ -464,18 +464,32 @@ router.get('/stats', authMiddleware, (req, res, next) => {
       WHERE is_active = 1
     `).get();
 
+    // Determine active operating date (falls back to latest records date if current date has no records)
+    const activeDateRow = db.prepare(`
+      SELECT CASE 
+        WHEN (SELECT COUNT(*) FROM maintenance_records WHERE date(created_at) = date('now')) > 0 
+        THEN date('now')
+        ELSE (SELECT COALESCE(MAX(date(created_at)), date('now')) FROM maintenance_records)
+      END as target_date
+    `).get();
+    const targetDate = activeDateRow ? activeDateRow.target_date : new Date().toISOString().slice(0, 10);
+
     // Activities today
     const recordsToday = db.prepare(`
       SELECT 
         COUNT(*) as completed_today,
-        SUM(CASE WHEN overall_condition IN ('CRITICAL', 'FAIL') THEN 1 ELSE 0 END) as failed_today,
+        SUM(CASE WHEN overall_condition IN ('CRITICAL', 'FAIL', 'PROBLEM') THEN 1 ELSE 0 END) as failed_today,
         SUM(CASE WHEN overall_condition = 'WARNING' THEN 1 ELSE 0 END) as warning_today,
         SUM(CASE WHEN overall_condition IN ('NORMAL', 'PASS') THEN 1 ELSE 0 END) as pass_today,
-        SUM(CASE WHEN verified_at IS NOT NULL THEN 1 ELSE 0 END) as verified_today,
+        (
+          SELECT COUNT(*) 
+          FROM maintenance_records 
+          WHERE (date(verified_at) = date('now') OR (date(created_at) = ? AND verified_at IS NOT NULL))
+        ) as verified_today,
         AVG(lead_time_seconds) as avg_lead_time_seconds
       FROM maintenance_records
-      WHERE date(created_at) = date('now')
-    `).get();
+      WHERE date(created_at) = ? OR date(submitted_at) = ?
+    `).get(targetDate, targetDate, targetDate);
 
     // Latest updated machine
     const latestRecord = db.prepare(`
