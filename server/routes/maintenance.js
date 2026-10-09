@@ -352,7 +352,7 @@ router.post('/verify/:id', authMiddleware, requireRole('MANAGER', 'SUPERVISOR', 
   try {
     const recordId = req.params.id;
     const supervisorId = req.user.id;
-    const { notes } = req.body;
+    const { notes, condition } = req.body;
 
     const record = db.prepare(`SELECT * FROM maintenance_records WHERE id = ?`).get(recordId);
     if (!record) {
@@ -360,19 +360,56 @@ router.post('/verify/:id', authMiddleware, requireRole('MANAGER', 'SUPERVISOR', 
     }
 
     const verifiedAt = new Date().toISOString();
-    const updatedRemarks = notes 
-      ? `${record.remarks ? record.remarks + ' | ' : ''}Catatan Supervisor: ${notes}`
-      : record.remarks;
+    const supervisorUser = db.prepare(`SELECT full_name FROM users WHERE id = ?`).get(supervisorId);
+    const supervisorName = supervisorUser ? supervisorUser.full_name : 'Supervisor';
+
+    // Clean existing remarks from internal UUID tags
+    const cleanOldRemarks = (record.remarks || '')
+      .replace(/\[UUID:[^\]]+\]/g, '')
+      .trim();
+
+    const verificationNote = notes && notes.trim()
+      ? notes.trim()
+      : 'Telah diverifikasi fisik oleh Supervisor (Kondisi Sesuai Standar Operasional)';
+
+    const updatedRemarks = cleanOldRemarks
+      ? `${cleanOldRemarks} | Diverifikasi [${supervisorName}]: ${verificationNote}`
+      : `Diverifikasi [${supervisorName}]: ${verificationNote}`;
+
+    const newCondition = condition || record.overall_condition || 'NORMAL';
 
     db.prepare(`
       UPDATE maintenance_records
       SET supervisor_id = ?,
           verified_at = ?,
           remarks = ?,
+          overall_condition = ?,
           status = 'VERIFIED',
           updated_at = ?
       WHERE id = ?
-    `).run(supervisorId, verifiedAt, updatedRemarks, verifiedAt, recordId);
+    `).run(supervisorId, verifiedAt, updatedRemarks, newCondition, verifiedAt, recordId);
+
+    // Also update asset status and condition if associated
+    if (record.asset_id) {
+      const assetConditionText = newCondition === 'NORMAL' 
+        ? `Normal & Siap Operasi (${verificationNote})`
+        : `Status: ${newCondition} (${verificationNote})`;
+
+      db.prepare(`
+        UPDATE assets
+        SET status = ?,
+            current_condition = ?,
+            last_maintenance_at = ?,
+            updated_at = ?
+        WHERE id = ?
+      `).run(
+        newCondition === 'PROBLEM' ? 'PROBLEM' : (newCondition === 'WARNING' ? 'WARNING' : 'NORMAL'),
+        assetConditionText,
+        verifiedAt,
+        verifiedAt,
+        record.asset_id
+      );
+    }
 
     // Audit log
     const auditId = `aud_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
@@ -386,17 +423,25 @@ router.post('/verify/:id', authMiddleware, requireRole('MANAGER', 'SUPERVISOR', 
       'MAINTENANCE_SUPERVISOR_VERIFY',
       'maintenance_records',
       recordId,
-      JSON.stringify({ verified_at: verifiedAt, notes }),
+      JSON.stringify({ 
+        verified_at: verifiedAt, 
+        notes: verificationNote, 
+        condition: newCondition,
+        supervisor_name: supervisorName
+      }),
       '127.0.0.1',
       verifiedAt
     );
 
     res.json({
       success: true,
-      message: 'Catatan pemeliharaan berhasil diverifikasi oleh supervisor.',
+      message: 'Catatan pemeliharaan berhasil diverifikasi dan keterangan telah diperbarui.',
       data: {
         record_id: recordId,
         status: 'VERIFIED',
+        remarks: updatedRemarks,
+        overall_condition: newCondition,
+        supervisor_name: supervisorName,
         verified_at: verifiedAt
       }
     });

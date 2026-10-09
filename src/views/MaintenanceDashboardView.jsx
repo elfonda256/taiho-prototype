@@ -17,7 +17,13 @@ export default function MaintenanceDashboardView({ currentUser, onNavigateToOper
   // Supervisor verification modal
   const [verifyingRecord, setVerifyingRecord] = useState(null);
   const [verifyNotes, setVerifyNotes] = useState('');
+  const [verifyCondition, setVerifyCondition] = useState('NORMAL');
   const [isVerifying, setIsVerifying] = useState(false);
+
+  const cleanRemarks = (text) => {
+    if (!text) return '-';
+    return text.replace(/\[UUID:[^\]]+\]/g, '').trim() || '-';
+  };
 
   useEffect(() => {
     fetchData();
@@ -57,7 +63,10 @@ export default function MaintenanceDashboardView({ currentUser, onNavigateToOper
       const res = await fetch(`/api/maintenance/verify/${verifyingRecord.id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notes: verifyNotes })
+        body: JSON.stringify({ 
+          notes: verifyNotes,
+          condition: verifyCondition
+        })
       });
       const d = await res.json();
       if (d.success) {
@@ -358,19 +367,18 @@ export default function MaintenanceDashboardView({ currentUser, onNavigateToOper
                 <th>NO. BUKTI DIGITAL</th>
                 <th>MESIN</th>
                 <th>AKTIVITAS</th>
-                <th>OPERATOR</th>
-                <th>WAKTU SELESAI FISIK</th>
-                <th>WAKTU MASUK SISTEM</th>
-                <th>LEAD TIME</th>
+                <th>PEMBUAT LAPORAN & VERIFIKATOR</th>
+                <th>WAKTU & LEAD TIME</th>
                 <th>KONDISI</th>
-                <th>VERIFIKASI</th>
+                <th>KETERANGAN / TEMUAN</th>
+                <th>STATUS VERIFIKASI</th>
               </tr>
             </thead>
             <tbody>
               {records.map(rec => {
-                const isFail = rec.overall_condition === 'CRITICAL' || rec.overall_condition === 'FAIL';
+                const isFail = rec.overall_condition === 'CRITICAL' || rec.overall_condition === 'FAIL' || rec.overall_condition === 'PROBLEM';
                 const isWarn = rec.overall_condition === 'WARNING';
-                const isVerified = rec.verified_at !== null;
+                const isVerified = rec.status === 'VERIFIED' || rec.verified_at !== null;
 
                 return (
                   <tr key={rec.id}>
@@ -378,24 +386,35 @@ export default function MaintenanceDashboardView({ currentUser, onNavigateToOper
                       {rec.record_number}
                     </td>
                     <td style={{ color: 'var(--text-main)', fontWeight: 700 }}>
-                      {rec.asset_code}
+                      <div>{rec.asset_code}</div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 400 }}>{rec.asset_name}</div>
                     </td>
                     <td style={{ color: 'var(--text-secondary)' }}>
                       {rec.maintenance_type}
                     </td>
-                    <td style={{ color: 'var(--text-muted)' }}>
-                      {rec.operator_name || 'Operator Lapangan'}
-                    </td>
-                    <td style={{ color: 'var(--text-muted)', fontSize: 11.5 }}>
-                      {rec.completion_time ? new Date(rec.completion_time).toLocaleTimeString('id-ID') : '-'}
-                    </td>
-                    <td style={{ color: 'var(--text-muted)', fontSize: 11.5 }}>
-                      {rec.submitted_at ? new Date(rec.submitted_at).toLocaleTimeString('id-ID') : '-'}
-                    </td>
                     <td>
-                      <span className="badge badge-normal font-mono">
-                        {rec.lead_time_seconds < 60 ? `${rec.lead_time_seconds}s` : `${Math.floor(rec.lead_time_seconds / 60)}m`}
-                      </span>
+                      <div style={{ color: 'var(--text-main)', fontWeight: 650, fontSize: 12 }}>
+                        👤 Pelapor: {rec.operator_name || 'Operator Lapangan'}
+                      </div>
+                      <div style={{ fontSize: 11, marginTop: 2 }}>
+                        {isVerified ? (
+                          <span style={{ color: 'var(--accent-emerald)', fontWeight: 600 }}>
+                            ✓ Verif: {rec.supervisor_name || 'Supervisor'}
+                          </span>
+                        ) : (
+                          <span style={{ color: 'var(--accent-amber)', fontSize: 10.5 }}>
+                            ⏳ Menunggu Verifikasi
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td style={{ color: 'var(--text-muted)', fontSize: 11 }}>
+                      <div>Selesai: {rec.completion_time ? new Date(rec.completion_time).toLocaleTimeString('id-ID') : '-'}</div>
+                      <div style={{ marginTop: 2 }}>
+                        <span className="badge badge-normal font-mono" style={{ fontSize: 10 }}>
+                          Lead: {rec.lead_time_seconds < 60 ? `${rec.lead_time_seconds}s` : `${Math.floor(rec.lead_time_seconds / 60)}m`}
+                        </span>
+                      </div>
                     </td>
                     <td>
                       <span className={`badge ${isFail ? 'badge-critical' : isWarn ? 'badge-warning' : 'badge-normal'}`}>
@@ -403,13 +422,35 @@ export default function MaintenanceDashboardView({ currentUser, onNavigateToOper
                       </span>
                     </td>
                     <td>
+                      <div style={{ fontSize: 12, color: 'var(--text-main)', maxWidth: 280, lineHeight: 1.35 }}>
+                        {cleanRemarks(rec.remarks) !== '-' ? cleanRemarks(rec.remarks) : (rec.findings || 'Pemeriksaan rutin')}
+                      </div>
+                      {rec.action_taken && (
+                        <div style={{ fontSize: 11, color: 'var(--accent-cyan)', marginTop: 2 }}>
+                          Tindakan: {rec.action_taken}
+                        </div>
+                      )}
+                    </td>
+                    <td>
                       {isVerified ? (
-                        <span style={{ color: 'var(--accent-emerald)', display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 700 }}>
-                          <CheckCircle2 size={14} /> Terverifikasi
-                        </span>
+                        <div style={{ display: 'inline-flex', flexDirection: 'column', gap: 2 }}>
+                          <span style={{ color: 'var(--accent-emerald)', display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11.5, fontWeight: 700 }}>
+                            <CheckCircle2 size={13} /> Terverifikasi
+                          </span>
+                          <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>
+                            {rec.verified_at ? new Date(rec.verified_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB' : ''}
+                          </span>
+                        </div>
                       ) : (
                         <button
-                          onClick={() => setVerifyingRecord(rec)}
+                          onClick={() => {
+                            setVerifyingRecord(rec);
+                            const initialNote = cleanRemarks(rec.remarks) !== '-'
+                              ? cleanRemarks(rec.remarks)
+                              : 'Telah diperiksa fisik di lapangan, hasil sesuai standar operasional pabrik.';
+                            setVerifyNotes(initialNote);
+                            setVerifyCondition(rec.overall_condition || 'NORMAL');
+                          }}
                           className="btn btn-primary"
                           style={{ minHeight: 28, padding: '0 10px', fontSize: 11 }}
                         >
@@ -428,16 +469,41 @@ export default function MaintenanceDashboardView({ currentUser, onNavigateToOper
       {/* Supervisor Verification Modal */}
       {verifyingRecord && (
         <div className="modal-overlay">
-          <div className="modal-content" style={{ maxWidth: 520 }}>
+          <div className="modal-content" style={{ maxWidth: 540 }}>
             <h3 style={{ margin: '0 0 10px', fontSize: 16, color: 'var(--text-main)', fontWeight: 800 }}>
               Verifikasi Catatan Pemeliharaan ({verifyingRecord.record_number})
             </h3>
-            <p style={{ fontSize: 12.5, color: 'var(--text-muted)', margin: '0 0 16px', lineHeight: 1.5 }}>
-              Mesin: <b style={{ color: 'var(--text-main)' }}>{verifyingRecord.asset_code}</b> | Operator: <b style={{ color: 'var(--text-main)' }}>{verifyingRecord.operator_name}</b> | Kondisi: <span className="badge badge-normal">{verifyingRecord.overall_condition}</span>
-            </p>
+            
+            <div style={{ backgroundColor: 'var(--bg-subtle)', padding: '12px 14px', borderRadius: 'var(--radius-sm)', marginBottom: 16, border: '1px solid var(--border-subtle)', fontSize: 12.5, lineHeight: 1.6 }}>
+              <div>Mesin: <b style={{ color: 'var(--text-main)' }}>{verifyingRecord.asset_code}</b> ({verifyingRecord.asset_name})</div>
+              <div>Pembuat Laporan (Pelapor): <b style={{ color: 'var(--accent-cyan)' }}>{verifyingRecord.operator_name || 'Operator Lapangan'}</b></div>
+              <div>Temuan / Keterangan Lapangan: <b style={{ color: 'var(--text-main)' }}>{cleanRemarks(verifyingRecord.remarks) !== '-' ? cleanRemarks(verifyingRecord.remarks) : (verifyingRecord.findings || 'Pemeriksaan normal')}</b></div>
+              {verifyingRecord.action_taken && (
+                <div>Tindakan Lapangan: <span style={{ color: 'var(--text-secondary)' }}>{verifyingRecord.action_taken}</span></div>
+              )}
+            </div>
 
-            <label className="form-label" style={{ marginBottom: 6 }}>
-              Catatan Tinjauan Supervisor (Opsional)
+            <div style={{ marginBottom: 14 }}>
+              <label className="form-label" style={{ marginBottom: 6, fontWeight: 700 }}>
+                Kondisi Akhir Mesin Setelah Diverifikasi:
+              </label>
+              <div style={{ display: 'flex', gap: 8 }}>
+                {['NORMAL', 'WARNING', 'PROBLEM'].map(cond => (
+                  <button
+                    key={cond}
+                    type="button"
+                    onClick={() => setVerifyCondition(cond)}
+                    className={`btn ${verifyCondition === cond ? 'btn-primary' : 'btn-outline'}`}
+                    style={{ fontSize: 11, padding: '4px 12px', minHeight: 28 }}
+                  >
+                    {cond === 'NORMAL' ? '✓ NORMAL (Siap Pakai)' : cond}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <label className="form-label" style={{ marginBottom: 6, fontWeight: 700 }}>
+              Keterangan & Catatan Tinjauan Supervisor
             </label>
             <textarea
               rows={3}
@@ -462,7 +528,7 @@ export default function MaintenanceDashboardView({ currentUser, onNavigateToOper
                 disabled={isVerifying}
                 className="btn btn-success"
               >
-                {isVerifying ? 'Menyimpan...' : 'Konfirmasi Verifikasi'}
+                {isVerifying ? 'Menyimpan...' : 'Konfirmasi & Simpan Keterangan'}
               </button>
             </div>
           </div>

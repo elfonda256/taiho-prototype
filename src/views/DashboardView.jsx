@@ -78,6 +78,11 @@ export default function DashboardView({
     }
   };
 
+  const cleanRemarks = (text) => {
+    if (!text) return '';
+    return text.replace(/\[UUID:[^\]]+\]/g, '').trim();
+  };
+
   const getDisplayedInspections = () => {
     const list = [];
     if (inspectionTab === 'all' || inspectionTab === 'machines') {
@@ -90,6 +95,8 @@ export default function DashboardView({
           objectSub: item.asset_name,
           category: item.maintenance_type || (lang === 'en' ? 'Daily Inspection' : 'Pemeriksaan Harian'),
           operator: item.operator_name || (lang === 'en' ? 'Field Tech' : 'Teknisi Lapangan'),
+          supervisor: item.supervisor_name,
+          remarks: cleanRemarks(item.remarks) || item.findings || (lang === 'en' ? 'Routine normal check' : 'Pemeriksaan rutin normal'),
           condition: item.overall_condition,
           status: item.status,
           time: item.submitted_at || item.completion_time,
@@ -107,6 +114,8 @@ export default function DashboardView({
           objectSub: item.title,
           category: lang === 'en' ? 'Stock Opname' : 'Opname Fisik',
           operator: item.started_by_name || (lang === 'en' ? 'Warehouse Op.' : 'Operator Gudang'),
+          supervisor: item.approved_by_name,
+          remarks: item.title,
           condition: item.discrepant_items > 0 ? 'WARNING' : 'NORMAL',
           status: item.status,
           discrepancyCount: item.discrepant_items,
@@ -561,9 +570,9 @@ export default function DashboardView({
               <tr>
                 <th>{lang === 'en' ? 'RECORD NO' : 'NO. PEMERIKSAAN'}</th>
                 <th>{lang === 'en' ? 'OBJECT & TYPE' : 'OBJEK & TIPE'}</th>
-                <th>{lang === 'en' ? 'INSPECTOR' : 'PEMERIKSA'}</th>
-                <th>{lang === 'en' ? 'CONDITION / RESULT' : 'HASIL / KONDISI'}</th>
-                <th>{lang === 'en' ? 'RECORDED AT' : 'WAKTU'}</th>
+                <th>{lang === 'en' ? 'REPORTER & VERIFIER' : 'PEMBUAT LAPORAN & VERIFIKATOR'}</th>
+                <th>{lang === 'en' ? 'CONDITION & REMARKS' : 'KONDISI & KETERANGAN'}</th>
+                <th>{lang === 'en' ? 'TIME' : 'WAKTU'}</th>
                 <th className="text-right">{lang === 'en' ? 'ACTION' : 'AKSI'}</th>
               </tr>
             </thead>
@@ -584,24 +593,45 @@ export default function DashboardView({
                       </div>
                     </td>
                     <td>
-                      <span style={{ color: 'var(--text-main)', fontSize: 11.5 }}>{row.operator}</span>
+                      <div style={{ color: 'var(--text-main)', fontSize: 11.5, fontWeight: 650 }}>
+                        👤 {row.operator}
+                      </div>
+                      <div style={{ fontSize: 10.5, marginTop: 2 }}>
+                        {row.supervisor ? (
+                          <span style={{ color: 'var(--status-safe-text)', fontWeight: 600 }}>
+                            ✓ {lang === 'en' ? 'Verif: ' : 'Verifikator: '}{row.supervisor}
+                          </span>
+                        ) : (
+                          <span style={{ color: 'var(--status-warn-text)', fontSize: 10 }}>
+                            ⏳ {lang === 'en' ? 'Pending verify' : 'Menunggu verifikasi'}
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td>
-                      {row.type === 'machine' ? (
-                        row.condition === 'NORMAL' ? (
-                          <span className="badge badge-normal" style={{ fontSize: 10 }}>NORMAL (PASS)</span>
-                        ) : row.condition === 'WARNING' ? (
-                          <span className="badge badge-warning" style={{ fontSize: 10 }}>WARNING</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 3 }}>
+                        {row.type === 'machine' ? (
+                          row.condition === 'NORMAL' ? (
+                            <span className="badge badge-normal" style={{ fontSize: 9.5 }}>NORMAL</span>
+                          ) : row.condition === 'WARNING' ? (
+                            <span className="badge badge-warning" style={{ fontSize: 9.5 }}>WARNING</span>
+                          ) : (
+                            <span className="badge badge-critical" style={{ fontSize: 9.5 }}>PROBLEM</span>
+                          )
                         ) : (
-                          <span className="badge badge-critical" style={{ fontSize: 10 }}>PROBLEM</span>
-                        )
-                      ) : (
-                        row.discrepancyCount > 0 ? (
-                          <span className="badge badge-selisih" style={{ fontSize: 10 }}>{row.discrepancyCount} Selisih</span>
-                        ) : (
-                          <span className="badge badge-normal" style={{ fontSize: 10 }}>COCOK 100%</span>
-                        )
-                      )}
+                          row.discrepancyCount > 0 ? (
+                            <span className="badge badge-selisih" style={{ fontSize: 9.5 }}>{row.discrepancyCount} Selisih</span>
+                          ) : (
+                            <span className="badge badge-normal" style={{ fontSize: 9.5 }}>COCOK 100%</span>
+                          )
+                        )}
+                        {row.status === 'VERIFIED' && (
+                          <span className="badge badge-normal" style={{ fontSize: 9, padding: '1px 5px' }}>TERVERIFIKASI</span>
+                        )}
+                      </div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)', maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={row.remarks}>
+                        {row.remarks}
+                      </div>
                     </td>
                     <td>
                       <span style={{ fontSize: 11, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>

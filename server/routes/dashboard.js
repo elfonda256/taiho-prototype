@@ -127,13 +127,19 @@ router.get('/stats', authMiddleware, (req, res, next) => {
         mr.submitted_at,
         mr.lead_time_seconds,
         mr.status,
+        mr.remarks,
+        mr.findings,
+        mr.action_taken,
+        mr.verified_at,
         a.asset_code,
         a.asset_name,
         a.location as asset_location,
-        u.full_name as operator_name
+        u.full_name as operator_name,
+        v.full_name as supervisor_name
       FROM maintenance_records mr
       JOIN assets a ON mr.asset_id = a.id
       LEFT JOIN users u ON mr.operator_id = u.id
+      LEFT JOIN users v ON mr.supervisor_id = v.id
       ORDER BY mr.submitted_at DESC
       LIMIT 5
     `).all();
@@ -150,9 +156,11 @@ router.get('/stats', authMiddleware, (req, res, next) => {
         so.discrepant_items,
         so.total_discrepancy_value,
         so.created_at,
-        u.full_name as started_by_name
+        u.full_name as started_by_name,
+        v.full_name as approved_by_name
       FROM stock_opnames so
       LEFT JOIN users u ON so.started_by = u.id
+      LEFT JOIN users v ON so.approved_by = v.id
       ORDER BY so.created_at DESC
       LIMIT 4
     `).all();
