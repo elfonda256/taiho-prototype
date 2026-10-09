@@ -78,7 +78,7 @@ export default function DashboardView({
     }
   };
 
-  const displayedInspections = React.useMemo(() => {
+  const getDisplayedInspections = () => {
     const list = [];
     if (inspectionTab === 'all' || inspectionTab === 'machines') {
       (recentInspections || []).forEach(item => {
@@ -116,7 +116,9 @@ export default function DashboardView({
       });
     }
     return list.slice(0, 5);
-  }, [recentInspections, recentOpnames, inspectionTab, lang]);
+  };
+
+  const displayedInspections = getDisplayedInspections();
 
   const info = df?.information || {
     baseline_lead_time_days: 7,
