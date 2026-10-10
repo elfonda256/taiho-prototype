@@ -399,7 +399,7 @@ const seedData = db.transaction(() => {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
   // Items in Opname 1
-  insertOpItem.run('opi_01', 'opn_01', 'mat_01', 'loc_gb_r01_s01', 1400, 1250, -150, 12750000, 'usr_budi', 'Perlu pemeriksaan: fisik di rak B01 hanya 1.250 PCS', '2026-10-06 10:15:00');
+  insertOpItem.run('opi_01', 'opn_01', 'mat_01', 'loc_gb_r01_s01', 1250, 1100, -150, 12750000, 'usr_budi', 'Perlu pemeriksaan: fisik di rak B01 1.100 PCS vs sistem 1.250 PCS', '2026-10-06 10:15:00');
   insertOpItem.run('opi_02', 'opn_01', 'mat_07', 'loc_gb_r02_s01', 950, 920, -30, 1950000, 'usr_budi', 'Perlu pemeriksaan di area perakitan mesin', '2026-10-06 10:45:00');
   insertOpItem.run('opi_03', 'opn_01', 'mat_25', 'loc_gb_r03_s02', 8500, 7900, -600, 3300000, 'usr_budi', 'Selisih baut M12 kemungkinan belum tercatat pengeluaran SPK-02', '2026-10-06 11:20:00');
   insertOpItem.run('opi_04', 'opn_01', 'mat_45', 'loc_gb_r02_s02', 80, 65, -15, 3900000, 'usr_budi', 'Sensor proximity di kotak bin hanya ditemukan 65 pcs', '2026-10-06 11:50:00');
@@ -414,7 +414,7 @@ const seedData = db.transaction(() => {
   `);
 
   const activeDiscrepancies = [
-    ['dsc_01', 'DISC-2026-001', 'mat_01', 'loc_gb_r01_s01', 1400, 1250, -150, 12750000, 'PERLU_PEMERIKSAAN', 'Fisik ditemukan 1.250 PCS di rak B01. Diperlukan penelusuran dokumen surat jalan batch 3 perakitan.', 'usr_hendra', 'opn_01', '2026-10-06 10:20:00'],
+    ['dsc_01', 'DISC-2026-001', 'mat_01', 'loc_gb_r01_s01', 1250, 1100, -150, 12750000, 'PERLU_PEMERIKSAAN', 'Fisik ditemukan 1.100 PCS di rak B01 vs stok sistem 1.250 PCS. Diperlukan penelusuran dokumen surat jalan batch 3 perakitan.', 'usr_hendra', 'opn_01', '2026-10-06 10:20:00'],
     ['dsc_02', 'DISC-2026-002', 'mat_13', 'loc_ga_r01_s01', 390, 310, -80, 27200000, 'PERLU_PEMERIKSAAN', 'Selisih 80 lembar pelat SPCC. Kemungkinan material sudah dipindahkan ke area potong sebelum scan QR.', 'usr_hendra', null, '2026-10-06 14:10:00'],
     ['dsc_03', 'DISC-2026-003', 'mat_07', 'loc_gb_r02_s01', 950, 920, -30, 1950000, 'SEDANG_DISELIDIKI', 'Selisih 30 PCS bushing kuningan sedang dicocokkan dengan log pengembalian Lini 02.', 'usr_budi', 'opn_01', '2026-10-06 11:00:00'],
     ['dsc_04', 'DISC-2026-004', 'mat_19', 'loc_ga_r02_s02', 140, 115, -25, 11250000, 'PERLU_PEMERIKSAAN', 'Batang temaga C1100 selisih 25 meter. Nilai material tinggi, prioritas investigasi.', 'usr_hendra', null, '2026-10-07 08:45:00'],

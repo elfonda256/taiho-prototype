@@ -60,6 +60,36 @@ export default function MaterialMasukView({ onOpenScanner, onSuccessTransaction 
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.message);
 
+      // Persist locally to guarantee persistence across serverless container restarts
+      try {
+        const mat = materialsList.find(m => m.id === selectedMatId);
+        const localTrx = {
+          id: `trx_rcv_${Date.now()}`,
+          transaction_number: data.data?.transaction_number || `RCV-${Date.now()}`,
+          transaction_type: 'RECEIVE',
+          quantity: Number(quantity),
+          material_code: mat?.code || 'MAT-000101',
+          material_name: mat?.name || 'Bearing Shell A',
+          unit_code: mat?.unit_code || 'PCS',
+          unit_cost: mat?.unit_cost || 85000,
+          previous_stock: mat?.total_current_stock || 1250,
+          new_stock: (mat?.total_current_stock || 1250) + Number(quantity),
+          financial_impact: Number(quantity) * (mat?.unit_cost || 85000),
+          reference_type: 'PO',
+          reference_number: poNumber || deliveryNote || 'PO-2026-10-095',
+          operator_name: 'Pak Budi (Gudang)',
+          recipient_name: 'Gudang Utama',
+          from_location_code: 'Supplier (Vendor)',
+          to_location_code: 'loc_gb_r01_s01',
+          notes: notes || 'Penerimaan uji material masuk dari vendor',
+          created_at: new Date().toISOString()
+        };
+        const existing = JSON.parse(localStorage.getItem('taiho_local_transactions') || '[]');
+        localStorage.setItem('taiho_local_transactions', JSON.stringify([localTrx, ...existing]));
+      } catch (err) {
+        console.warn('LocalStorage save warning:', err);
+      }
+
       setMessage({ type: 'success', text: data.message });
       setQuantity('');
       if (onSuccessTransaction) onSuccessTransaction();

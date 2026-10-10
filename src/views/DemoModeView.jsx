@@ -12,7 +12,7 @@ import {
   ScrollText
 } from 'lucide-react';
 
-export default function DemoModeView({ setView, onSelectMaterial }) {
+export default function DemoModeView({ setView, onSelectMaterial, lang = 'en' }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [steps, setSteps] = useState([]);
   const [isExecuting, setIsExecuting] = useState(false);
@@ -63,6 +63,69 @@ export default function DemoModeView({ setView, onSelectMaterial }) {
 
   return (
     <div className="content-body" style={{ maxWidth: 960 }}>
+      {/* QUICK START / ALUR CEPAT EVALUASI (REDESAIN: BUKA & PILIH PERAN TANPA LAYAR LOGIN) */}
+      <div
+        className="card"
+        style={{
+          marginBottom: 20,
+          border: '1.5px solid var(--brand-primary)',
+          backgroundColor: 'var(--bg-card-inner)'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+          <span className="badge badge-normal" style={{ fontSize: 11, fontWeight: 800 }}>
+            QUICK START FLOW
+          </span>
+          <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-main)' }}>
+            {lang === 'en' ? 'Quick Start Evaluation Guide (No Login Screen Required)' : 'Panduan Cepat Evaluasi Sistem (Tanpa Layar Login)'}
+          </span>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
+          <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 12, borderRadius: 8, border: '1px solid var(--border-subtle)' }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--brand-primary)', textTransform: 'uppercase' }}>
+              {lang === 'en' ? 'STEP 1: OPEN & SELECT ROLE' : 'LANGKAH 1: BUKA & PILIH PERAN'}
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-main)', marginTop: 2 }}>
+              {lang === 'en' ? 'Buka & Pilih Peran' : 'Buka & Pilih Peran'}
+            </div>
+            <div style={{ fontSize: 11.5, color: 'var(--text-secondary)', marginTop: 4 }}>
+              {lang === 'en'
+                ? 'App opens directly without credentials. Click the role avatar at top-right to switch between Operator, Technician, Supervisor, or Plant Manager.'
+                : 'Aplikasi langsung terbuka tanpa layar login. Klik avatar akun di kanan atas untuk langsung berganti peran (Operator Gudang, Teknisi, Supervisor, atau Plant Manager).'}
+            </div>
+          </div>
+
+          <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 12, borderRadius: 8, border: '1px solid var(--border-subtle)' }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--accent-cyan)', textTransform: 'uppercase' }}>
+              {lang === 'en' ? 'STEP 2: FIELD SCAN OR ACTION' : 'LANGKAH 2: SCAN QR / EKSEKUSI'}
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-main)', marginTop: 2 }}>
+              {lang === 'en' ? 'Execute Module / Scan QR' : 'Eksekusi Modul / Scan QR'}
+            </div>
+            <div style={{ fontSize: 11.5, color: 'var(--text-secondary)', marginTop: 4 }}>
+              {lang === 'en'
+                ? 'Issue material, count physical opname, or open field maintenance tablet by scanning machine / rack QR.'
+                : 'Keluarkan material, hitung opname fisik, atau isi checklist pemeliharaan mesin dengan sentuhan tablet cepat.'}
+            </div>
+          </div>
+
+          <div style={{ backgroundColor: 'var(--bg-subtle)', padding: 12, borderRadius: 8, border: '1px solid var(--border-subtle)' }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--status-safe-text)', textTransform: 'uppercase' }}>
+              {lang === 'en' ? 'STEP 3: REAL-TIME AUDIT' : 'LANGKAH 3: PANTAU AUDIT REAL-TIME'}
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-main)', marginTop: 2 }}>
+              {lang === 'en' ? 'Instant Executive Visibility' : 'Visibilitas Manajemen Seketika'}
+            </div>
+            <div style={{ fontSize: 11.5, color: 'var(--text-secondary)', marginTop: 4 }}>
+              {lang === 'en'
+                ? 'Information lead time < 15 seconds, immediate stock reconciliation, and proven financial loss prevention.'
+                : 'Jeda waktu data < 15 detik, buku besar mutasi otomatis tercatat, dan selisih terdeteksi tanpa tuduhan.'}
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* BANNER DEMO */}
       <div
         style={{

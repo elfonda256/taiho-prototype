@@ -176,6 +176,8 @@ router.get('/stats', authMiddleware, (req, res, next) => {
           totalMaterials,
           totalStockValue,
           discrepantItemsCount,
+          discrepant_itemsCount: discrepantItemsCount,
+          discrepancyValue: totalDiscrepancyValue,
           totalDiscrepancyValue,
           lossRate,
           pendingApprovalsCount,

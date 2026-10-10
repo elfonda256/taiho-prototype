@@ -19,8 +19,34 @@ export default function TransactionsLedgerView({ onSelectMaterial }) {
       .then(res => res.json())
       .then(d => {
         if (d.success) {
-          setTransactions(d.data);
-          setTotal(d.total);
+          let list = d.data || [];
+          try {
+            const localTrx = JSON.parse(localStorage.getItem('taiho_local_transactions') || '[]');
+            if (localTrx.length > 0) {
+              const existingKeys = new Set(list.map(t => t.transaction_number));
+              const missing = localTrx.filter(t => !existingKeys.has(t.transaction_number));
+              if (missing.length > 0) {
+                // Filter missing based on search / type filter if applied
+                const filteredMissing = missing.filter(t => {
+                  if (typeFilter && t.transaction_type !== typeFilter) return false;
+                  if (search) {
+                    const q = search.toLowerCase();
+                    const match = t.transaction_number?.toLowerCase().includes(q) ||
+                                  t.material_code?.toLowerCase().includes(q) ||
+                                  t.material_name?.toLowerCase().includes(q) ||
+                                  t.reference_number?.toLowerCase().includes(q);
+                    if (!match) return false;
+                  }
+                  return true;
+                });
+                list = [...filteredMissing, ...list];
+              }
+            }
+          } catch (e) {
+            console.warn('Error merging local transactions:', e);
+          }
+          setTransactions(list);
+          setTotal(list.length);
         }
       })
       .finally(() => setIsLoading(false));

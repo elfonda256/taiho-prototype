@@ -225,7 +225,7 @@ export default function ReportsView({ lang = 'en' }) {
                   120 {lang === 'en' ? 'hrs/month' : 'jam/bln'} × Rp 45.000/{lang === 'en' ? 'hr labor cost' : 'jam upah'} × 12 {lang === 'en' ? 'months' : 'bulan'}
                 </td>
                 <td className="text-right font-mono" style={{ color: 'var(--status-safe-text)', fontWeight: 700 }}>
-                  Rp 67.000.000
+                  Rp 64.800.000
                 </td>
               </tr>
               <tr style={{ backgroundColor: 'var(--bg-card-inner)' }}>
@@ -233,14 +233,43 @@ export default function ReportsView({ lang = 'en' }) {
                   <strong style={{ color: 'var(--text-main)' }}>{lang === 'en' ? 'TOTAL COMBINED OPERATIONAL BENEFIT' : 'TOTAL MANFAAT FINANSIAL TAHUNAN'}</strong>
                 </td>
                 <td style={{ color: 'var(--text-muted)', fontSize: 11 }}>
-                  {lang === 'en' ? 'Consolidated annual bottom-line benefit' : 'Total estimasi penghematan operasional pabrik'}
+                  {lang === 'en' ? 'Consolidated annual bottom-line benefit (Rp 78M + Rp 64.8M)' : 'Total estimasi penghematan operasional pabrik (Rp 78 Jt + Rp 64.8 Jt)'}
                 </td>
                 <td className="text-right font-mono" style={{ fontSize: 15, fontWeight: 800, color: 'var(--status-safe-text)' }}>
-                  Rp 145.000.000 / {lang === 'en' ? 'Year' : 'Tahun'}
+                  Rp 142.800.000 / {lang === 'en' ? 'Year' : 'Tahun'}
                 </td>
               </tr>
             </tbody>
           </table>
+        </div>
+
+        {/* REKONSILIASI DASAR PERBEDAAN ANGKA PENGHEMATAN TENAGA KERJA */}
+        <div style={{
+          marginTop: 14,
+          padding: '12px 16px',
+          backgroundColor: 'var(--bg-card-inner)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: 'var(--radius-sm)',
+          fontSize: 12,
+          lineHeight: 1.55
+        }}>
+          <div style={{ fontWeight: 800, color: 'var(--brand-primary)', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span>📌</span>
+            <span>{lang === 'en' ? 'Executive Reconciliation: Labor Savings Distinction' : 'Dasar Rekonsiliasi Manajemen: Perbedaan Angka Penghematan Tenaga Kerja'}</span>
+          </div>
+          <div style={{ color: 'var(--text-secondary)' }}>
+            {lang === 'en' ? (
+              <>
+                • <strong>Financial Report (120 hrs/mo = Rp 64.800.000/yr):</strong> Conservative audit baseline focusing strictly on administrative recap & warehouse ticket re-entry elimination. Machine operator physical work hours are intentionally excluded to keep audited financial projections prudent.<br />
+                • <strong>ROI Simulation (210 hrs/mo = Rp 113.400.000/yr):</strong> Comprehensive end-to-end plant operational savings model, combining both 80 hrs/mo admin recap plus 130 hrs/mo shopfloor machine inspection tablet acceleration across all 24 production shifts.
+              </>
+            ) : (
+              <>
+                • <strong>Laporan Finansial (120 jam/bln = Rp 64.800.000/thn):</strong> Menggunakan baseline audit konservatif yang hanya menghitung efisiensi staf administrasi logistik & supervisor gudang (rekap surat jalan, pencocokan invoice vendor, re-entry). Jam kerja operator mesin di lantai pabrik sengaja tidak dimasukkan agar proyeksi audit tetap <em>prudent</em> (kehati-hatian akuntansi).<br />
+                • <strong>Simulasi ROI (210 jam/bln = Rp 113.400.000/thn):</strong> Model penghematan operasional komprehensif end-to-end seluruh pabrik, mencakup 80 jam/bln rekapitulasi back-office ditambah 130 jam/bln efisiensi tablet inspeksi operator mesin di lini produksi.
+              </>
+            )}
+          </div>
         </div>
       </div>
 

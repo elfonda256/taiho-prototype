@@ -13,7 +13,10 @@ import {
   RefreshCw,
   Gauge,
   AlertTriangle,
-  FileText
+  FileText,
+  BarChart2,
+  ShieldCheck,
+  Activity
 } from 'lucide-react';
 import { getTranslation } from '../utils/i18n';
 
@@ -23,7 +26,8 @@ export default function DashboardView({
   setView,
   onOpenScanner,
   onSelectMaterial,
-  lang = 'en'
+  lang = 'en',
+  currentUser
 }) {
   const [digitalFactoryData, setDigitalFactoryData] = useState(null);
   const [isLoadingDF, setIsLoadingDF] = useState(true);
@@ -291,8 +295,8 @@ export default function DashboardView({
                 <tr>
                   <td><span className="badge badge-neutral">MATERIAL</span></td>
                   <td><strong>MAT-000101</strong></td>
-                  <td>Bearing Shell A (Selisih -15 pcs vs Opname)</td>
-                  <td className="text-right font-mono" style={{ color: 'var(--status-alert-text)' }}>Rp 1.425.000</td>
+                  <td>Bearing Shell A ({lang === 'en' ? 'Discrepancy -150 pcs vs Opname' : 'Selisih -150 pcs vs Opname'})</td>
+                  <td className="text-right font-mono" style={{ color: 'var(--status-alert-text)' }}>Rp 12.750.000</td>
                   <td><span className="badge badge-selisih">PERLU_PEMERIKSAAN</span></td>
                   <td className="text-right">
                     <button onClick={() => setView('discrepancies')} className="btn btn-outline" style={{ minHeight: 28, padding: '0 8px', fontSize: 11 }}>
@@ -373,7 +377,7 @@ export default function DashboardView({
             <span className="tag-provenance tag-provenance-live" style={{ color: 'var(--status-alert-text)', borderColor: 'var(--status-alert-border)' }}>AUDIT</span>
           </div>
           <div className="kpi-value">
-            {kpi.discrepant_itemsCount} <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--status-alert-text)' }}>{getTranslation('unit_items', lang)}</span>
+            {(kpi.discrepantItemsCount ?? kpi.discrepant_itemsCount ?? 0)} <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--status-alert-text)' }}>{getTranslation('unit_items', lang)}</span>
           </div>
           <div className="kpi-subtext" style={{ color: 'var(--status-alert-text)' }}>
             Rp {(kpi.totalDiscrepancyValue / 1000000).toFixed(1)} {getTranslation('unit_million', lang)} {lang === 'en' ? 'variance value' : 'nilai selisih'}
@@ -668,45 +672,178 @@ export default function DashboardView({
       </div>
 
       {/* ======================================================== */}
-      {/* 5. FAST OPERATIONAL TOUCH COMMANDS                       */}
+      {/* 5. FAST OPERATIONAL TOUCH COMMANDS (ROLE-FILTERED)       */}
       {/* ======================================================== */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, marginTop: 4 }}>
-        <button
-          className="btn btn-success btn-lg"
-          onClick={() => setView('material_keluar')}
-          style={{ justifyContent: 'space-between' }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <ArrowUpRight size={17} />
-            <span>{lang === 'en' ? 'ISSUE MATERIAL' : 'PENGELUARAN MATERIAL'}</span>
-          </div>
-          <span style={{ fontSize: 11, opacity: 0.85 }}>→</span>
-        </button>
+      {(() => {
+        const userRole = currentUser?.role || 'WAREHOUSE';
 
-        <button
-          className="btn btn-primary btn-lg"
-          onClick={onOpenScanner}
-          style={{ justifyContent: 'space-between' }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <QrCode size={17} />
-            <span>{lang === 'en' ? 'SCAN QR CODE' : 'SCAN QR LAPANGAN'}</span>
-          </div>
-          <span style={{ fontSize: 11, opacity: 0.85 }}>→</span>
-        </button>
+        if (userRole === 'MANAGEMENT') {
+          return (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, marginTop: 4 }}>
+              <button
+                className="btn btn-primary btn-lg"
+                onClick={() => setView('reports')}
+                style={{ justifyContent: 'space-between' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <BarChart2 size={17} />
+                  <span>{lang === 'en' ? 'EXECUTIVE ROI REPORT' : 'LAPORAN FINANSIAL & ROI'}</span>
+                </div>
+                <span style={{ fontSize: 11, opacity: 0.85 }}>→</span>
+              </button>
 
-        <button
-          className="btn btn-outline btn-lg"
-          onClick={() => setView('stock_opname')}
-          style={{ justifyContent: 'space-between' }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <ClipboardList size={17} color="var(--brand-primary)" />
-            <span>{lang === 'en' ? 'STOCK OPNAME' : 'STOCK OPNAME FISIK'}</span>
+              <button
+                className="btn btn-outline btn-lg"
+                onClick={() => setView('lead_time_kpi')}
+                style={{ justifyContent: 'space-between' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Clock size={17} color="var(--brand-primary)" />
+                  <span>{lang === 'en' ? 'INFORMATION LEAD TIME' : 'ANALISIS LEAD TIME DATA'}</span>
+                </div>
+                <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>→</span>
+              </button>
+
+              <button
+                className="btn btn-outline btn-lg"
+                onClick={() => setView('discrepancies')}
+                style={{ justifyContent: 'space-between' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <ShieldAlert size={17} color="var(--status-alert-text)" />
+                  <span>{lang === 'en' ? 'AUDIT DISCREPANCIES' : 'AUDIT SELISIH MATERIAL'}</span>
+                </div>
+                <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>→</span>
+              </button>
+            </div>
+          );
+        }
+
+        if (userRole === 'PRODUCTION') {
+          return (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, marginTop: 4 }}>
+              <button
+                className="btn btn-primary btn-lg"
+                onClick={() => setView('maintenance_operator')}
+                style={{ justifyContent: 'space-between' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Wrench size={17} />
+                  <span>{lang === 'en' ? 'FIELD TABLET INSPECTION' : 'INSPEKSI LAPANGAN (TABLET)'}</span>
+                </div>
+                <span style={{ fontSize: 11, opacity: 0.85 }}>→</span>
+              </button>
+
+              <button
+                className="btn btn-success btn-lg"
+                onClick={onOpenScanner}
+                style={{ justifyContent: 'space-between' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <QrCode size={17} />
+                  <span>{lang === 'en' ? 'SCAN QR CODE' : 'SCAN QR LAPANGAN'}</span>
+                </div>
+                <span style={{ fontSize: 11, opacity: 0.85 }}>→</span>
+              </button>
+
+              <button
+                className="btn btn-outline btn-lg"
+                onClick={() => setView('materials')}
+                style={{ justifyContent: 'space-between' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Boxes size={17} color="var(--brand-primary)" />
+                  <span>{lang === 'en' ? 'MATERIAL CATALOG' : 'KATALOG MATERIAL'}</span>
+                </div>
+                <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>→</span>
+              </button>
+            </div>
+          );
+        }
+
+        if (userRole === 'SUPERVISOR') {
+          return (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, marginTop: 4 }}>
+              <button
+                className="btn btn-primary btn-lg"
+                onClick={() => setView('maintenance_dashboard')}
+                style={{ justifyContent: 'space-between' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <ShieldCheck size={17} />
+                  <span>{lang === 'en' ? 'VERIFY MAINTENANCE' : 'VERIFIKASI MAINTENANCE'}</span>
+                </div>
+                <span style={{ fontSize: 11, opacity: 0.85 }}>→</span>
+              </button>
+
+              <button
+                className="btn btn-outline btn-lg"
+                onClick={() => setView('discrepancies')}
+                style={{ justifyContent: 'space-between' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <ShieldAlert size={17} color="var(--status-alert-text)" />
+                  <span>{lang === 'en' ? 'INVESTIGATE VARIANCE' : 'INVESTIGASI SELISIH'}</span>
+                </div>
+                <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>→</span>
+              </button>
+
+              <button
+                className="btn btn-outline btn-lg"
+                onClick={() => setView('stock_opname')}
+                style={{ justifyContent: 'space-between' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <ClipboardList size={17} color="var(--brand-primary)" />
+                  <span>{lang === 'en' ? 'STOCK OPNAME' : 'STOCK OPNAME FISIK'}</span>
+                </div>
+                <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>→</span>
+              </button>
+            </div>
+          );
+        }
+
+        // Default for WAREHOUSE & ADMIN
+        return (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, marginTop: 4 }}>
+            <button
+              className="btn btn-success btn-lg"
+              onClick={() => setView('material_keluar')}
+              style={{ justifyContent: 'space-between' }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <ArrowUpRight size={17} />
+                <span>{lang === 'en' ? 'ISSUE MATERIAL' : 'PENGELUARAN MATERIAL'}</span>
+              </div>
+              <span style={{ fontSize: 11, opacity: 0.85 }}>→</span>
+            </button>
+
+            <button
+              className="btn btn-primary btn-lg"
+              onClick={onOpenScanner}
+              style={{ justifyContent: 'space-between' }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <QrCode size={17} />
+                <span>{lang === 'en' ? 'SCAN QR CODE' : 'SCAN QR LAPANGAN'}</span>
+              </div>
+              <span style={{ fontSize: 11, opacity: 0.85 }}>→</span>
+            </button>
+
+            <button
+              className="btn btn-outline btn-lg"
+              onClick={() => setView('stock_opname')}
+              style={{ justifyContent: 'space-between' }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <ClipboardList size={17} color="var(--brand-primary)" />
+                <span>{lang === 'en' ? 'STOCK OPNAME' : 'STOCK OPNAME FISIK'}</span>
+              </div>
+              <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>→</span>
+            </button>
           </div>
-          <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>→</span>
-        </button>
-      </div>
+        );
+      })()}
     </div>
   );
 }

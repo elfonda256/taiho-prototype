@@ -6,6 +6,7 @@ import MobileNav from './components/MobileNav';
 import RoleSwitcherModal from './components/RoleSwitcherModal';
 import QRScannerModal from './components/QRScannerModal';
 import MobileDrawer from './components/MobileDrawer';
+import Footer from './components/Footer';
 
 // Existing Material Views (100% Preserved)
 import DashboardView from './views/DashboardView';
@@ -145,6 +146,7 @@ export default function App() {
   const handleResetDemo = async () => {
     if (!confirm('Apakah Anda ingin me-reset database ke kondisi awal demo pabrik?')) return;
     try {
+      localStorage.removeItem('taiho_local_transactions');
       const res = await fetch('/api/demo/reset', { method: 'POST' });
       const d = await res.json();
       alert(d.message);
@@ -224,7 +226,7 @@ export default function App() {
           onOpenScanner={() => setIsScannerOpen(true)}
           onResetDemo={handleResetDemo}
           setView={setView}
-          discrepanciesCount={dashboardData?.kpi?.discrepant_itemsCount || 0}
+          discrepanciesCount={dashboardData?.kpi?.discrepantItemsCount ?? dashboardData?.kpi?.discrepant_itemsCount ?? 0}
           theme={theme}
           onToggleTheme={toggleTheme}
           lang={lang}
@@ -242,6 +244,7 @@ export default function App() {
               onOpenScanner={() => setIsScannerOpen(true)}
               onSelectMaterial={handleSelectMaterial}
               lang={lang}
+              currentUser={currentUser}
             />
           )}
 
@@ -264,7 +267,7 @@ export default function App() {
 
           {/* INFORMATION LEAD TIME & DATA AVAILABILITY KPI */}
           {currentView === 'lead_time_kpi' && (
-            <InformationLeadTimeView />
+            <InformationLeadTimeView lang={lang} />
           )}
 
           {/* BASELINE CONFIGURATION & ROI SIMULATION */}
@@ -344,8 +347,11 @@ export default function App() {
           {currentView === 'reports' && <ReportsView lang={lang} />}
 
           {currentView === 'demo_mode' && (
-            <DemoModeView setView={setView} onSelectMaterial={handleSelectMaterial} />
+            <DemoModeView setView={setView} onSelectMaterial={handleSelectMaterial} lang={lang} />
           )}
+
+          {/* Formal Corporate Document Control & Footer */}
+          <Footer lang={lang} />
         </main>
 
         {/* Mobile Touch Navigation */}

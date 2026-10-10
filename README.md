@@ -157,16 +157,38 @@ node tests/redteam_attack.js
 
 ---
 
-## 10. Struktur Akun Uji Coba
+## 10. Panduan Quick Start & Evaluasi Peran (Tanpa Layar Login)
 
-| Peran | Username | Password | Deskripsi Tugas |
-|---|---|---|---|
-| **Teknisi Produksi** | `operator_produksi` | `operator123` | Mengisi checklist mesin di tablet, scan QR mesin |
-| **Operator Gudang** | `operator_gudang` | `gudang123` | Mengeluarkan material ke lini, scan barcode barang |
-| **Supervisor** | `supervisor` | `spv123` | Verifikasi checklist lapangan, persetujuan selisih |
-| **Plant Manager** | `manajemen` | `manager123` | Memantau Digital Factory Overview, Lead Time KPI |
-| **Administrator** | `admin` | `admin123` | Konfigurasi baseline pabrik, master mesin & material |
+Aplikasi dirancang sebagai **Single Page Application langsung terbuka** tanpa form login konvensional:
+
+### Alur Evaluasi Cepat 3 Langkah:
+1. **Langkah 1: Buka & Pilih Peran** — Klik avatar peran pengguna di pojok kanan atas layar (atau menu drawer di ponsel) untuk langsung beralih perspektif operasional:
+   - **Teknisi Produksi** (`operator_produksi`): Mengisi checklist mesin di tablet Android lapangan, scan QR mesin.
+   - **Operator Gudang** (`operator_gudang`): Mengeluarkan material cepat ke lini, penerimaan barang vendor, stock opname fisik rak.
+   - **Supervisor** (`supervisor`): Verifikasi persetujuan selisih, approval scrap, investigasi chain of custody.
+   - **Plant Manager** (`manajemen`): Memantau dasbor eksekutif, analisis Information Lead Time, Laporan Finansial & ROI.
+   - **Administrator** (`admin`): Pengaturan master data mesin & material, konfigurasi baseline pabrik.
+2. **Langkah 2: Pilih Fitur / Scan QR Lapangan** — Eksekusi modul yang relevan sesuai peran.
+3. **Langkah 3: Pantau Audit Real-Time** — Amati keterhubungan data seketika antar lini (<15 detik).
 
 ---
 
-*TAIHO Prototype v2.0 — Digital Field Data Collection Platform for Automotive Component Manufacturing.*
+## 11. Informasi Kontrol Dokumen & Hak Cipta Resmi
+
+### Kontrol Dokumen (Document Control)
+- **Nomor Dokumen**: `SOP-TAIHO-DFP-2026-001`
+- **Klasifikasi**: Internal Operational Prototype (Phase 2 Live Audit)
+- **Versi**: `Rev 2.4`
+- **Tanggal Efektif**: `10 Oktober 2026`
+- **Pengesahan**: Maintenance & Production Engineering Steering Committee
+
+### Kontak & Dukungan Teknis (Contact Support)
+- **Email IT & Otomasi Pabrik**: `it-support@taiho.co.id`
+- **Telepon Internal**: `Ext. 402` / **Hotline Pabrik**: `+62 21 8983-0001`
+- **Layanan Shift**: 24/7 Dukungan Operasional Teknisi Lapangan & Operator Gudang
+
+### Hak Cipta (Copyright)
+© 2026 **PT Taiho Nusantara Indonesia**. All rights reserved.  
+*Kawasan Industri MM2100, Blok C-1, Cikarang Barat, Bekasi 17520, Jawa Barat, Indonesia.*  
+*Subsidiary of TAIHO KOGYO CO., LTD. (Japan).*
+

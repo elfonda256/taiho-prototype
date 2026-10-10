@@ -128,7 +128,7 @@ router.get('/before-after', authMiddleware, (req, res, next) => {
         kejelasan_tanggung_jawab: '100% Tercatat (Setiap transaksi mengunci nama operator)',
         deteksi_selisih: 'Seketika (Real-time saat barang keluar atau opname harian)'
       },
-      estimasi_penghematan_tahunan: 'Rp 145.000.000 / Tahun (Efisiensi waktu & pengurangan material hilang)'
+      estimasi_penghematan_tahunan: 'Rp 142.800.000 / Tahun (Efisiensi waktu & pengurangan material hilang)'
     };
 
     res.json({ success: true, data });

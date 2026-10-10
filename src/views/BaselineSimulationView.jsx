@@ -479,7 +479,9 @@ export default function BaselineSimulationView({ currentUser }) {
             }}>
               <Info size={16} color="var(--accent-cyan)" style={{ flexShrink: 0, marginTop: 2 }} />
               <div>
-                <b>Catatan Rekayasa Industri:</b> Penghematan ini berasal dari eliminasi pekerjaan non-value-added (mengetik ulang kertas, mencari arsip lembar, koreksi salah baca tulisan tangan).
+                <b>Dasar Rekonsiliasi Manajemen (Perbedaan Angka Simulasi vs Laporan Finansial):</b><br />
+                • <b>Simulasi ROI (210 Jam/Bulan = Rp 113.400.000/Tahun):</b> Model komprehensif seluruh operasional pabrik, menggabungkan 80 jam/bln eliminasi rekapitulasi kertas back-office + 130 jam/bln percepatan inspeksi tablet operator mesin di 24 shift.<br />
+                • <b>Laporan Finansial (120 Jam/Bulan = Rp 64.800.000/Tahun):</b> Menggunakan baseline audit konservatif khusus penghematan staf logistik & supervisor gudang (rekap surat jalan & verifikasi), tanpa memasukkan efisiensi fisik operator mesin agar proyeksi akuntansi tetap <i>prudent</i>.
               </div>
             </div>
           </div>
