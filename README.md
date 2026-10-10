@@ -184,11 +184,11 @@ Aplikasi dirancang sebagai **Single Page Application langsung terbuka** tanpa fo
 
 ### Kontak & Dukungan Teknis (Contact Support)
 - **Email IT & Otomasi Pabrik**: `it-support@taiho.co.id`
-- **Telepon Internal**: `Ext. 402` / **Hotline Pabrik**: `+62 21 8983-0001`
+- **Telepon Internal**: `Ext. 402` / **Telepon Pabrik**: `+62-21-8910-6545`
 - **Layanan Shift**: 24/7 Dukungan Operasional Teknisi Lapangan & Operator Gudang
 
 ### Hak Cipta (Copyright)
-© 2026 **PT Taiho Nusantara Indonesia**. All rights reserved.  
-*Kawasan Industri MM2100, Blok C-1, Cikarang Barat, Bekasi 17520, Jawa Barat, Indonesia.*  
+© 2026 **PT Taiho Nusantara**. All rights reserved.  
+*Kawasan Industri KIIC, Jl. Permata Raya Lot BB-8B, Puseurjaya, Telukjambe Timur, Karawang, Jawa Barat 41361, Indonesia.*  
 *Subsidiary of TAIHO KOGYO CO., LTD. (Japan).*
 

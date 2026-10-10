@@ -88,7 +88,7 @@ export default function Footer({ lang = 'en' }) {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <Phone size={13} color="var(--text-muted)" />
-                <span>Ext. 402 (Internal) / +62 21 8983-0001 (Hunting)</span>
+                <span>Ext. 402 (Internal) / +62-21-8910-6545</span>
               </div>
               <div>
                 <span style={{ color: 'var(--text-muted)' }}>{lang === 'en' ? 'PIC Team:' : 'Tim Penanggung Jawab:'}</span>{' '}
@@ -113,17 +113,17 @@ export default function Footer({ lang = 'en' }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 8 }}>
               <Building size={16} color="var(--accent-emerald)" />
               <span style={{ fontSize: 11, fontWeight: 800, color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                PT TAIHO NUSANTARA INDONESIA
+                PT TAIHO NUSANTARA
               </span>
             </div>
             <div style={{ fontSize: 11.5, display: 'flex', flexDirection: 'column', gap: 4 }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6 }}>
                 <MapPin size={13} color="var(--text-muted)" style={{ flexShrink: 0, marginTop: 3 }} />
-                <span>Kawasan Industri MM2100, Blok C-1, Cikarang Barat, Bekasi 17520, Jawa Barat</span>
+                <span>Kawasan Industri KIIC, Jl. Permata Raya Lot BB-8B, Puseurjaya, Telukjambe Timur, Karawang, Jawa Barat 41361</span>
               </div>
               <div>
                 <span style={{ color: 'var(--text-muted)' }}>{lang === 'en' ? 'Plant Specialization:' : 'Spesialisasi Pabrik:'}</span>{' '}
-                <span>Automotive Precision Engine Bearings & Bushings</span>
+                <span>Automotive Precision Engine Bearings, Bushings & Thrust Washers</span>
               </div>
               <div>
                 <span style={{ color: 'var(--text-muted)' }}>Parent:</span>{' '}
@@ -148,7 +148,7 @@ export default function Footer({ lang = 'en' }) {
           }}
         >
           <div>
-            © 2026 <strong>PT Taiho Nusantara Indonesia</strong>. All rights reserved. 
+            © 2026 <strong>PT Taiho Nusantara</strong>. All rights reserved. 
             <span style={{ marginLeft: 8, opacity: 0.85 }}>
               {lang === 'en' 
                 ? 'Automotive Component Manufacturing Plant System' 
