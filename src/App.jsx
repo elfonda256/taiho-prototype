@@ -6,7 +6,6 @@ import MobileNav from './components/MobileNav';
 import RoleSwitcherModal from './components/RoleSwitcherModal';
 import QRScannerModal from './components/QRScannerModal';
 import MobileDrawer from './components/MobileDrawer';
-import Footer from './components/Footer';
 
 // Existing Material Views (100% Preserved)
 import DashboardView from './views/DashboardView';
@@ -349,9 +348,6 @@ export default function App() {
           {currentView === 'demo_mode' && (
             <DemoModeView setView={setView} onSelectMaterial={handleSelectMaterial} lang={lang} />
           )}
-
-          {/* Formal Corporate Document Control & Footer */}
-          <Footer lang={lang} />
         </main>
 
         {/* Mobile Touch Navigation */}

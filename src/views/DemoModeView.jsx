@@ -11,6 +11,7 @@ import {
   AlertTriangle,
   ScrollText
 } from 'lucide-react';
+import Footer from '../components/Footer';
 
 export default function DemoModeView({ setView, onSelectMaterial, lang = 'en' }) {
   const [currentStep, setCurrentStep] = useState(1);
@@ -316,6 +317,9 @@ export default function DemoModeView({ setView, onSelectMaterial, lang = 'en' })
           ))}
         </div>
       </div>
+
+      {/* COMPACT DOCUMENT CONTROL & CORPORATE SPECIFICATION */}
+      <Footer lang={lang} />
     </div>
   );
 }
