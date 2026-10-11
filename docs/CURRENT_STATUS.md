@@ -1,62 +1,71 @@
 # CURRENT STATUS & ROADMAP SNAPSHOT
 
-**Terakhir Diperbarui:** 11 Oktober 2026  
+**Terakhir Diperbarui:** 11 Oktober 2026 (Pasca Governance Audit)  
 **Cabang Git:** `main` (`origin/main`)  
 **Repositori Remote:** `git@github.com:elfonda256/taiho-prototype.git`  
 **Platform Deployment:** Vercel Live Production (`taiho-prototype.vercel.app`)
 
 ---
 
-## 1. Status Modul & Antarmuka (17 Views Operasional)
+## 1. Status Modul & Antarmuka (17 Views Terverifikasi di `src/App.jsx`)
 
-| No | ID View | Nama Modul | Status | Keterangan |
+Daftar berikut diverifikasi 100% cocok dengan *state* `currentView` di [src/App.jsx](file:///Users/mymac/.gemini/antigravity-ide/scratch/material-loss-prevention/src/App.jsx):
+
+| No | ID View (`currentView`) | Nama Tampilan / Komponen | Status Implementasi | Keterangan Verifikasi |
 |---|---|---|---|---|
 | 1 | `dashboard` | Executive Plant Dashboard | ✅ Aktif & Stabil | Memuat KPI Information Lead Time & Data Availability. |
-| 2 | `katalog` | Katalog & Saldo Material | ✅ Aktif & Stabil | Baseline stok terverifikasi 1.250 PCS. |
-| 3 | `masuk` | Penerimaan Barang (Inbound) | ✅ Aktif & Stabil | Terkoneksi ke immutable ledger & riwayat PO. |
-| 4 | `keluar` | Pengeluaran Material (Outbound) | ✅ Aktif & Stabil | Fast-dispatch ke lini produksi otomotif. |
-| 5 | `scan` | Pemindai QR Lapangan | ✅ Aktif & Stabil | Mendukung scan QR material dan QR aset mesin. |
-| 6 | `opname` | Stock Opname Fisik Rak | ✅ Aktif & Stabil | Deteksi otomatis selisih fisik vs sistem. |
-| 7 | `scrap` | Pemusnahan & Defect Scrap | ✅ Aktif & Stabil | Pencatatan alasan scrap dan persetujuan. |
-| 8 | `investigasi` | Investigasi Selisih Material | ✅ Aktif & Stabil | **RBAC Terkunci:** Hanya role Admin & Manager yang dapat verifikasi. |
-| 9 | `ledger` | Buku Besar Transaksi (Ledger) | ✅ Aktif & Stabil | Immutable audit trail dengan timestamp riil. |
-| 10 | `maintenance_dashboard` | Dasbor Pemeliharaan Mesin | ✅ Aktif & Stabil | Status 8 mesin utama (CNC, Die Casting, Stamping). |
-| 11 | `maintenance_checklist` | Checklist Tablet Lapangan | ✅ Aktif & Stabil | Tablet-first UX (tombol $\ge 50$px, toggle PASS/WARN/FAIL). |
-| 12 | `machine_assets` | Master Aset & QR Mesin | ✅ Aktif & Stabil | Generator kode QR untuk setiap mesin pabrik. |
-| 13 | `shift_handover` | Serah Terima Shift Kerja | ✅ Aktif & Stabil | Logbook digital pergantian regu kerja. |
-| 14 | `iot_simulator` | Simulator Telemetri IoT | ✅ Aktif & Stabil | Endpoint `POST /api/telemetry/ingest` (vibration/temp). |
-| 15 | `roi_calculator` | Kalkulator ROI & Finansial | ✅ Aktif & Stabil | Model simulasi matematis transparan (tanpa data fiktif). |
-| 16 | `demo_mode` | Mode Demo & Evaluasi | ✅ Aktif & Stabil | **Satu-satunya lokasi** untuk `<Footer />` (ultra-compact micro-bar). |
-| 17 | `settings` | Pengaturan & Diagnostik | ✅ Aktif & Stabil | Reset demo, sinkronisasi offline queue, konfigurasi baseline. |
+| 2 | `maintenance_operator` | Form Checklist Mesin Tablet | ✅ Aktif & Stabil | Tablet-first UX (PASS/WARN/FAIL, mandatory findings). |
+| 3 | `maintenance_dashboard` | Dasbor Pemeliharaan & Verifikasi | ✅ Aktif & Stabil | Riwayat pemeriksaan, verifikasi supervisor/manager. |
+| 4 | `lead_time_kpi` | Analisis Information Lead Time | ✅ Aktif & Stabil | Metrik akselerasi 7 hari manual → ≤ 2–4 menit digital. |
+| 5 | `baseline_simulation` | Simulasi Finansial & ROI | ✅ Aktif & Stabil | Model estimasi matematis interaktif tanpa data rekaan. |
+| 6 | `sensor_integration` | Gerbang Integrasi IoT Telemetri | ✅ Aktif & Stabil | Endpoint `POST /api/telemetry/ingest` (vibration/temp). |
+| 7 | `material_keluar` | Pengeluaran Material Cepat | ✅ Aktif & Stabil | Terkoneksi ke ledger mutasi, pencegahan stok negatif. |
+| 8 | `material_masuk` | Penerimaan Barang (Goods Receipt) | ✅ Aktif & Stabil | Pencatatan mutasi masuk dan referensi nomor surat jalan. |
+| 9 | `scan_qr` | Pemindai QR Lapangan | ✅ Aktif & Stabil | Pemindaian kamera & input manual kode QR mesin/material. |
+| 10 | `stock_opname` | Rekonsiliasi Stock Opname Fisik | ✅ Aktif & Stabil | Perbandingan fisik vs sistem, deteksi anomali. |
+| 11 | `discrepancies` | Investigasi Kasus Selisih | ✅ Aktif & Stabil | Wewenang penyelesaian resmi (ADR-004: Admin & Supervisor). |
+| 12 | `materials` | Master Katalog 55 Material | ✅ Aktif & Stabil | Filter kategori, lokasi rak, status ketersediaan. |
+| 13 | `material_detail` | Detail Material & Audit Trail | ✅ Aktif & Stabil | Chain of custody riwayat transaksi individual. |
+| 14 | `ledger` | Buku Besar Transaksi (Ledger) | ✅ Aktif & Stabil | Immutable audit log mutasi (ACID transaction compliant). |
+| 15 | `locations` | Manajemen Lokasi Rak & Gudang | ✅ Aktif & Stabil | Pemetaan hierarki rak fisik pabrik. |
+| 16 | `reports` | Laporan Terpadu & Audit Eksekutif | ✅ Aktif & Stabil | Rekapitulasi pergerakan persediaan & pemeliharaan. |
+| 17 | `demo_mode` | Mode Demo & Evaluasi Skenario | ✅ Aktif & Stabil | **Satu-satunya lokasi** untuk `<Footer />` (micro-bar ultra-compact). |
 
 ---
 
-## 2. Riwayat Perbaikan Kritis Terkini
+## 2. Hasil Governance Audit Terhadap Implementasi Nyata
 
-- **Commit `3f48860`**: Penyelesaian 9 poin audit gambar evaluasi:
-  - Sinkronisasi baseline stok gudang ke 1.250 PCS.
-  - Perbaikan bug KPI `discrepantItemsCount` (menghitung item riil berselisih, bukan total item).
-  - Tampilan bilingual pada Information Lead Time.
-  - Rekonsiliasi angka finansial Rp 64.800.000 dengan baseline model.
-  - Pembatasan tombol verifikasi hanya untuk Admin dan Manager.
-  - Panduan 3 langkah Quick Start ("Buka & Pilih Peran").
-  - Alamat resmi PT Taiho Nusantara di KIIC Karawang.
-- **Commit `cea6388`**: Pembaruan alamat lengkap resmi di `Footer.jsx` dan `README.md`.
-- **Commit `0c53752`**: Penghapusan `<Footer />` dari `src/App.jsx` sehingga tidak lagi muncul di semua menu, dan dipindahkan secara eksklusif ke `DemoModeView.jsx`.
-- **Commit `598d248`**: Redesain Footer menjadi *ultra-compact horizontal micro-bar* (font 10px, padding 6px 12px) menggantikan 3 box card besar.
-
----
-
-## 3. Status Kesehatan Sistem & Pengujian
-
-- **Kompilasi Frontend (`npm run build`)**: Lolos tanpa peringatan fatal (`dist/` ter-generate dalam 283ms).
-- **Pengujian Integrasi (`tests/maintenance.test.js`)**: Lolos.
-- **Pengujian Simulasi End-to-End (`tests/e2e_simulation.js`)**: Lolos.
-- **Pengujian Red-Team Integrity (`tests/redteam_attack.js`)**: Lolos (ACID WAL & anti-tampering ledger verified).
+Pemeriksaan silang kode sumber, middleware, database, dan konfigurasi:
+1. **Auto-Discovery Rules**:
+   - `AGENTS.md` tersimpan di root workspace.
+   - `.agents/rules/taiho-governance.md` dibuat untuk auto-discovery Antigravity customization root.
+   - *Catatan Penting*: IDE Antigravity saat ini belum menetapkan folder scratch ini sebagai active workspace resmi. Pengguna disarankan menetapkan direktori ini sebagai active workspace di pengaturan IDE.
+2. **Safe Stage-Gating (Change Management)**:
+   - Aturan auto-push instan telah diperbaiki. Sekarang diwajibkan melewati tahap: selesaikan task → `npm run build` → `npm test` → cek diff → atomic commit → push ke `main`.
+3. **Akurasi Baseline Stok**:
+   - Baseline 1.250 PCS diverifikasi akurat khusus untuk material acuan evaluasi `mat_01` (Bearing Shell A), bukan total seluruh katalog (yang bernilai > Rp 2,4 Miliar di 55 item).
+4. **Verifikasi RBAC**:
+   - Backend `server/routes/discrepancies.js` mengizinkan `ADMIN` dan `SUPERVISOR` untuk resolve.
+   - Backend `server/routes/maintenance.js` mengizinkan `MANAGER`, `SUPERVISOR`, dan `ADMIN` untuk verify.
+   - Operator Lapangan dilarang secara ketat (HTTP 403 / UI guard).
+5. **Database Runtime vs Blueprint Produksi**:
+   - Runtime aktif: Node.js dengan SQLite WAL (`better-sqlite3`).
+   - Runtime Vercel: Serverless dengan SQLite disalin ke `/tmp/matsys.db` (ephemeral instance storage untuk demo evaluasi).
+   - Blueprint Produksi Pabrik: PostgreSQL 16 Alpine disiapkan di `docker-compose.yml` & `server/db/schema.postgres.sql`.
 
 ---
 
-## 4. Rencana Kerja Selanjutnya (Next Steps)
-1. Menjaga kepatuhan terhadap file tata kelola `AGENTS.md` pada setiap prompt chat berikutnya.
-2. Setiap kali ada penambahan fitur baru, wajib menjalankan `npm run build` dan push ke GitHub `main`.
-3. Memperbarui `docs/CURRENT_STATUS.md` ini setiap kali ada perubahan milestone besar.
+## 3. Hasil Validasi Test Suite Lokal
+
+- **`npm run build`**: PASS (1949 modules transformed, 0 error).
+- **`npm test` (`tests/index.test.js`)**: PASS (7/7 Lulus).
+- **`node tests/maintenance.test.js`**: PASS (8/8 Lulus).
+- **`node tests/e2e_simulation.js`**: PASS (7/7 Skenario Lulus).
+- **`node tests/redteam_attack.js`**: PASS (7/7 Serangan Tertangkal).
+
+---
+
+## 4. Temuan Terbuka (Open Items)
+
+1. **Vercel Ephemeral Storage**: Mutasi data pada Vercel live hanya bertahan selama siklus hidup instance serverless lambda. Untuk persistensi multi-user cloud permanen, diperlukan external managed database (misal: Supabase/Neon PostgreSQL).
+2. **Active Workspace IDE Hook**: Pengguna perlu mengonfirmasi atau mengatur workspace root di IDE Antigravity ke direktori `/Users/mymac/.gemini/antigravity-ide/scratch/material-loss-prevention`.

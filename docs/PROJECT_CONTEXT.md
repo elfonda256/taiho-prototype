@@ -35,33 +35,34 @@ Menerapkan filosofi: *"Capture data at the source, at the moment the work happen
 
 ---
 
-## 4. Arsitektur Teknologi
+## 4. Arsitektur Teknologi & Database
 
 ```mermaid
 graph TD
     ClientTablet["Tablet Android Lapangan (PWA / Web)"] -->|Offline Queue + Sync| Frontend["React 18 + Vite SPA"]
     ClientDesktop["Desktop PC Manajemen / Admin"] --> Frontend
     Frontend -->|REST API JSON| Backend["Node.js Express Server"]
-    Backend -->|WAL ACID Mode| DB_Local["SQLite (Local & Demo)"]
-    Backend -->|Production Ready| DB_Prod["PostgreSQL 16"]
-    Backend -->|Live Cloud Hosting| Vercel["Vercel Serverless (api/index.js)"]
+    Backend -->|WAL ACID Mode| DB_Local["SQLite (Local & Demo Server)"]
+    Backend -->|Ephemeral /tmp| Vercel["Vercel Serverless (api/index.js)"]
+    Docker["Factory Production Server"] -->|docker compose up -d| DB_Prod["PostgreSQL 16 Alpine"]
     IoT["Sensor Mesin (Modbus / MQTT)"] -->|Telemetry Ingest| Backend
 ```
 
 ### Komponen Teknis:
 - **Frontend**: React 18, Vite, Lucide React Icons, Vanilla CSS (Industrial High-Density Dark Theme).
-- **Backend**: Node.js, Express, Better-SQLite3 / SQLite3 dengan mode Write-Ahead Logging (WAL).
-- **Cloud Deployment**: Vercel Serverless Functions (`api/index.js` + static assets `dist/`).
+- **Backend**: Node.js, Express, Better-SQLite3 dengan mode Write-Ahead Logging (WAL).
+- **Runtime Cloud (Vercel)**: Vercel Serverless Function (`api/index.js` mengimpor `server/index.js`). Database SQLite disalin ke `/tmp/matsys.db` (ephemeral instance storage untuk demo evaluasi langsung).
+- **Blueprint Produksi Pabrik**: Konfigurasi siap pakai untuk server Linux on-premise perusahaan menggunakan Docker (`Dockerfile`, `docker-compose.yml`, dan `server/db/schema.postgres.sql`).
 - **Resilience**: Offline-first via browser `localStorage` + `client_uuid` idempotency protection.
 
 ---
 
-## 5. Matriks Peran Pengguna (Role Personas)
+## 5. Matriks Peran Pengguna (Role Personas & RBAC)
 
-| Peran | ID Teknis | Perangkat Utama | Tanggung Jawab Utama |
+| Peran | ID Teknis | Perangkat Utama | Tanggung Jawab & Hak Akses |
 |---|---|---|---|
-| **Operator Produksi** | `operator_produksi` | Tablet 8-11" | Checklist preventif mesin, scan QR mesin, input finding jika status FAIL/WARN. |
-| **Operator Gudang** | `operator_gudang` | Handheld / Tablet | Pengeluaran material cepat ke lini, penerimaan barang vendor, stock opname fisik. |
-| **Supervisor** | `supervisor` | Laptop / Tablet | Pemantauan anomali, peninjauan pergerakan material, eskalasi masalah. |
-| **Plant Manager** | `manajemen` | Laptop / Monitor TV | Dashboard Information Lead Time, verifikasi investigasi selisih, kalkulator ROI. |
-| **Administrator** | `admin` | PC Desktop | Manajemen master data mesin & material, konfigurasi baseline simulasi. |
+| **Operator Produksi** | `operator_produksi` | Tablet 8-11" | Checklist preventif mesin, scan QR mesin, input finding jika status FAIL/WARN. Read-only untuk audit/verifikasi. |
+| **Operator Gudang** | `operator_gudang` | Handheld / Tablet | Pengeluaran material cepat ke lini, penerimaan barang vendor, stock opname fisik. Read-only untuk audit/verifikasi. |
+| **Supervisor** | `supervisor` | Laptop / Tablet | Pemantauan anomali, verifikasi checklist mesin lapangan, penyelesaian resmi selisih stok (resolution). |
+| **Plant Manager** | `manajemen` | Laptop / Monitor TV | Dashboard Information Lead Time, verifikasi laporan pemeliharaan, peninjauan kalkulator ROI. |
+| **Administrator** | `admin` | PC Desktop | Full access: manajemen master data mesin & material, konfigurasi baseline simulasi, sistem diagnostik. |

@@ -22,17 +22,21 @@
 
 ---
 
-### ADR-003: SQLite WAL Mode untuk Portabilitas & ACID Compliance
-- **Konteks:** Prototipe harus dapat dijalankan secara instan di laptop tanpa perlu menginstal server database berat, namun tetap menjamin integritas transaksi ACID pabrik.
-- **Keputusan:** Menggunakan SQLite dengan mode `PRAGMA journal_mode=WAL` (Write-Ahead Logging). Struktur skema SQL dibuat kompatibel dengan PostgreSQL 16 untuk transisi produksi.
-- **Konsekuensi:** Seluruh transaksi pencatatan stok dan checklist mesin aman dari korupsi data (*concurrency-safe*).
+### ADR-003: SQLite WAL Mode untuk Portabilitas & PostgreSQL Production Blueprint
+- **Konteks:** Prototipe harus dapat dijalankan secara instan di laptop/demo tanpa instalasi server database terpisah, namun arsitektur harus siap dideploy ke server Linux pabrik.
+- **Keputusan:** Runtime Node.js aktif menggunakan SQLite dengan mode `PRAGMA journal_mode=WAL` (Write-Ahead Logging). Untuk migrasi server produksi pabrik, skema kompatibel PostgreSQL 16 disediakan via `docker-compose.yml` dan `schema.postgres.sql`. Pada Vercel, database berjalan di `/tmp/matsys.db` sebagai lingkungan evaluasi demo.
+- **Konsekuensi:** Portabel, zero-setup, aman ACID, dan siap untuk dockerization di lantai pabrik.
 
 ---
 
-### ADR-004: Otorisasi Ketat untuk Verifikasi Investigasi Selisih (RBAC)
-- **Konteks:** Ditemukan temuan audit di mana semua peran (termasuk operator) sebelumnya dapat mengklik verifikasi investigasi selisih material.
-- **Keputusan:** Tindakan verifikasi hasil investigasi selisih dan penyesuaian inventaris **HANYA DAPAT DILAKUKAN** oleh peran `admin` dan `manajemen` (Manager). Operator dan supervisor hanya memiliki akses *read-only*.
-- **Konsekuensi:** Mencegah manipulasi data stok oleh staf pelaksana di lantai gudang/pabrik.
+### ADR-004: Otorisasi Berlapis untuk Verifikasi Lapangan & Resolusi Selisih (RBAC)
+- **Konteks:** Menjaga pemisahan tugas (*segregation of duties*) antara pelaksana lapangan dengan verifikator administratif.
+- **Keputusan:**
+  1. **Operator Lapangan** (`operator_produksi`, `operator_gudang`): Ditolak saat mencoba verifikasi administratif atau mengubah baseline.
+  2. **Supervisor**: Memiliki wewenang operasional verifikasi checklist mesin dan persetujuan penyelesaian resmi selisih stok (`/api/discrepancies/:id/resolve`).
+  3. **Plant Manager**: Memiliki wewenang verifikasi laporan pemeliharaan (`/api/maintenance/verify/:id`) dan peninjauan analitik finansial.
+  4. **Admin**: Memiliki hak akses penuh.
+- **Konsekuensi:** Mencegah manipulasi sepihak atas data stok oleh staf pelaksana lantai pabrik.
 
 ---
 
@@ -46,20 +50,20 @@
 
 ---
 
-### ADR-006: Alur Kerja Push Langsung ke GitHub untuk Vercel Continuous Deployment
-- **Konteks:** Pengguna dan penguji pabrik mengakses aplikasi secara langsung melalui deployment live Vercel (`taiho-prototype.vercel.app`), bukan melalui `localhost`.
+### ADR-006: Safe Stage-Gating untuk Vercel Continuous Deployment
+- **Konteks:** Pengguna dan penguji pabrik mengakses aplikasi secara langsung melalui deployment live Vercel (`taiho-prototype.vercel.app`). Setiap push ke remote `origin/main` langsung memicu auto-deployment Vercel.
 - **Keputusan:**
-  1. Setiap kali ada perubahan kode atau bugfix, Antigravity **WAJIB** memvalidasi dengan `npm run build`.
-  2. Setelah build berhasil, Antigravity **WAJIB** langsung melakukan commit dan push ke remote `origin/main` menggunakan `smart_commit.sh`.
+  1. DILARANG melakukan micro-commit atau push parsial saat pekerjaan masih dalam proses (WIP).
+  2. Alur perubahan kode wajib melalui tahapan berurutan: (a) selesaikan seluruh kode tugas, (b) `npm run build` lokal, (c) jalankan test lokal (`npm test`), (d) tinjau git diff, (e) atomic commit, (f) push ke `main`.
   3. Mengingatkan pengguna untuk melakukan **Hard Refresh (`Ctrl+Shift+R` / `Cmd+Shift+R`)** karena cache Vercel/browser.
-- **Konsekuensi:** Feedback loop pengujian sangat cepat tanpa intervensi manual dari pengguna untuk git-push.
+- **Konsekuensi:** Mencegah live production breakdown pada Vercel dan menjaga git history tetap bersih.
 
 ---
 
 ### ADR-007: Perhitungan Finansial Transparan Berbasis Baseline Nyata (No Fake Data)
 - **Konteks:** Angka penghematan klaim sepihak (seperti klaim palsu "menghemat 1 miliar rupiah") merusak kredibilitas sistem di mata manajemen Jepang & lokal.
 - **Keputusan:**
-  1. Baseline stok acuan gudang dikunci pada **1.250 PCS**.
+  1. Baseline stok acuan untuk material spesifikasi demo `mat_01` (Bearing Shell A) dikunci pada **1.250 PCS** (dengan selisih fisik 150 PCS di rak B01).
   2. Seluruh metrik finansial dan ROI menggunakan kalkulator interaktif di mana manajer menginput parameter riil pabrik (biaya tenaga kerja, jumlah form, jam lembur).
   3. KPI `discrepantItemsCount` hanya menghitung jumlah item unik yang memiliki selisih fisik vs sistem.
 - **Konsekuensi:** Menjaga kepercayaan eksekutif terhadap akurasi analitik sistem.
